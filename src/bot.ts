@@ -11,16 +11,10 @@ import {
   setupLocalContext,
   setupLogger,
   setUser,
-  setupI18n,
   collectMetrics,
 } from "@bot/middlewares";
 import { apiCallsLogger } from "@bot/transformers";
-import {
-  botAdminFeature,
-  languageSelectFeature,
-  welcomeFeature,
-} from "@bot/features";
-import { isMultipleLocales } from "@bot/helpers/i18n";
+import { botAdminFeature, welcomeFeature } from "@bot/features";
 import { handleError } from "@bot/helpers/error-handler";
 
 export const bot = new Bot<Context>(config.BOT_TOKEN);
@@ -41,17 +35,12 @@ bot.use(hydrateReply);
 bot.use(setupSession());
 bot.use(setupLocalContext());
 bot.use(setupLogger());
-bot.use(setupI18n());
 bot.use(setUser());
 
 // Handlers
 
 bot.use(botAdminFeature);
 bot.use(welcomeFeature);
-
-if (isMultipleLocales) {
-  bot.use(languageSelectFeature);
-}
 
 if (config.isDev) {
   bot.catch(handleError);

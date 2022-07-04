@@ -34,8 +34,8 @@ prisma.$on("query", (e: Prisma.QueryEvent) => {
   const parameters = parseParameters(
     e.params.replace(
       /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.?\d* UTC/g,
-      (date) => `"${date}"`
-    )
+      date => `"${date}"`,
+    ),
   );
   const query = e.query.replace(
     /(\?|\$\d+)/g,
@@ -44,7 +44,7 @@ prisma.$on("query", (e: Prisma.QueryEvent) => {
       const previousChar = string.charAt(offset - 1);
 
       return (previousChar === "," ? " " : "") + parameter;
-    }
+    },
   );
 
   logger.debug({

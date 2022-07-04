@@ -1,8 +1,6 @@
 {
   "compilerOptions": {
-    "lib": [
-      "esnext"
-    ],
+    "lib": ["esnext"],
     "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -16,12 +14,8 @@
     "outDir": "dist",
     "baseUrl": "src",
     "paths": {
-      "@bot/*": [
-        "*"
-      ]
+      "@bot/*": ["*"]
     }
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }

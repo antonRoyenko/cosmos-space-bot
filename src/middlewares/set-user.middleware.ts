@@ -5,16 +5,11 @@ import { usersService } from "@bot/services";
 
 export const middleware = (): Middleware<Context> => async (ctx, next) => {
   if (ctx.from?.is_bot === false) {
-    const { id: telegramId, language_code: languageCode } = ctx.from;
+    const { id: telegramId } = ctx.from;
 
-    ctx.local.user = await usersService.upsertByTelegramId(telegramId, {
-      create: {
-        languageCode,
-      },
-      update: {
-        languageCode,
-      },
-    });
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    ctx.local.user = await usersService.upsertByTelegramId(telegramId);
   }
 
   return next();

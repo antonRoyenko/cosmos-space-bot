@@ -8,7 +8,6 @@ const options: LoggerOptions = {
   level: config.LOG_LEVEL,
 };
 
-// eslint-disable-next-line import/no-mutable-exports
 export let rawLogger = pino(options);
 
 if (config.isDev) {
@@ -18,7 +17,7 @@ if (config.isDev) {
       ignore: "pid,hostname",
       colorize: true,
       translateTime: true,
-    })
+    }),
   );
 }
 

@@ -2,7 +2,6 @@
 CREATE TABLE "users" (
     "id" SERIAL NOT NULL,
     "telegram_id" BIGINT NOT NULL,
-    "language_code" TEXT,
     "updated_at" TIMESTAMP(3) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
