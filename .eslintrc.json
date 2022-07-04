@@ -1,14 +1,22 @@
 {
     "root": true,
+    "env": {
+        "es6": true,
+        "browser": true,
+        "node": true
+    },
     "extends": [
         "eslint:recommended",
+        "plugin:prettier/recommended",
         "plugin:@typescript-eslint/recommended"
+    ],
+     "plugins": [
+        "@typescript-eslint",
+        "prettier",
+        "import"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": { "project": ["./tsconfig.json"] },
-    "plugins": [
-        "@typescript-eslint"
-    ],
     "rules": {
         "@typescript-eslint/strict-boolean-expressions": [
             2,
