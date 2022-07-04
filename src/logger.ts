@@ -17,7 +17,7 @@ if (config.isDev) {
       ignore: "pid,hostname",
       colorize: true,
       translateTime: true,
-    }),
+    })
   );
 }
 

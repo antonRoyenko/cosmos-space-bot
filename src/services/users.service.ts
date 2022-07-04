@@ -6,7 +6,7 @@ export const createService = (prisma: PrismaClient) =>
   Object.assign(prisma.user, {
     upsertByTelegramId: <T extends DeepPartial<Prisma.UserUpsertArgs>>(
       telegramId: number,
-      args: Prisma.SelectSubset<T, Prisma.UserUpsertArgs>,
+      args: Prisma.SelectSubset<T, Prisma.UserUpsertArgs>
     ) => {
       const query: Prisma.UserUpsertArgs = {
         where: {
@@ -23,7 +23,7 @@ export const createService = (prisma: PrismaClient) =>
 
     updateByTelegramId: <T extends DeepPartial<Prisma.UserUpdateArgs>>(
       telegramId: number,
-      args: Prisma.SelectSubset<T, Prisma.UserUpdateArgs>,
+      args: Prisma.SelectSubset<T, Prisma.UserUpdateArgs>
     ) => {
       const query: Prisma.UserUpdateArgs = {
         where: {

@@ -13,7 +13,7 @@ const feature = composer
   .chatType("private")
   .filter(isUserId(config.BOT_ADMIN_USER_ID));
 
-feature.command("stats", logHandle("handle /stats"), async ctx => {
+feature.command("stats", logHandle("handle /stats"), async (ctx) => {
   await ctx.replyWithChatAction("typing");
 
   const usersCount = await usersService.count();
@@ -26,7 +26,7 @@ feature.command("stats", logHandle("handle /stats"), async ctx => {
 feature.command(
   "setcommands",
   logHandle("handle /setcommands"),
-  async ctx => {
+  async (ctx) => {
     await ctx.replyWithChatAction("typing");
 
     // set private chat admin commands
@@ -46,7 +46,7 @@ feature.command(
           type: "chat",
           chat_id: config.BOT_ADMIN_USER_ID,
         },
-      },
+      }
     );
 
     // set group chat commands
@@ -57,5 +57,5 @@ feature.command(
     });
 
     return ctx.reply("Commands updated");
-  },
+  }
 );

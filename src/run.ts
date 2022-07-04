@@ -22,8 +22,8 @@ const run = async () => {
           .setWebhook(config.BOT_WEBHOOK, {
             allowed_updates: config.BOT_ALLOWED_UPDATES,
           })
-          .catch(err => logger.error(err));
-      },
+          .catch((err) => logger.error(err));
+      }
     );
   } else {
     bot.start({
