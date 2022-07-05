@@ -1,2 +1,3 @@
-export { composer as botAdminFeature } from "./bot-admin.feature";
-export { composer as welcomeFeature } from "./welcome.feature";
+export { feature as botAdminFeature } from "./bot-admin.feature";
+export { feature as setupFeature } from "./setup.feature";
+export { feature as walletFeature } from "./wallet.feature";

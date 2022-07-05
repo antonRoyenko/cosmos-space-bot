@@ -4,3 +4,4 @@ export { middleware as setupLocalContext } from "./setup-local-context.middlewar
 export { middleware as setupLogger } from "./setup-logger.middleware";
 export { middleware as setupSession } from "./setup-session.middleware";
 export { middleware as updatesLogger } from "./updates-logger.middleware";
+export { middleware as router } from "./setup-router.middleware";

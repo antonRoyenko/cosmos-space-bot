@@ -6,7 +6,7 @@ export const createService = (prisma: PrismaClient) =>
   Object.assign(prisma.user, {
     upsertByTelegramId: <T extends DeepPartial<Prisma.UserUpsertArgs>>(
       telegramId: number,
-      args: Prisma.SelectSubset<T, Prisma.UserUpsertArgs>
+      args?: Prisma.SelectSubset<T, Prisma.UserUpsertArgs>
     ) => {
       const query: Prisma.UserUpsertArgs = {
         where: {
@@ -34,4 +34,11 @@ export const createService = (prisma: PrismaClient) =>
 
       return prisma.user.update(_.merge(query, args));
     },
+
+    getUserByTelegramId: (telegramId: number) =>
+      prisma.user.findUnique({
+        where: {
+          telegramId,
+        },
+      }),
   });

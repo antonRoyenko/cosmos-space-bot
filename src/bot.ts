@@ -12,10 +12,12 @@ import {
   setupLogger,
   setUser,
   collectMetrics,
+  router,
 } from "@bot/middlewares";
 import { apiCallsLogger } from "@bot/transformers";
-import { botAdminFeature, welcomeFeature } from "@bot/features";
+import { botAdminFeature, setupFeature, walletFeature } from "@bot/features";
 import { handleError } from "@bot/helpers/error-handler";
+import { currencyMenu } from "@bot/menu";
 
 export const bot = new Bot<Context>(config.BOT_TOKEN);
 
@@ -36,11 +38,13 @@ bot.use(setupSession());
 bot.use(setupLocalContext());
 bot.use(setupLogger());
 bot.use(setUser());
-
+bot.use(router);
+bot.use(currencyMenu);
 // Handlers
 
 bot.use(botAdminFeature);
-bot.use(welcomeFeature);
+bot.use(walletFeature);
+bot.use(setupFeature);
 
 if (config.isDev) {
   bot.catch(handleError);

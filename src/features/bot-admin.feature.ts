@@ -1,16 +1,13 @@
-import { Composer } from "grammy";
 import { isUserId } from "grammy-guard";
 
-import { Context } from "@bot/types";
 import { usersService } from "@bot/services";
 import { config } from "@bot/config";
 import { getGroupChatCommands } from "@bot/helpers/bot-commands";
 import { logHandle } from "@bot/helpers/logging";
+import { router } from "@bot/middlewares";
 
-export const composer = new Composer<Context>();
-
-const feature = composer
-  .chatType("private")
+export const feature = router
+  .route("wallet")
   .filter(isUserId(config.BOT_ADMIN_USER_ID));
 
 feature.command("stats", logHandle("handle /stats"), async (ctx) => {

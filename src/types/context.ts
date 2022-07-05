@@ -1,4 +1,4 @@
-import { Context as DefaultContext } from "grammy";
+import { Context as DefaultContext, SessionFlavor } from "grammy";
 import { FluentContextFlavor } from "@grammyjs/fluent";
 import { ParseModeContext } from "@grammyjs/parse-mode";
 
@@ -8,7 +8,13 @@ export interface LocalContextFlavor {
   local: LocalContext;
 }
 
+export interface SessionData {
+  currencyMenu?: string;
+  step: "setup" | "wallet" | "admin" | "home";
+}
+
 export type Context = DefaultContext &
   FluentContextFlavor &
   ParseModeContext &
-  LocalContextFlavor;
+  LocalContextFlavor &
+  SessionFlavor<SessionData>;

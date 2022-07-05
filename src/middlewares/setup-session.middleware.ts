@@ -9,9 +9,7 @@ const storage = new RedisAdapter({
 });
 
 export const middleware = (): Middleware<Context> =>
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   session({
-    initial: () => ({}),
+    initial: () => ({ currencyMenu: undefined, step: "setup" }),
     storage,
   });

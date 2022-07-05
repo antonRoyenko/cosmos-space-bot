@@ -10,6 +10,7 @@ datasource db {
 
 model User {
   id           Int      @id @default(autoincrement())
+  wallets      String[]
   telegramId   BigInt   @unique @map("telegram_id")
   updatedAt    DateTime @updatedAt @map("updated_at")
   createdAt    DateTime @default(now()) @map("created_at")
