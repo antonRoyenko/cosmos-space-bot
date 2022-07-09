@@ -1,0 +1,12 @@
+overwrite: true
+config:
+  # omitOperationSuffix: true
+  skipTypeNameForRoot: true
+generates:
+  src/graphql/desmos/types/general_types.ts:
+    documents:
+      - 'src/graphql/desmos/general/*'
+    schema: ${DESMOS_PUBLIC_GRAPHQL_URL}
+    plugins:
+      - "typescript"
+      - "typescript-operations"

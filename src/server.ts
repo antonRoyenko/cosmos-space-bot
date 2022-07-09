@@ -1,9 +1,9 @@
 import fastify from "fastify";
-import { BotError } from "grammy";
+import { BotError, webhookCallback } from "grammy";
 import { register } from "prom-client";
 
-// import { bot } from "@bot/bot";
-// import { config } from "@bot/config";
+import { bot } from "@bot/bot";
+import { config } from "@bot/config";
 import { logger } from "@bot/logger";
 import { handleError } from "@bot/helpers/error-handler";
 
@@ -23,7 +23,7 @@ server.setErrorHandler(async (error, request, response) => {
   }
 });
 
-// server.post(`/${config.BOT_TOKEN}`, webhookCallback(bot, "fastify"));
+server.post(`/${config.BOT_TOKEN}`, webhookCallback(bot, "fastify"));
 
 server.get("/metrics", async (req, res) => {
   try {

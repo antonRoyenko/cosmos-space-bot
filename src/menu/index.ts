@@ -1,1 +1,1 @@
-export { currencyMenu } from "./currency";
+export { currentMenu } from "./currency";

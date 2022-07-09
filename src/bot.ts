@@ -17,7 +17,8 @@ import {
 import { apiCallsLogger } from "@bot/transformers";
 import { botAdminFeature, setupFeature, walletFeature } from "@bot/features";
 import { handleError } from "@bot/helpers/error-handler";
-import { currencyMenu } from "@bot/menu";
+import { currentMenu } from "@bot/menu";
+// import { currentMenu } from "@bot/menu";
 
 export const bot = new Bot<Context>(config.BOT_TOKEN);
 
@@ -38,13 +39,13 @@ bot.use(setupSession());
 bot.use(setupLocalContext());
 bot.use(setupLogger());
 bot.use(setUser());
+bot.use(currentMenu);
 bot.use(router);
-bot.use(currencyMenu);
 // Handlers
 
 bot.use(botAdminFeature);
-bot.use(walletFeature);
 bot.use(setupFeature);
+bot.use(walletFeature);
 
 if (config.isDev) {
   bot.catch(handleError);

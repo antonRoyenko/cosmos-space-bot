@@ -9,7 +9,8 @@ export interface LocalContextFlavor {
 }
 
 export interface SessionData {
-  currencyMenu?: string;
+  currentMenu?: string;
+  currentWallets: Array<string>;
   step: "setup" | "wallet" | "admin" | "home";
 }
 
