@@ -11,7 +11,7 @@ export interface LocalContextFlavor {
 export interface SessionData {
   currentMenu?: string;
   currentWallets: Array<string>;
-  step: "setup" | "wallet" | "admin" | "home";
+  step: "setup" | "wallet" | "admin" | "home" | "help";
 }
 
 export type Context = DefaultContext &

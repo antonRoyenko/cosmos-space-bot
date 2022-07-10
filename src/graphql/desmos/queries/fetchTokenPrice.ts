@@ -35,50 +35,49 @@ export const formatAllTokens = (data: TokenData) => {
   };
 
   const PNL = (amount: number) => {
-    if (
-      data.tokenHistory[0].market_data.current_price &&
-      data.tokenHistory[1].market_data.current_price &&
-      data.tokenHistory[2].market_data.current_price
-    ) {
-      const firstDayPercent = calcTVLPercent(
+    let firstDayPercent = "0";
+    if (data.tokenHistory[0]?.market_data?.current_price) {
+      firstDayPercent = calcTVLPercent(
         nowPrice,
         data.tokenHistory[0].market_data.current_price.usd
       );
-      const seventhDayPercent = calcTVLPercent(
+    }
+
+    let seventhDayPercent = "0";
+    if (data.tokenHistory[1]?.market_data?.current_price) {
+      seventhDayPercent = calcTVLPercent(
         nowPrice,
         data.tokenHistory[1].market_data.current_price.usd
       );
-      const thirtyDayPercent = calcTVLPercent(
+    }
+
+    let thirtyDayPercent = "0";
+    if (data.tokenHistory[2]?.market_data?.current_price) {
+      thirtyDayPercent = calcTVLPercent(
         nowPrice,
         data.tokenHistory[2].market_data.current_price.usd
       );
-
-      return {
-        first: {
-          percent: formatTokenPrice(firstDayPercent),
-          amount: formatTokenPrice(
-            Big(amount).div(100).mul(firstDayPercent).toPrecision()
-          ),
-        },
-        seventh: {
-          percent: formatTokenPrice(seventhDayPercent),
-          amount: formatTokenPrice(
-            Big(amount).div(100).mul(seventhDayPercent).toPrecision()
-          ),
-        },
-        thirty: {
-          percent: formatTokenPrice(thirtyDayPercent),
-          amount: formatTokenPrice(
-            Big(amount).div(100).mul(thirtyDayPercent).toPrecision()
-          ),
-        },
-      };
     }
 
     return {
-      first: { percent: 0, amount: 0 },
-      seventh: { percent: 0, amount: 0 },
-      thirty: { percent: 0, amount: 0 },
+      first: {
+        percent: formatTokenPrice(firstDayPercent),
+        amount: formatTokenPrice(
+          Big(amount).div(100).mul(firstDayPercent).toPrecision()
+        ),
+      },
+      seventh: {
+        percent: formatTokenPrice(seventhDayPercent),
+        amount: formatTokenPrice(
+          Big(amount).div(100).mul(seventhDayPercent).toPrecision()
+        ),
+      },
+      thirty: {
+        percent: formatTokenPrice(thirtyDayPercent),
+        amount: formatTokenPrice(
+          Big(amount).div(100).mul(thirtyDayPercent).toPrecision()
+        ),
+      },
     };
   };
 

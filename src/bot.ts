@@ -15,10 +15,14 @@ import {
   router,
 } from "@bot/middlewares";
 import { apiCallsLogger } from "@bot/transformers";
-import { botAdminFeature, setupFeature, walletFeature } from "@bot/features";
+import {
+  botAdminFeature,
+  helpFeature,
+  setupFeature,
+  walletFeature,
+} from "@bot/features";
 import { handleError } from "@bot/helpers/error-handler";
 import { currentMenu } from "@bot/menu";
-// import { currentMenu } from "@bot/menu";
 
 export const bot = new Bot<Context>(config.BOT_TOKEN);
 
@@ -43,6 +47,7 @@ bot.use(currentMenu);
 bot.use(router);
 // Handlers
 
+bot.use(helpFeature);
 bot.use(botAdminFeature);
 bot.use(setupFeature);
 bot.use(walletFeature);
