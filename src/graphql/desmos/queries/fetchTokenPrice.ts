@@ -1,103 +1,50 @@
-import Big from "big.js";
-import {
-  fetchTokenHistory,
-  fetchTokenPrice as fetchTokenPriceApi,
-} from "./tokenPrice";
-import _ from "lodash";
-import { formatTokenPrice } from "@bot/utils/formatTokenPrice";
-import { calcTVLPercent } from "@bot/utils/calcTVLPercent";
-import { TokenData } from "@bot/types/general";
+import { getTokenPrice, getTokenPriceByDate } from "@bot/constants/api";
+import { desmosChain } from "@bot/configs/desmos";
+import { getPnlDate } from "@bot/utils/getPnlDate";
+import { restRequest } from "@bot/utils/restRequest";
 
 export const fetchTokenPrice = async () => {
-  const promises = [fetchTokenPriceApi(), fetchTokenHistory()];
-
-  const [tokenPrice, tokenHistory] = await Promise.allSettled(promises);
-
-  const formattedRawData: TokenData = {
+  const defaultReturnValue = {
     tokenPrice: [],
-    tokenHistory: [],
   };
-  formattedRawData.tokenPrice = _.get(tokenPrice, ["value", "tokenPrice"], []);
-  formattedRawData.tokenHistory = _.get(
-    tokenHistory,
-    ["value", "tokenPrice"],
-    []
-  );
-
-  return formatAllTokens(formattedRawData);
-};
-
-export const formatAllTokens = (data: TokenData) => {
-  const nowPrice = data.tokenPrice[0]?.usd;
-
-  const totalFiat = (total: number) => {
-    return `${formatTokenPrice(nowPrice * total)}$`;
-  };
-
-  const PNL = (amount: number) => {
-    let firstDayPercent = "0";
-    if (data.tokenHistory[0]?.market_data?.current_price) {
-      firstDayPercent = calcTVLPercent(
-        nowPrice,
-        data.tokenHistory[0].market_data.current_price.usd
-      );
-    }
-
-    let seventhDayPercent = "0";
-    if (data.tokenHistory[1]?.market_data?.current_price) {
-      seventhDayPercent = calcTVLPercent(
-        nowPrice,
-        data.tokenHistory[1].market_data.current_price.usd
-      );
-    }
-
-    let fourteenthDayPercent = "0";
-    if (data.tokenHistory[2]?.market_data?.current_price) {
-      fourteenthDayPercent = calcTVLPercent(
-        nowPrice,
-        data.tokenHistory[2].market_data.current_price.usd
-      );
-    }
-
-    let thirtyDayPercent = "0";
-    if (data.tokenHistory[3]?.market_data?.current_price) {
-      thirtyDayPercent = calcTVLPercent(
-        nowPrice,
-        data.tokenHistory[3].market_data.current_price.usd
-      );
-    }
+  try {
+    const response = await restRequest(
+      getTokenPrice("cosmos", {
+        contract_addresses: desmosChain.contract,
+        vs_currencies: "usd",
+      })
+    );
+    const data = await response.json();
 
     return {
-      first: {
-        percent: formatTokenPrice(firstDayPercent),
-        amount: formatTokenPrice(
-          Big(amount).div(100).mul(firstDayPercent).toPrecision()
-        ),
-      },
-      seventh: {
-        percent: formatTokenPrice(seventhDayPercent),
-        amount: formatTokenPrice(
-          Big(amount).div(100).mul(seventhDayPercent).toPrecision()
-        ),
-      },
-      fourteenth: {
-        percent: formatTokenPrice(fourteenthDayPercent),
-        amount: formatTokenPrice(
-          Big(amount).div(100).mul(fourteenthDayPercent).toPrecision()
-        ),
-      },
-      thirty: {
-        percent: formatTokenPrice(thirtyDayPercent),
-        amount: formatTokenPrice(
-          Big(amount).div(100).mul(thirtyDayPercent).toPrecision()
-        ),
-      },
+      tokenPrice: Object.values(data),
     };
-  };
+  } catch (error) {
+    return defaultReturnValue;
+  }
+};
 
-  return {
-    totalFiat,
-    PNL,
-    price: nowPrice,
+export const fetchTokenHistory = async () => {
+  const defaultReturnValue = {
+    tokenPrice: {},
   };
+  try {
+    const dates = getPnlDate();
+    const promises = dates.map(async (date) => {
+      const response = await restRequest(
+        getTokenPriceByDate("desmos", {
+          date,
+          localization: "false",
+        })
+      );
+
+      return await response.json();
+    });
+    const data = await Promise.all(promises);
+    return {
+      tokenPrice: Object.values(data),
+    };
+  } catch (error) {
+    return defaultReturnValue;
+  }
 };

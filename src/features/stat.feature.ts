@@ -1,7 +1,7 @@
 import { logHandle } from "@bot/helpers/logging";
 import { router } from "@bot/middlewares";
-import { fetchTokenPrice } from "@bot/graphql/desmos/queries/fetchTokenPrice";
-import { fetchStatistic } from "@bot/graphql/desmos/queries/fetchStatistic";
+import { getTokenPrice } from "@bot/graphql/desmos/queries/getTokenPrice";
+import { getStatistic } from "@bot/graphql/desmos/queries/getStatistic";
 import { toNumber } from "lodash";
 import { formatTokenPrice } from "@bot/utils/formatTokenPrice";
 import { nFormatter } from "@bot/utils/nFormatter";
@@ -12,9 +12,9 @@ feature.command("statistic", logHandle("handle1 /start"), async (ctx) => {
   await ctx.replyWithChatAction("typing");
   ctx.session.step = "stats";
 
-  const prices = await fetchTokenPrice();
+  const prices = await getTokenPrice();
   const { communityPool, height, apr, inflation, bonded, unbonding, unbonded } =
-    await fetchStatistic();
+    await getStatistic();
   const { first, seventh, fourteenth, thirty } = prices.PNL(1);
 
   return ctx.reply(

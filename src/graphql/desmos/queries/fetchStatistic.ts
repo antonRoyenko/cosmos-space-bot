@@ -1,25 +1,11 @@
-import _ from "lodash";
-import {
-  fetchMarketData,
-  fetchLatestHeight,
-  fetchTokenomics,
-} from "@bot/graphql/desmos/queries/statistic";
-import Big from "big.js";
-import numeral from "numeral";
-import { Coins, StatisticData, StatisticValues } from "@bot/types/general";
-import { desmosChain } from "@bot/configs/desmos";
-import { formatToken } from "@bot/utils/formatToken";
-import { getDenom } from "@bot/utils/getFilterDenom";
+import { desmosRequest } from "@bot/graphql/desmos/desmosRequest";
+import { MarketData } from "@bot/graphql/desmos/general/market_data";
+import { Tokenomics } from "@bot/graphql/desmos/general/tokenomics";
+import { LatestBlockHeight } from "@bot/graphql/desmos/general/block_height";
 
-export const fetchStatistic = async () => {
-  const promises = [fetchMarketData(), fetchLatestHeight(), fetchTokenomics()];
-
-  const [marketData, latestHeight, tokenomics] = await Promise.allSettled(
-    promises
-  );
-
-  const formattedRawData: StatisticData = {
-    statistic: {
+export const fetchMarketData = async () => {
+  const defaultReturnValue = {
+    data: {
       communityPool: [],
       inflation: [],
       tokenPrice: [],
@@ -27,117 +13,46 @@ export const fetchStatistic = async () => {
       bondedTokens: [],
       distributionParams: [],
     },
+  };
+  try {
+    const data = await desmosRequest(MarketData, {
+      denom: "dsm",
+    });
+
+    return {
+      data,
+    };
+  } catch (error) {
+    return defaultReturnValue;
+  }
+};
+
+export const fetchLatestHeight = async () => {
+  const defaultReturnValue = {
     height: [],
-    tokenomics: {
+  };
+  try {
+    return await desmosRequest(LatestBlockHeight);
+  } catch (error) {
+    return defaultReturnValue;
+  }
+};
+
+export const fetchTokenomics = async () => {
+  const defaultReturnValue = {
+    data: {
       stakingParams: [],
       stakingPool: [],
       supply: [],
     },
   };
+  try {
+    const data = await desmosRequest(Tokenomics);
 
-  formattedRawData.statistic = _.get(marketData, ["value", "statistic"], []);
-  formattedRawData.height = _.get(latestHeight, ["value", "height"], []);
-  formattedRawData.tokenomics = _.get(tokenomics, ["value", "tokenomics"], []);
-
-  return formatStatisticsValues(formattedRawData);
-};
-
-const formatStatisticsValues = (data: StatisticData): StatisticValues => {
-  const { statistic, height, tokenomics } = data;
-  let communityPool, price, marketCap;
-
-  if (statistic.tokenPrice?.length) {
-    price = numeral(
-      numeral(statistic?.tokenPrice[0]?.price).format("0.[00]", Math.floor)
-    ).value();
-    marketCap = statistic.tokenPrice[0]?.marketCap;
+    return {
+      data,
+    };
+  } catch (error) {
+    return defaultReturnValue;
   }
-
-  const [communityPoolCoin]: [Coins] = _.get(
-    statistic,
-    ["communityPool", 0, "coins"],
-    []
-  ).filter((x: Coins) => x.denom === desmosChain.primaryTokenUnit);
-  const inflation = _.get(statistic, ["inflation", 0, "value"], 0);
-
-  const [total] = _.get(statistic, ["supply", 0, "coins"], []).filter(
-    (x: Coins) => x.denom === desmosChain.primaryTokenUnit
-  );
-
-  const rawSupplyAmount = getDenom(
-    _.get(statistic, ["supply", 0, "coins"], []),
-    desmosChain.primaryTokenUnit
-  ).amount;
-
-  const supply = formatToken(
-    rawSupplyAmount,
-    desmosChain.tokenUnits.udsm,
-    desmosChain.primaryTokenUnit
-  );
-
-  if (communityPoolCoin && communityPoolCoin.denom === "udsm") {
-    communityPool = formatToken(
-      communityPoolCoin.amount,
-      desmosChain.tokenUnits[communityPoolCoin.denom],
-      communityPoolCoin.denom
-    );
-  }
-
-  const bondedTokens = _.get(
-    statistic,
-    ["bondedTokens", 0, "bonded_tokens"],
-    1
-  );
-  const communityTax = _.get(
-    statistic,
-    ["distributionParams", 0, "params", "community_tax"],
-    "0"
-  );
-
-  const inflationWithCommunityTax = Big(1)
-    .minus(communityTax)
-    .times(inflation)
-    .toPrecision(2);
-  const apr = Big(rawSupplyAmount)
-    .times(inflationWithCommunityTax)
-    .div(bondedTokens)
-    .toNumber();
-
-  const bonded = _.get(tokenomics, ["stakingPool", 0, "bonded"], data);
-
-  const unbonding = _.get(tokenomics, ["stakingPool", 0, "unbonded"], []);
-
-  const unbonded = total.amount - unbonding - bonded;
-
-  return {
-    price,
-    supply,
-    marketCap,
-    inflation,
-    communityPool,
-    apr,
-    height,
-    tokenomics,
-    bonded: numeral(
-      formatToken(
-        bonded,
-        desmosChain.tokenUnits.udsm,
-        desmosChain.primaryTokenUnit
-      ).value
-    ).value(),
-    unbonding: numeral(
-      formatToken(
-        unbonding,
-        desmosChain.tokenUnits.udsm,
-        desmosChain.primaryTokenUnit
-      ).value
-    ).value(),
-    unbonded: numeral(
-      formatToken(
-        unbonded,
-        desmosChain.tokenUnits.udsm,
-        desmosChain.primaryTokenUnit
-      ).value
-    ).value(),
-  };
 };

@@ -1,8 +1,8 @@
 import { logHandle } from "@bot/helpers/logging";
 import { Context } from "@bot/types";
 import { router } from "@bot/middlewares";
-import { fetchBalance } from "@bot/graphql/desmos/queries/fetchBalance";
-import { fetchTokenPrice } from "@bot/graphql/desmos/queries/fetchTokenPrice";
+import { getBalance } from "@bot/graphql/desmos/queries/getBalance";
+import { getTokenPrice } from "@bot/graphql/desmos/queries/getTokenPrice";
 import { toNumber } from "lodash";
 
 export const feature = router.route("wallet");
@@ -10,12 +10,12 @@ export const feature = router.route("wallet");
 feature.command("wallet", logHandle("handle /wallet"), async (ctx: Context) => {
   await ctx.replyWithChatAction("typing");
   const wallets = ctx.session.currentWallets;
-  const prices = await fetchTokenPrice();
+  const prices = await getTokenPrice();
   let output = "";
 
   await Promise.all(
     wallets.map(async (wallet) => {
-      const data = await fetchBalance(wallet);
+      const data = await getBalance(wallet);
       const { first, seventh, thirty } = prices.PNL(toNumber(data.total.value));
 
       output +=
