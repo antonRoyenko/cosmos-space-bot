@@ -51,11 +51,19 @@ export const formatAllTokens = (data: TokenData) => {
       );
     }
 
-    let thirtyDayPercent = "0";
+    let fourteenthDayPercent = "0";
     if (data.tokenHistory[2]?.market_data?.current_price) {
-      thirtyDayPercent = calcTVLPercent(
+      fourteenthDayPercent = calcTVLPercent(
         nowPrice,
         data.tokenHistory[2].market_data.current_price.usd
+      );
+    }
+
+    let thirtyDayPercent = "0";
+    if (data.tokenHistory[3]?.market_data?.current_price) {
+      thirtyDayPercent = calcTVLPercent(
+        nowPrice,
+        data.tokenHistory[3].market_data.current_price.usd
       );
     }
 
@@ -72,6 +80,12 @@ export const formatAllTokens = (data: TokenData) => {
           Big(amount).div(100).mul(seventhDayPercent).toPrecision()
         ),
       },
+      fourteenth: {
+        percent: formatTokenPrice(fourteenthDayPercent),
+        amount: formatTokenPrice(
+          Big(amount).div(100).mul(fourteenthDayPercent).toPrecision()
+        ),
+      },
       thirty: {
         percent: formatTokenPrice(thirtyDayPercent),
         amount: formatTokenPrice(
@@ -84,5 +98,6 @@ export const formatAllTokens = (data: TokenData) => {
   return {
     totalFiat,
     PNL,
+    price: nowPrice,
   };
 };

@@ -1,3 +1,8 @@
+import {
+  MarketDataQuery,
+  TokenomicsQuery,
+} from "@bot/graphql/desmos/types/general_types";
+
 export type TokenUnit = {
   displayDenom: string;
   baseDenom: string;
@@ -5,7 +10,7 @@ export type TokenUnit = {
   value: string;
 };
 
-type Coins = {
+export type Coins = {
   amount: string;
   denom: string;
 };
@@ -16,6 +21,12 @@ export type BalanceData = {
   delegationBalance: { coins: Array<Coins> };
   unbondingBalance: { coins: Array<Coins> };
   delegationRewards: Array<{ coins: Array<Coins>; validatorAddress: string }>;
+};
+
+export type StatisticData = {
+  statistic: MarketDataQuery;
+  height: Array<{ height: number }>;
+  tokenomics: TokenomicsQuery;
 };
 
 export type TokenData = {
@@ -120,3 +131,17 @@ export interface CoinHistoryResponse extends BasicCoin {
   developer_data: DeveloperData;
   public_interest_stats: PublicInterestStats;
 }
+
+export type StatisticValues = {
+  price?: number | null;
+  supply: TokenUnit;
+  marketCap: number | null;
+  inflation: number;
+  communityPool?: TokenUnit;
+  apr: number;
+  height: Array<{ height: number }>;
+  tokenomics: TokenomicsQuery;
+  bonded: number | null;
+  unbonding: number | null;
+  unbonded: number | null;
+};

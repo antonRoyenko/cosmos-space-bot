@@ -17,23 +17,21 @@ feature.command("wallet", logHandle("handle /wallet"), async (ctx: Context) => {
     wallets.map(async (wallet) => {
       const data = await fetchBalance(wallet);
       const { first, seventh, thirty } = prices.PNL(toNumber(data.total.value));
-      output += `
-Wallet: ${wallet} \n
-Balance in ${data.available.displayDenom}:
-Available - ${data.available.value}
-Delagated - ${data.delegate.value}
-Unbonding - ${data.unbonding.value}
-Staking Reward - ${data.reward.value}
-Commission - ${data.commission.value}
 
-Total ${data.total.displayDenom} - ${data.total.value}
-Total USD - ${prices.totalFiat(toNumber(data.total.value))}
-
-PNL:
-for today ${first.percent}% ${first.amount}${data.total.displayDenom}
-in 7 days ${seventh.percent}% ${seventh.amount}${data.total.displayDenom}
-in 30 days ${thirty.percent}% ${thirty.amount}${data.total.displayDenom}
-`;
+      output +=
+        `Wallet: ${wallet} \n` +
+        `\nBalance in ${data.available.displayDenom}: \n` +
+        `Available - ${data.available.value} \n` +
+        `Delagated - ${data.delegate.value} \n` +
+        `Unbonding - ${data.unbonding.value} \n` +
+        `Staking Reward - ${data.reward.value} \n` +
+        `Commission - ${data.commission.value} \n` +
+        `\nTotal ${data.total.displayDenom} - ${data.total.value} \n` +
+        `Total USD - ${prices.totalFiat(toNumber(data.total.value))} \n` +
+        `\nPNL: \n` +
+        `for today ${first.percent}% ${first.amount}${data.total.displayDenom} \n` +
+        `in 7 days ${seventh.percent}% ${seventh.amount}${data.total.displayDenom} \n` +
+        `in 30 days ${thirty.percent}% ${thirty.amount}${data.total.displayDenom}`;
     })
   );
 

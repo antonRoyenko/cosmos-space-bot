@@ -20,6 +20,7 @@ import {
   helpFeature,
   setupFeature,
   walletFeature,
+  statFeature,
 } from "@bot/features";
 import { handleError } from "@bot/helpers/error-handler";
 import { currentMenu } from "@bot/menu";
@@ -48,6 +49,7 @@ bot.use(router);
 // Handlers
 
 bot.use(helpFeature);
+bot.use(statFeature);
 bot.use(botAdminFeature);
 bot.use(setupFeature);
 bot.use(walletFeature);

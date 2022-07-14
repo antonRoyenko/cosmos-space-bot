@@ -8,7 +8,7 @@ feature.command("help", logHandle("handle /start"), async (ctx) => {
 
   await ctx.reply(
     "/wallet - show your assets \n" +
-      "/stats - network statistic \n" +
+      "/statistic - network statistic \n" +
       "/gov - active governance \n" +
       "/resources - useful network resources \n" +
       "/add - add wallet \n" +

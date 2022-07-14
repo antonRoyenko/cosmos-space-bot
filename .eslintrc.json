@@ -19,7 +19,7 @@
     "parserOptions": { "project": ["./tsconfig.json"] },
     "rules": {
         "@typescript-eslint/strict-boolean-expressions": [
-            2,
+            1,
             {
                 "allowString" : false,
                 "allowNumber" : false
