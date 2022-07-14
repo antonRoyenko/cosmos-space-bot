@@ -11217,3 +11217,20 @@ export type MarketDataQuery = {
     { __typename?: "distribution_params" } & Pick<Distribution_Params, "params">
   >;
 };
+
+export type ProposalsQuery = {
+  proposals: Array<
+    { __typename?: "proposal" } & Pick<
+      Proposal,
+      "title" | "status" | "description"
+    > & { proposalId: Proposal["id"] }
+  >;
+  total: { __typename?: "proposal_aggregate" } & {
+    aggregate?: Maybe<
+      { __typename?: "proposal_aggregate_fields" } & Pick<
+        Proposal_Aggregate_Fields,
+        "count"
+      >
+    >;
+  };
+};
