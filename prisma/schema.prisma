@@ -9,11 +9,35 @@ datasource db {
 }
 
 model User {
-  id           Int      @id @default(autoincrement())
-  wallets      String[]
-  telegramId   BigInt   @unique @map("telegram_id")
-  updatedAt    DateTime @updatedAt @map("updated_at")
-  createdAt    DateTime @default(now()) @map("created_at")
+  id            Int      @id @default(autoincrement())
+  wallets       String[]
+  telegramId    BigInt   @unique @map("telegram_id")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  createdAt     DateTime @default(now()) @map("created_at")
+  activeNetwork Network?  @relation(fields: [networkId], references: [name])
+  networkId     String?
 
   @@map(name: "users")
+}
+
+model Network {
+  name      String     @id @unique
+  resources Resources?
+  user      User[]
+
+  @@map(name: "network")
+}
+
+model Resources {
+  id        Int     @id @default(autoincrement())
+  site      String
+  discord   String
+  twitter   String
+  youtube   String?
+  medium    String
+  github    String
+  network   Network @relation(fields: [networkId], references: [name])
+  networkId String  @unique
+
+  @@map(name: "resources")
 }

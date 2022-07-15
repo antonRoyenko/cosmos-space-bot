@@ -22,6 +22,7 @@ import {
   walletFeature,
   statFeature,
   govFeature,
+  resFeature,
 } from "@bot/features";
 import { handleError } from "@bot/helpers/error-handler";
 import { currentMenu } from "@bot/menu";
@@ -55,6 +56,7 @@ bot.use(botAdminFeature);
 bot.use(setupFeature);
 bot.use(walletFeature);
 bot.use(govFeature);
+bot.use(resFeature);
 
 if (config.isDev) {
   bot.catch(handleError);

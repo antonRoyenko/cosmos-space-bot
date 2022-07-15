@@ -14,6 +14,7 @@ export const createService = (prisma: PrismaClient) =>
         },
         create: {
           telegramId,
+          networkId: undefined,
         },
         update: {},
       };
@@ -34,6 +35,15 @@ export const createService = (prisma: PrismaClient) =>
 
       return prisma.user.update(_.merge(query, args));
     },
+
+    getResourcesById: (networkId: string) =>
+      prisma.resources.findUnique({
+        where: {
+          networkId,
+        },
+      }),
+
+    getNetworks: () => prisma.network.findMany(),
 
     getUserByTelegramId: (telegramId: number) =>
       prisma.user.findUnique({
