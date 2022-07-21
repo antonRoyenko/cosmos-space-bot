@@ -145,3 +145,8 @@ export type StatisticValues = {
   unbonding: number | null;
   unbonded: number | null;
 };
+
+export type Subscription = {
+  closed: boolean;
+  unsubscribe(): void;
+};

@@ -23,6 +23,7 @@ import {
   statFeature,
   govFeature,
   resFeature,
+  notifFeature,
 } from "@bot/features";
 import { handleError } from "@bot/helpers/error-handler";
 import { currentMenu } from "@bot/menu";
@@ -38,6 +39,8 @@ if (config.isDev) {
   bot.api.config.use(apiCallsLogger);
   bot.use(updatesLogger());
 }
+
+// getClient("https://gql.desmos.forbole.com/v1/graphql");
 
 bot.use(collectMetrics());
 bot.use(rateLimit());
@@ -57,6 +60,7 @@ bot.use(setupFeature);
 bot.use(walletFeature);
 bot.use(govFeature);
 bot.use(resFeature);
+bot.use(notifFeature);
 
 if (config.isDev) {
   bot.catch(handleError);
