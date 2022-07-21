@@ -1,12 +1,10 @@
 import { logHandle } from "@bot/helpers/logging";
 import { router } from "@bot/middlewares";
 import { usersService } from "@bot/services";
-import { observer } from "@bot/graphql/desmos/queries/testSubscription";
 
 export const feature = router.route("resources");
 
 feature.command("resources", logHandle("handle /resources"), async (ctx) => {
-  observer.unsubscribe();
   await ctx.replyWithChatAction("typing");
   ctx.session.step = "resources";
   if (!ctx.local.user?.networkId) {
