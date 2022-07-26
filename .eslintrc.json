@@ -1,29 +1,48 @@
 {
-    "root": true,
-    "env": {
-        "es6": true,
-        "browser": true,
-        "node": true
-    },
-    "extends": [
-        "eslint:recommended",
-        "plugin:prettier/recommended",
-        "plugin:@typescript-eslint/recommended"
+  "root": true,
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended"
+  ],
+  "plugins": [
+    "@typescript-eslint",
+    "prettier",
+    "import",
+    "react"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": [
+      "./tsconfig.json"
+    ]
+  },
+  "rules": {
+    "@typescript-eslint/strict-boolean-expressions": [
+      1,
+      {
+        "allowString": false,
+        "allowNumber": false
+      }
     ],
-     "plugins": [
-        "@typescript-eslint",
-        "prettier",
-        "import"
-    ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": { "project": ["./tsconfig.json"] },
-    "rules": {
-        "@typescript-eslint/strict-boolean-expressions": [
-            1,
-            {
-                "allowString" : false,
-                "allowNumber" : false
-            }
+    "react/react-in-jsx-scope": "off",
+    "react/display-name": "off",
+    "react/jsx-filename-extension": [
+      0,
+      {
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".ts",
+          ".tsx"
         ]
-    }
+      }
+    ]
+  }
 }

@@ -1,8 +1,8 @@
 import "module-alias/register";
 
 import { bot } from "@bot/bot";
-import { server } from "@bot/server";
-import { prisma } from "@bot/prisma";
+import { server } from "@server/server";
+import { prisma } from "@server/prisma";
 import { config } from "@bot/config";
 import { logger } from "@bot/logger";
 import { handleGracefulShutdown } from "@bot/helpers/graceful-shutdown-handler";
@@ -26,6 +26,11 @@ const run = async () => {
       }
     );
   } else {
+    server.listen({ host: config.BOT_SERVER_HOST, port: 3000 }, (err) => {
+      if (err) throw err;
+      console.log("Server listening on http://localhost:3000");
+    });
+
     bot.start({
       allowed_updates: config.BOT_ALLOWED_UPDATES,
       onStart: ({ username }) =>

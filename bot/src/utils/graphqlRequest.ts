@@ -1,4 +1,4 @@
-import { gql, GraphQLClient } from "graphql-request";
+import { gql, GraphQLClient, GraphQLWebSocketClient } from "graphql-request";
 import { RequestDocument, Variables } from "graphql-request/dist/types";
 
 export const request = <T, V = Variables>(

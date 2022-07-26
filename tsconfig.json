@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "lib": ["esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -12,11 +16,28 @@
     "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "dist",
-    "baseUrl": "src",
+    "baseUrl": "./",
     "skipLibCheck": true,
+    "noEmit": false,
     "paths": {
-      "@bot/*": ["*"]
-    }
+      "@bot/*": [
+        "./bot/src/*"
+      ],
+      "@web/*": [
+        "./web/*"
+      ],
+      "@server/*": [
+        "./server/*"
+      ]
+    },
+    "jsx": "preserve"
   },
-  "include": ["src/**/*"]
+  "include": [
+    "bot/**/*.ts",
+    "web/**/*.tsx",
+    "web/**/*.ts",
+    "web/**/*",
+    "server/**/*.ts",
+    "types/**/*.ts"
+  ]
 }
