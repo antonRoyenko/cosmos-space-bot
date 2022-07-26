@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 import { connectWallet } from "./utils/connectWallet";
 import { chainInfo } from "./config";
 import { sendNotification } from "./utils/telegram";
-import { makePostRequest } from "@web/src/utils/request";
+import { makePostRequest } from "./utils/request";
 
 const App: FC = () => {
   const [error, setError] = useState<Error>();
@@ -29,10 +29,7 @@ const App: FC = () => {
   };
 
   const back = async () => {
-    await sendNotification(
-      "done, now you can find your assets in /assets",
-      "HTML"
-    );
+    await sendNotification("Perfect! Now you can use /asset command", "HTML");
     window.location.replace("https://t.me/cosmos_space_bot");
   };
 

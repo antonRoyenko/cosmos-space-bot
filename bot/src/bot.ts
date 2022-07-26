@@ -26,7 +26,7 @@ import {
   notifFeature,
 } from "@bot/features";
 import { handleError } from "@bot/helpers/error-handler";
-import { currentMenu, walletMenu } from "@bot/menu";
+import { currentMenu, walletMenu, walletRemove } from "@bot/menu";
 
 export const bot = new Bot<Context>(config.BOT_TOKEN);
 
@@ -49,9 +49,10 @@ bot.use(setupSession());
 bot.use(setupLocalContext());
 bot.use(setupLogger());
 bot.use(setUser());
-bot.use(currentMenu);
-bot.use(currentMenu);
 bot.use(walletMenu);
+walletMenu.register(walletRemove);
+bot.use(currentMenu);
+bot.use(router);
 // Handlers
 
 bot.use(helpFeature);

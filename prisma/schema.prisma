@@ -14,16 +14,18 @@ model User {
   telegramId    BigInt   @unique @map("telegram_id")
   updatedAt     DateTime @updatedAt @map("updated_at")
   createdAt     DateTime @default(now()) @map("created_at")
-  activeNetwork Network?  @relation(fields: [networkId], references: [name])
+  activeNetwork Network? @relation(fields: [networkId], references: [name])
   networkId     String?
 
   @@map(name: "users")
 }
 
 model Network {
-  name      String     @id @unique
-  resources Resources?
-  user      User[]
+  name        String     @id @unique
+  resources   Resources?
+  user        User[]
+  publicUrl   String
+  wsPublicUrl String
 
   @@map(name: "network")
 }

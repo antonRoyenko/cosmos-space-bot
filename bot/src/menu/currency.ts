@@ -1,6 +1,7 @@
 import { Menu } from "@grammyjs/menu";
 import { Context } from "@bot/types";
 import { usersService } from "@bot/services";
+import { walletMenu } from "@bot/menu/wallet";
 
 export const currentMenu = new Menu<Context>("currency").text(
   "Desmos",
@@ -11,6 +12,6 @@ export const currentMenu = new Menu<Context>("currency").text(
     ctx.local.user = await usersService.updateByTelegramId(telegramId, {
       data: { networkId: "desmos" },
     });
-    return ctx.reply("Great! Now please enter wallet address");
+    await ctx.reply("Please choose network", { reply_markup: walletMenu });
   }
 );
