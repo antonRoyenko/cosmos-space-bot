@@ -30,5 +30,5 @@ feature
 
     ctx.session.currentWallets = [ctx.message.text];
     ctx.session.step = "home";
-    return ctx.reply("Perfect! Now you can use /asset command");
+    return ctx.reply("Perfect! Now you can use /assets command");
   });

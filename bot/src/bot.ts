@@ -24,6 +24,7 @@ import {
   govFeature,
   resFeature,
   notifFeature,
+  assetsFeature,
 } from "@bot/features";
 import { handleError } from "@bot/helpers/error-handler";
 import { currentMenu, walletMenu, walletRemove } from "@bot/menu";
@@ -60,6 +61,7 @@ bot.use(statFeature);
 bot.use(botAdminFeature);
 bot.use(setupFeature);
 bot.use(walletFeature);
+bot.use(assetsFeature);
 bot.use(govFeature);
 bot.use(resFeature);
 bot.use(notifFeature);

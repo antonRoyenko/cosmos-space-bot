@@ -1,6 +1,6 @@
 import { logHandle } from "@bot/helpers/logging";
 import { router } from "@bot/middlewares";
-import { getProposals } from "@bot/graphql/desmos/queries/getProposals";
+import { getProposals } from "@bot/graphql/queries/getProposals";
 
 export const feature = router.route("governance");
 

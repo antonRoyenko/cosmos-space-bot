@@ -1,11 +1,8 @@
 const coingeckoApiHost = "https://api.coingecko.com/api/v3";
 
-export const getTokenPrice = (
-  id: string,
-  queryParams: { [key: string]: string }
-) => {
+export const getTokenPrice = (queryParams: { [key: string]: string }) => {
   const params = new URLSearchParams(queryParams);
-  return `${coingeckoApiHost}/simple/token_price/${id}?${params}`;
+  return `${coingeckoApiHost}/simple/price?${params}`;
 };
 
 export const getTokenPriceByDate = (

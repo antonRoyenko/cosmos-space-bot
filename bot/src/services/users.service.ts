@@ -43,7 +43,12 @@ export const createService = (prisma: PrismaClient) =>
         },
       }),
 
-    getNetworks: () => prisma.network.findMany(),
+    getNetwork: (network: string) =>
+      prisma.network.findUnique({
+        where: {
+          name: network,
+        },
+      }),
 
     getUserByTelegramId: (telegramId: number) =>
       prisma.user.findUnique({

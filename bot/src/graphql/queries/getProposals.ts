@@ -1,4 +1,4 @@
-import { fetchProposal } from "@bot/graphql/desmos/queries/fetchProposal";
+import { fetchProposal } from "@bot/graphql/queries/fetchProposal";
 import _ from "lodash";
 import { govStatus } from "@bot/constants/gov";
 import { ProposalsQuery } from "../types/general_types";

@@ -19,7 +19,8 @@ export interface SessionData {
     | "help"
     | "stats"
     | "governance"
-    | "resources";
+    | "resources"
+    | "assets";
 }
 
 export type Context = DefaultContext &

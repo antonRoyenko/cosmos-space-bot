@@ -7,14 +7,21 @@ import _ from "lodash";
 import { formatTokenPrice } from "@bot/utils/formatTokenPrice";
 import { calcTVLPercent } from "@bot/utils/calcTVLPercent";
 import { TokenData } from "@bot/types/general";
+import { bech32 } from "bech32";
+import { config } from "@bot/chains";
+import { atomConfig } from "@bot/chains/atom";
 
-export const getTokenPrice = async () => {
-  const promises = [fetchTokenPriceApi(), fetchTokenHistory()];
+export const getTokenPrice = async (address: string) => {
+  const prefix = bech32.decode(address).prefix;
+  const chain = config.find(({ network }) => network === prefix) || atomConfig;
+  const apiId = chain.coingeckoId || "";
+
+  const promises = [fetchTokenPriceApi(apiId), fetchTokenHistory(apiId)];
 
   const [tokenPrice, tokenHistory] = await Promise.allSettled(promises);
 
   const formattedRawData: TokenData = {
-    tokenPrice: [],
+    tokenPrice: {},
     tokenHistory: [],
   };
   formattedRawData.tokenPrice = _.get(tokenPrice, ["value", "tokenPrice"], []);
@@ -24,21 +31,21 @@ export const getTokenPrice = async () => {
     []
   );
 
-  return formatAllTokens(formattedRawData);
+  return formatAllTokens(formattedRawData, apiId);
 };
 
-export const formatAllTokens = (data: TokenData) => {
-  const nowPrice = data.tokenPrice[0]?.usd;
+export const formatAllTokens = (data: TokenData, apiId: string) => {
+  const currentPrice = data.tokenPrice[apiId]?.usd;
 
   const totalFiat = (total: number) => {
-    return `${formatTokenPrice(nowPrice * total)}$`;
+    return `${formatTokenPrice(currentPrice * total)}$`;
   };
 
   const PNL = (amount: number) => {
     let firstDayPercent = "0";
     if (data.tokenHistory[0]?.market_data?.current_price) {
       firstDayPercent = calcTVLPercent(
-        nowPrice,
+        currentPrice,
         data.tokenHistory[0].market_data.current_price.usd
       );
     }
@@ -46,7 +53,7 @@ export const formatAllTokens = (data: TokenData) => {
     let seventhDayPercent = "0";
     if (data.tokenHistory[1]?.market_data?.current_price) {
       seventhDayPercent = calcTVLPercent(
-        nowPrice,
+        currentPrice,
         data.tokenHistory[1].market_data.current_price.usd
       );
     }
@@ -54,7 +61,7 @@ export const formatAllTokens = (data: TokenData) => {
     let fourteenthDayPercent = "0";
     if (data.tokenHistory[2]?.market_data?.current_price) {
       fourteenthDayPercent = calcTVLPercent(
-        nowPrice,
+        currentPrice,
         data.tokenHistory[2].market_data.current_price.usd
       );
     }
@@ -62,7 +69,7 @@ export const formatAllTokens = (data: TokenData) => {
     let thirtyDayPercent = "0";
     if (data.tokenHistory[3]?.market_data?.current_price) {
       thirtyDayPercent = calcTVLPercent(
-        nowPrice,
+        currentPrice,
         data.tokenHistory[3].market_data.current_price.usd
       );
     }
@@ -98,6 +105,6 @@ export const formatAllTokens = (data: TokenData) => {
   return {
     totalFiat,
     PNL,
-    price: nowPrice,
+    price: currentPrice,
   };
 };

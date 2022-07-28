@@ -1,7 +1,7 @@
-import { desmosRequest } from "@bot/graphql/desmos/desmosRequest";
-import { MarketData } from "@bot/graphql/desmos/general/market_data";
-import { Tokenomics } from "@bot/graphql/desmos/general/tokenomics";
-import { LatestBlockHeight } from "@bot/graphql/desmos/general/block_height";
+import { request } from "@bot/utils/graphqlRequest";
+import { MarketData } from "@bot/graphql/general/market_data";
+import { Tokenomics } from "@bot/graphql/general/tokenomics";
+import { LatestBlockHeight } from "@bot/graphql/general/block_height";
 
 export const fetchMarketData = async () => {
   const defaultReturnValue = {
@@ -15,12 +15,12 @@ export const fetchMarketData = async () => {
     },
   };
   try {
-    const data = await desmosRequest(MarketData, {
-      denom: "dsm",
-    });
+    // const data = await request(MarketData, {
+    //   denom: "dsm",
+    // });
 
     return {
-      data,
+      data: defaultReturnValue,
     };
   } catch (error) {
     return defaultReturnValue;
@@ -32,7 +32,8 @@ export const fetchLatestHeight = async () => {
     height: [],
   };
   try {
-    return await desmosRequest(LatestBlockHeight);
+    return defaultReturnValue;
+    // return await createRequest(LatestBlockHeight);
   } catch (error) {
     return defaultReturnValue;
   }
@@ -47,10 +48,10 @@ export const fetchTokenomics = async () => {
     },
   };
   try {
-    const data = await desmosRequest(Tokenomics);
+    // const data = await createRequest(Tokenomics);
 
     return {
-      data,
+      data: defaultReturnValue,
     };
   } catch (error) {
     return defaultReturnValue;

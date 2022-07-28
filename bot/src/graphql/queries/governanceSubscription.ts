@@ -1,5 +1,5 @@
 import { createSubscriptionObservable } from "@bot/utils/apollo";
-import { HeightSubscriber } from "@bot/graphql/desmos/general/proposals";
+import { HeightSubscriber } from "@bot/graphql/general/proposals";
 import gql from "graphql-tag";
 import { Subscription } from "@bot/types/general";
 

@@ -1,27 +1,34 @@
 import _ from "lodash";
 import Big from "big.js";
 import {
-  fetchCommission,
   fetchAvailableBalances,
   fetchDelegationBalance,
   fetchUnbondingBalance,
   fetchRewards,
 } from "./fetchBalance";
 import { getDenom } from "@bot/utils/getFilterDenom";
-import { desmosChain } from "@bot/configs/desmos";
 import { formatToken } from "@bot/utils/formatToken";
-import { BalanceData } from "@bot/types/general";
+import { BalanceData, ChainInfo } from "@bot/types/general";
+import { bech32 } from "bech32";
+import { config } from "@bot/chains";
+import { atomConfig } from "@bot/chains/atom";
+import { usersService } from "@bot/services";
 
 export const getBalance = async (address: string) => {
+  const prefix = bech32.decode(address).prefix;
+  const chain = config.find(({ network }) => network === prefix) || atomConfig;
+  const url = await usersService.getNetwork(prefix);
+  const publicUrl = url?.publicUrl || "";
+
   const promises = [
-    fetchCommission(address),
-    fetchAvailableBalances(address),
-    fetchDelegationBalance(address),
-    fetchUnbondingBalance(address),
-    fetchRewards(address),
+    fetchAvailableBalances(publicUrl, address),
+    fetchDelegationBalance(publicUrl, address),
+    fetchUnbondingBalance(publicUrl, address),
+    fetchRewards(publicUrl, address),
   ];
-  const [commission, available, delegation, unbonding, rewards] =
-    await Promise.allSettled(promises);
+  const [available, delegation, unbonding, rewards] = await Promise.allSettled(
+    promises
+  );
 
   const formattedRawData: BalanceData = {
     commission: { coins: [] },
@@ -30,7 +37,6 @@ export const getBalance = async (address: string) => {
     unbondingBalance: { coins: [] },
     delegationRewards: [],
   };
-  formattedRawData.commission = _.get(commission, ["value", "commission"], []);
   formattedRawData.accountBalances = _.get(
     available,
     ["value", "accountBalances"],
@@ -52,74 +58,63 @@ export const getBalance = async (address: string) => {
     []
   );
 
-  return formatAllBalance(formattedRawData);
+  return formatAllBalance(formattedRawData, chain);
 };
 
-const formatAllBalance = (data: BalanceData) => {
+const formatAllBalance = (data: BalanceData, chain: ChainInfo) => {
+  const { primaryTokenUnit, tokenUnits } = chain;
   const available = getDenom(
     _.get(data, ["accountBalances", "coins"], []),
-    desmosChain.primaryTokenUnit
+    primaryTokenUnit
   );
   const availableAmount = formatToken(
     available.amount,
-    desmosChain.tokenUnits.udsm,
-    desmosChain.primaryTokenUnit
+    tokenUnits[primaryTokenUnit],
+    primaryTokenUnit
   );
   const delegate = getDenom(
     _.get(data, ["delegationBalance", "coins"], []),
-    desmosChain.primaryTokenUnit
+    primaryTokenUnit
   );
   const delegateAmount = formatToken(
     delegate.amount,
-    desmosChain.tokenUnits.udsm,
-    desmosChain.primaryTokenUnit
+    tokenUnits[primaryTokenUnit],
+    primaryTokenUnit
   );
 
   const unbonding = getDenom(
     _.get(data, ["unbondingBalance", "coins"], []),
-    desmosChain.primaryTokenUnit
+    primaryTokenUnit
   );
   const unbondingAmount = formatToken(
     unbonding.amount,
-    desmosChain.tokenUnits.udsm,
-    desmosChain.primaryTokenUnit
+    tokenUnits[primaryTokenUnit],
+    primaryTokenUnit
   );
 
   const rewards = data.delegationRewards.reduce((a, b) => {
     const coins = _.get(b, ["coins"], []);
-    const dsmCoins = getDenom(coins, desmosChain.primaryTokenUnit);
+    const dsmCoins = getDenom(coins, primaryTokenUnit);
 
     return Big(a).plus(dsmCoins.amount).toPrecision();
   }, "0");
   const rewardsAmount = formatToken(
     rewards,
-    desmosChain.tokenUnits.udsm,
-    desmosChain.primaryTokenUnit
-  );
-
-  const commission = getDenom(
-    _.get(data, ["commission", "coins"], []),
-    desmosChain.primaryTokenUnit
-  );
-  const commissionAmount = formatToken(
-    commission.amount,
-    desmosChain.tokenUnits.udsm,
-    desmosChain.primaryTokenUnit
+    tokenUnits[primaryTokenUnit],
+    primaryTokenUnit
   );
 
   const total = Big(availableAmount.value)
     .plus(delegateAmount.value)
     .plus(unbondingAmount.value)
     .plus(rewardsAmount.value)
-    .plus(commissionAmount.value)
-    .toFixed(desmosChain.tokenUnits.udsm.exponent);
+    .toFixed(tokenUnits[primaryTokenUnit].exponent);
 
   return {
     available: availableAmount,
     delegate: delegateAmount,
     unbonding: unbondingAmount,
     reward: rewardsAmount,
-    commission: commissionAmount,
     total: {
       value: total,
       displayDenom: availableAmount.displayDenom,

@@ -29,7 +29,7 @@ const App: FC = () => {
   };
 
   const back = async () => {
-    await sendNotification("Perfect! Now you can use /asset command", "HTML");
+    await sendNotification("Perfect! Now you can use /assets command", "HTML");
     window.location.replace("https://t.me/cosmos_space_bot");
   };
 

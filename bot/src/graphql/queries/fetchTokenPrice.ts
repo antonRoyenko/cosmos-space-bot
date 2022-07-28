@@ -1,30 +1,29 @@
 import { getTokenPrice, getTokenPriceByDate } from "@bot/constants/api";
-import { desmosChain } from "@bot/configs/desmos";
 import { getPnlDate } from "@bot/utils/getPnlDate";
 import { restRequest } from "@bot/utils/restRequest";
 
-export const fetchTokenPrice = async () => {
+export const fetchTokenPrice = async (apiId: string) => {
   const defaultReturnValue = {
-    tokenPrice: [],
+    tokenPrice: {},
   };
   try {
     const response = await restRequest(
-      getTokenPrice("cosmos", {
-        contract_addresses: desmosChain.contract,
+      getTokenPrice({
+        ids: apiId,
         vs_currencies: "usd",
       })
     );
     const data = await response.json();
 
     return {
-      tokenPrice: Object.values(data),
+      tokenPrice: data,
     };
   } catch (error) {
     return defaultReturnValue;
   }
 };
 
-export const fetchTokenHistory = async () => {
+export const fetchTokenHistory = async (apiId: string) => {
   const defaultReturnValue = {
     tokenPrice: {},
   };
@@ -32,7 +31,7 @@ export const fetchTokenHistory = async () => {
     const dates = getPnlDate();
     const promises = dates.map(async (date) => {
       const response = await restRequest(
-        getTokenPriceByDate("desmos", {
+        getTokenPriceByDate(apiId, {
           date,
           localization: "false",
         })

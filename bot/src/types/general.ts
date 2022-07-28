@@ -1,7 +1,9 @@
 import {
   MarketDataQuery,
   TokenomicsQuery,
-} from "@bot/graphql/desmos/types/general_types";
+} from "@bot/graphql/types/general_types";
+import { Bech32Address } from "@keplr-wallet/cosmos";
+import { Bech32Config } from "@keplr-wallet/types";
 
 export type TokenUnit = {
   displayDenom: string;
@@ -23,6 +25,18 @@ export type BalanceData = {
   delegationRewards: Array<{ coins: Array<Coins>; validatorAddress: string }>;
 };
 
+export type ChainInfo = {
+  network: string;
+  prefix: Bech32Config;
+  primaryTokenUnit: string;
+  tokenUnits: {
+    [key: string]: {
+      display: string;
+      exponent: number;
+    };
+  };
+};
+
 export type StatisticData = {
   statistic: MarketDataQuery;
   height: Array<{ height: number }>;
@@ -30,7 +44,11 @@ export type StatisticData = {
 };
 
 export type TokenData = {
-  tokenPrice: Array<{ usd: number }>;
+  tokenPrice: {
+    [key: string]: {
+      usd: number;
+    };
+  };
   tokenHistory: Array<CoinHistoryResponse>;
 };
 
