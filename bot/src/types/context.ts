@@ -3,17 +3,19 @@ import { FluentContextFlavor } from "@grammyjs/fluent";
 import { ParseModeContext } from "@grammyjs/parse-mode";
 
 import { LocalContext } from "@bot/context";
+import { Wallet } from "@prisma/client";
 
 export interface LocalContextFlavor {
   local: LocalContext;
 }
 
 export interface SessionData {
-  currentMenu?: string;
-  currentWallets: Array<string>;
+  currentNetwork?: string;
+  currentWallets: Array<Wallet>;
   step:
     | "setup"
     | "wallet"
+    | "walletMenu"
     | "admin"
     | "home"
     | "help"

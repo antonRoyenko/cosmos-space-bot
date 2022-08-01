@@ -5,8 +5,6 @@ import {
   AccountUnbondingBalanceDocument,
   AccountDelegationRewardsDocument,
 } from "../general/account_details_documents";
-import { bech32 } from "bech32";
-import { usersService } from "@bot/services";
 
 export const fetchAvailableBalances = async (url: string, address: string) => {
   const defaultReturnValue = {

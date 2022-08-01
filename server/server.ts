@@ -9,6 +9,7 @@ import { logger } from "@bot/logger";
 import { handleError } from "@bot/helpers/error-handler";
 import path from "path";
 import { usersService } from "@bot/services";
+import { bech32 } from "bech32";
 
 export const server = fastify({
   logger,
@@ -52,13 +53,12 @@ server.get("/metrics", async (req, res) => {
 server.post<postWalletRequest>("/update_wallet/:id", async (req, res) => {
   try {
     const telegramId = Number(req.params.id);
-    const wallet = req.body.wallet;
-    const user = await usersService.getUserByTelegramId(telegramId);
-    if (user) {
-      const wallets = [...new Set([...user.wallets, wallet])];
-      await usersService.updateByTelegramId(telegramId, {
-        data: { wallets },
-      });
+    const address = req.body.wallet;
+    const prefix = bech32.decode(address).prefix;
+    const network = await usersService.getNetwork({ name: prefix });
+
+    if (network && network.id) {
+      await usersService.upsertWallet(telegramId, network.id, address);
     }
 
     return req.body;

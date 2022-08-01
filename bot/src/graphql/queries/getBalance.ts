@@ -9,17 +9,15 @@ import {
 import { getDenom } from "@bot/utils/getFilterDenom";
 import { formatToken } from "@bot/utils/formatToken";
 import { BalanceData, ChainInfo } from "@bot/types/general";
-import { bech32 } from "bech32";
 import { config } from "@bot/chains";
 import { atomConfig } from "@bot/chains/atom";
-import { usersService } from "@bot/services";
 
-export const getBalance = async (address: string) => {
-  const prefix = bech32.decode(address).prefix;
+export const getBalance = async (
+  publicUrl: string,
+  address: string,
+  prefix: string
+) => {
   const chain = config.find(({ network }) => network === prefix) || atomConfig;
-  const url = await usersService.getNetwork(prefix);
-  const publicUrl = url?.publicUrl || "";
-
   const promises = [
     fetchAvailableBalances(publicUrl, address),
     fetchDelegationBalance(publicUrl, address),

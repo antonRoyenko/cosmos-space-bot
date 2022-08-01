@@ -108,6 +108,9 @@
   "lint-staged": {
     "*.ts": "npm run lint"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "_moduleAliases": {
     "@bot": "dist/bot/src",
     "@web": "dist/web",

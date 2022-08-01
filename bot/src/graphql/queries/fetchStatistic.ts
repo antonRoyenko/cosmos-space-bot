@@ -3,9 +3,9 @@ import { MarketData } from "@bot/graphql/general/market_data";
 import { Tokenomics } from "@bot/graphql/general/tokenomics";
 import { LatestBlockHeight } from "@bot/graphql/general/block_height";
 
-export const fetchMarketData = async () => {
+export const fetchMarketData = async (publicUrl: string, denom: string) => {
   const defaultReturnValue = {
-    data: {
+    statistic: {
       communityPool: [],
       inflation: [],
       tokenPrice: [],
@@ -15,43 +15,42 @@ export const fetchMarketData = async () => {
     },
   };
   try {
-    // const data = await request(MarketData, {
-    //   denom: "dsm",
-    // });
+    const data = await request(publicUrl, MarketData, {
+      denom,
+    });
 
     return {
-      data: defaultReturnValue,
+      statistic: data,
     };
   } catch (error) {
     return defaultReturnValue;
   }
 };
 
-export const fetchLatestHeight = async () => {
+export const fetchLatestHeight = async (publicUrl: string) => {
   const defaultReturnValue = {
     height: [],
   };
   try {
-    return defaultReturnValue;
-    // return await createRequest(LatestBlockHeight);
+    return await request(publicUrl, LatestBlockHeight);
   } catch (error) {
     return defaultReturnValue;
   }
 };
 
-export const fetchTokenomics = async () => {
+export const fetchTokenomics = async (publicUrl: string) => {
   const defaultReturnValue = {
-    data: {
+    tokenomics: {
       stakingParams: [],
       stakingPool: [],
       supply: [],
     },
   };
   try {
-    // const data = await createRequest(Tokenomics);
+    const data = await request(publicUrl, Tokenomics);
 
     return {
-      data: defaultReturnValue,
+      tokenomics: data,
     };
   } catch (error) {
     return defaultReturnValue;

@@ -10,36 +10,51 @@ datasource db {
 
 model User {
   id            Int      @id @default(autoincrement())
-  wallets       String[]
+  wallets       Wallet[]
   telegramId    BigInt   @unique @map("telegram_id")
   updatedAt     DateTime @updatedAt @map("updated_at")
   createdAt     DateTime @default(now()) @map("created_at")
-  activeNetwork Network? @relation(fields: [networkId], references: [name])
-  networkId     String?
+  activeNetwork Network? @relation(fields: [networkId], references: [id])
+  networkId     Int?
 
   @@map(name: "users")
 }
 
+model Wallet {
+  id        Int     @id @default(autoincrement())
+  wallet    String
+  network   Network @relation(fields: [networkId], references: [id])
+  networkId Int
+  User      User    @relation(fields: [userId], references: [id])
+  userId    Int     @unique
+
+  @@map(name: "wallets")
+}
+
 model Network {
-  name        String     @id @unique
-  resources   Resources?
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  fullName    String
+  resource    Resource? @relation(fields: [resourceId], references: [id])
+  resourceId  Int       @unique
   user        User[]
   publicUrl   String
   wsPublicUrl String
+  wallet      Wallet[]
 
-  @@map(name: "network")
+  @@map(name: "networks")
 }
 
-model Resources {
-  id        Int     @id @default(autoincrement())
-  site      String
-  discord   String
-  twitter   String
-  youtube   String?
-  medium    String
-  github    String
-  network   Network @relation(fields: [networkId], references: [name])
-  networkId String  @unique
+model Resource {
+  id      Int       @id @default(autoincrement())
+  site    String
+  discord String
+  twitter String
+  youtube String?
+  blog    String?
+  github  String
+  reddit  String?
+  network Network[]
 
   @@map(name: "resources")
 }

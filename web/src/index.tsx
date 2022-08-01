@@ -21,8 +21,6 @@ const App: FC = () => {
           wallet,
         }
       );
-
-      console.log(wallet);
     } catch (e: any) {
       setError(e);
     }

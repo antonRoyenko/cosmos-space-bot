@@ -1,3 +1,4 @@
-export { currentMenu } from "./currency";
 export { walletMenu } from "./wallet";
-export { walletRemove } from "./walletRemove";
+export { walletRemoveMenu } from "./walletRemove";
+export { statisticMenu } from "./statistic";
+export { networkMenu } from "./networks";

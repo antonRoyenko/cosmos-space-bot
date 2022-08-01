@@ -38,6 +38,7 @@
     "web/**/*.ts",
     "web/**/*",
     "server/**/*.ts",
-    "types/**/*.ts"
+    "types/**/*.ts",
+    "prisma/seed.ts"
   ]
 }

@@ -5,22 +5,29 @@ import { getBalance } from "@bot/graphql/queries/getBalance";
 import { getTokenPrice } from "@bot/graphql/queries/getTokenPrice";
 import { toNumber } from "lodash";
 import { usersService } from "@bot/services";
+import { bech32 } from "bech32";
+import { Wallet } from "@prisma/client";
 
 export const feature = router.route("assets");
 
 feature.command("assets", logHandle("handle /assets"), async (ctx: Context) => {
   await ctx.replyWithChatAction("typing");
   ctx.session.step = "assets";
-  let wallets;
   let output = "";
+  let wallets: Wallet[] = [];
   const user = await usersService.getUserByTelegramId(Number(ctx.from?.id));
-  if (user && user.wallets) {
-    wallets = user.wallets;
+  if (user) {
+    wallets = await usersService.getUserWallets(user.id);
+  }
 
+  if (wallets.length > 0) {
     await Promise.all(
-      wallets.map(async (wallet) => {
-        const data = await getBalance(wallet);
-        const prices = await getTokenPrice(wallet);
+      wallets.map(async ({ wallet, networkId }) => {
+        const prefix = bech32.decode(wallet).prefix;
+        const url = await usersService.getNetwork({ id: networkId });
+        const publicUrl = url?.publicUrl || "";
+        const data = await getBalance(publicUrl, wallet, prefix);
+        const prices = await getTokenPrice(prefix);
         const { first, seventh, thirty } = prices.PNL(
           toNumber(data.total.value)
         );

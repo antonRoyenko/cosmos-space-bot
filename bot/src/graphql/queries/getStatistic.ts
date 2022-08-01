@@ -6,13 +6,20 @@ import {
 } from "./fetchStatistic";
 import Big from "big.js";
 import numeral from "numeral";
-import { Coins, StatisticData, StatisticValues } from "@bot/types/general";
-// import { desmosChain } from "@bot/chains/desmos";
+import { ChainInfo, Coins, StatisticData } from "@bot/types/general";
 import { formatToken } from "@bot/utils/formatToken";
 import { getDenom } from "@bot/utils/getFilterDenom";
 
-export const getStatistic = async () => {
-  const promises = [fetchMarketData(), fetchLatestHeight(), fetchTokenomics()];
+export const getStatistic = async (
+  publicUrl: string,
+  denom: string,
+  chain: ChainInfo
+) => {
+  const promises = [
+    fetchMarketData(publicUrl, denom),
+    fetchLatestHeight(publicUrl),
+    fetchTokenomics(publicUrl),
+  ];
 
   const [marketData, latestHeight, tokenomics] = await Promise.allSettled(
     promises
@@ -39,11 +46,12 @@ export const getStatistic = async () => {
   formattedRawData.height = _.get(latestHeight, ["value", "height"], []);
   formattedRawData.tokenomics = _.get(tokenomics, ["value", "tokenomics"], []);
 
-  return formatStatisticsValues(formattedRawData);
+  return formatStatisticsValues(formattedRawData, chain);
 };
 
-const formatStatisticsValues = (data: StatisticData) => {
+const formatStatisticsValues = (data: StatisticData, chain: ChainInfo) => {
   const { statistic, height, tokenomics } = data;
+  const { primaryTokenUnit, tokenUnits } = chain;
   let communityPool, price, marketCap;
 
   if (statistic.tokenPrice?.length) {
@@ -53,35 +61,35 @@ const formatStatisticsValues = (data: StatisticData) => {
     marketCap = statistic.tokenPrice[0]?.marketCap;
   }
 
-  // const [communityPoolCoin]: [Coins] = _.get(
-  //   statistic,
-  //   ["communityPool", 0, "coins"],
-  //   []
-  // ).filter((x: Coins) => x.denom === desmosChain.primaryTokenUnit);
-  // const inflation = _.get(statistic, ["inflation", 0, "value"], 0);
+  const [communityPoolCoin]: [Coins] = _.get(
+    statistic,
+    ["communityPool", 0, "coins"],
+    []
+  ).filter((x: Coins) => x.denom === chain.primaryTokenUnit);
+  const inflation = _.get(statistic, ["inflation", 0, "value"], 0);
 
-  // const [total] = _.get(statistic, ["supply", 0, "coins"], []).filter(
-  //   (x: Coins) => x.denom === desmosChain.primaryTokenUnit
-  // );
+  const [total] = _.get(statistic, ["supply", 0, "coins"], []).filter(
+    (x: Coins) => x.denom === chain.primaryTokenUnit
+  );
 
-  // const rawSupplyAmount = getDenom(
-  //   _.get(statistic, ["supply", 0, "coins"], []),
-  //   desmosChain.primaryTokenUnit
-  // ).amount;
-  //
-  // const supply = formatToken(
-  //   rawSupplyAmount,
-  //   desmosChain.tokenUnits.udsm,
-  //   desmosChain.primaryTokenUnit
-  // );
-  //
-  // if (communityPoolCoin && communityPoolCoin.denom === "udsm") {
-  //   communityPool = formatToken(
-  //     communityPoolCoin.amount,
-  //     desmosChain.tokenUnits[communityPoolCoin.denom],
-  //     communityPoolCoin.denom
-  //   );
-  // }
+  const rawSupplyAmount = getDenom(
+    _.get(statistic, ["supply", 0, "coins"], []),
+    chain.primaryTokenUnit
+  ).amount;
+
+  const supply = formatToken(
+    rawSupplyAmount,
+    tokenUnits[primaryTokenUnit],
+    primaryTokenUnit
+  );
+
+  if (communityPoolCoin && communityPoolCoin.denom === "udsm") {
+    communityPool = formatToken(
+      communityPoolCoin.amount,
+      tokenUnits[communityPoolCoin.denom],
+      communityPoolCoin.denom
+    );
+  }
 
   const bondedTokens = _.get(
     statistic,
@@ -94,50 +102,40 @@ const formatStatisticsValues = (data: StatisticData) => {
     "0"
   );
 
-  // const inflationWithCommunityTax = Big(1)
-  //   .minus(communityTax)
-  //   .times(inflation)
-  //   .toPrecision(2);
-  // const apr = Big(rawSupplyAmount)
-  //   .times(inflationWithCommunityTax)
-  //   .div(bondedTokens)
-  //   .toNumber();
-  //
-  // const bonded = _.get(tokenomics, ["stakingPool", 0, "bonded"], data);
-  //
-  // const unbonding = _.get(tokenomics, ["stakingPool", 0, "unbonded"], []);
-  //
-  // const unbonded = total.amount - unbonding - bonded;
+  const inflationWithCommunityTax = Big(1)
+    .minus(communityTax)
+    .times(inflation)
+    .toPrecision(2);
+  const apr = Big(rawSupplyAmount)
+    .times(inflationWithCommunityTax)
+    .div(bondedTokens)
+    .toNumber();
+
+  const bonded = _.get(tokenomics, ["stakingPool", 0, "bonded"], data);
+
+  const unbonding = _.get(tokenomics, ["stakingPool", 0, "unbonded"], []);
+
+  const unbonded = total.amount - unbonding - bonded;
 
   return {
-    // price,
-    // supply,
-    // marketCap,
-    // inflation,
-    // communityPool,
-    // apr,
-    // height,
-    // tokenomics,
-    // bonded: numeral(
-    //   formatToken(
-    //     bonded,
-    //     desmosChain.tokenUnits.udsm,
-    //     desmosChain.primaryTokenUnit
-    //   ).value
-    // ).value(),
-    // unbonding: numeral(
-    //   formatToken(
-    //     unbonding,
-    //     desmosChain.tokenUnits.udsm,
-    //     desmosChain.primaryTokenUnit
-    //   ).value
-    // ).value(),
-    // unbonded: numeral(
-    //   formatToken(
-    //     unbonded,
-    //     desmosChain.tokenUnits.udsm,
-    //     desmosChain.primaryTokenUnit
-    //   ).value
-    // ).value(),
+    price,
+    supply,
+    marketCap,
+    inflation,
+    communityPool,
+    apr,
+    height,
+    tokenomics,
+    bonded: numeral(
+      formatToken(bonded, tokenUnits[primaryTokenUnit], primaryTokenUnit).value
+    ).value(),
+    unbonding: numeral(
+      formatToken(unbonding, tokenUnits[primaryTokenUnit], primaryTokenUnit)
+        .value
+    ).value(),
+    unbonded: numeral(
+      formatToken(unbonded, tokenUnits[primaryTokenUnit], primaryTokenUnit)
+        .value
+    ).value(),
   };
 };

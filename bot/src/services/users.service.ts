@@ -22,6 +22,34 @@ export const createService = (prisma: PrismaClient) =>
       return prisma.user.upsert(_.merge(query, args));
     },
 
+    upsertWallet: <T extends DeepPartial<Prisma.WalletUpsertArgs>>(
+      id: number,
+      networkId: number,
+      wallet: string,
+      args?: Prisma.SelectSubset<T, Prisma.UserUpsertArgs>
+    ) => {
+      const query: Prisma.WalletUpsertArgs = {
+        where: {
+          userId: id,
+        },
+        create: {
+          userId: id,
+          networkId,
+          wallet,
+        },
+        update: {},
+      };
+
+      return prisma.wallet.upsert(_.merge(query, args));
+    },
+
+    removeWallet: (id: number) =>
+      prisma.wallet.delete({
+        where: {
+          id,
+        },
+      }),
+
     updateByTelegramId: <T extends DeepPartial<Prisma.UserUpdateArgs>>(
       telegramId: number,
       args: Prisma.SelectSubset<T, Prisma.UserUpdateArgs>
@@ -36,24 +64,43 @@ export const createService = (prisma: PrismaClient) =>
       return prisma.user.update(_.merge(query, args));
     },
 
-    getResourcesById: (networkId: string) =>
-      prisma.resources.findUnique({
+    getResourcesById: (networkId: number) =>
+      prisma.resource.findUnique({
         where: {
-          networkId,
+          id: networkId,
         },
       }),
 
-    getNetwork: (network: string) =>
+    getNetwork: ({
+      id,
+      name,
+      resourceId,
+    }: {
+      id?: number;
+      name?: string;
+      resourceId?: number;
+    }) =>
       prisma.network.findUnique({
         where: {
-          name: network,
+          id,
+          name,
+          resourceId,
         },
       }),
+
+    getNetworks: () => prisma.network.findMany(),
 
     getUserByTelegramId: (telegramId: number) =>
       prisma.user.findUnique({
         where: {
           telegramId,
+        },
+      }),
+
+    getUserWallets: (telegramId: number) =>
+      prisma.wallet.findMany({
+        where: {
+          userId: telegramId,
         },
       }),
   });

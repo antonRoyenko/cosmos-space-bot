@@ -11,7 +11,7 @@ const storage = new RedisAdapter({
 export const middleware = (): Middleware<Context> =>
   session({
     initial: () => ({
-      currentMenu: undefined,
+      currentNetwork: undefined,
       step: "setup",
       currentWallets: [],
     }),

@@ -27,7 +27,12 @@ import {
   assetsFeature,
 } from "@bot/features";
 import { handleError } from "@bot/helpers/error-handler";
-import { currentMenu, walletMenu, walletRemove } from "@bot/menu";
+import {
+  walletMenu,
+  walletRemoveMenu,
+  statisticMenu,
+  networkMenu,
+} from "@bot/menu";
 
 export const bot = new Bot<Context>(config.BOT_TOKEN);
 
@@ -51,8 +56,9 @@ bot.use(setupLocalContext());
 bot.use(setupLogger());
 bot.use(setUser());
 bot.use(walletMenu);
-walletMenu.register(walletRemove);
-bot.use(currentMenu);
+bot.use(statisticMenu);
+bot.use(networkMenu);
+walletMenu.register(walletRemoveMenu);
 bot.use(router);
 // Handlers
 

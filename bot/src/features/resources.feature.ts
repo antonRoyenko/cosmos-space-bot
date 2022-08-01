@@ -20,7 +20,7 @@ feature.command("resources", logHandle("handle /resources"), async (ctx) => {
       `Discord: ${resources?.discord} \n` +
       `Twitter: ${resources?.twitter} \n` +
       `Youtube: ${resources?.youtube} \n` +
-      `Medium: ${resources?.medium} \n` +
+      `Blog: ${resources?.blog} \n` +
       `Github: ${resources?.github}`
   );
 });

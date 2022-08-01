@@ -29,6 +29,7 @@ export type ChainInfo = {
   network: string;
   prefix: Bech32Config;
   primaryTokenUnit: string;
+  coingeckoId: string;
   tokenUnits: {
     [key: string]: {
       display: string;

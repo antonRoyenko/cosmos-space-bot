@@ -7,14 +7,12 @@ import _ from "lodash";
 import { formatTokenPrice } from "@bot/utils/formatTokenPrice";
 import { calcTVLPercent } from "@bot/utils/calcTVLPercent";
 import { TokenData } from "@bot/types/general";
-import { bech32 } from "bech32";
 import { config } from "@bot/chains";
 import { atomConfig } from "@bot/chains/atom";
 
-export const getTokenPrice = async (address: string) => {
-  const prefix = bech32.decode(address).prefix;
+export const getTokenPrice = async (prefix: string) => {
   const chain = config.find(({ network }) => network === prefix) || atomConfig;
-  const apiId = chain.coingeckoId || "";
+  const apiId = chain.coingeckoId;
 
   const promises = [fetchTokenPriceApi(apiId), fetchTokenHistory(apiId)];
 
