@@ -1,8 +1,9 @@
 import { Menu, MenuRange } from "@grammyjs/menu";
 import { usersService } from "@bot/services";
 import { Context } from "@bot/types";
+import { walletMenu } from "@bot/menu/wallet";
 
-export const networkMenu = new Menu<Context>("networkMenu", {
+export const initNetworkMenu = new Menu<Context>("initNetwork", {
   autoAnswer: false,
 }).dynamic(async (ctx) => {
   await ctx.replyWithChatAction("typing");
@@ -23,16 +24,14 @@ export const networkMenu = new Menu<Context>("networkMenu", {
               data: { networkId: network.id },
             });
 
-            return ctx.reply(
-              `Network ${network.fullName} was successfully saved, now you can find network statistic`
-            );
+            return await ctx.reply("Please choose wallet action", {
+              reply_markup: walletMenu,
+            });
           })
           .row();
       }
     }
   }
-
-  range.back("Back");
 
   return range;
 });

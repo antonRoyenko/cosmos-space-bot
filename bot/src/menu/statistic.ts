@@ -9,20 +9,25 @@ import { config } from "@bot/chains";
 import { atomConfig } from "@bot/chains/atom";
 import { usersService } from "@bot/services";
 import { ChainInfo } from "@bot/types/general";
+import { networkMenu } from "@bot/menu";
 
 export const statisticMenu = new Menu<Context>("statistic", {
   autoAnswer: false,
 }).dynamic(async (ctx) => {
-  const { currentNetwork } = await ctx.session;
-  const range = new MenuRange<Context>();
-  range
-    .text(`Show ${currentNetwork} statistic`, statisticCallback)
-    .row()
-    .text("Change network", (ctx) =>
-      ctx.reply("Enter addreess of any cosmos chain")
-    );
+  const { currentNetwork } = ctx.session;
+  const network = await usersService.getNetwork({ name: currentNetwork });
 
-  return range;
+  if (network) {
+    const range = new MenuRange<Context>();
+    range
+      .text(`Show ${network.fullName} statistic`, statisticCallback)
+      .row()
+      .text("Change network", (ctx) =>
+        ctx.reply("Choose network", { reply_markup: networkMenu })
+      );
+
+    return range;
+  }
 });
 
 async function statisticCallback(ctx: Context) {

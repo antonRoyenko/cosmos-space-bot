@@ -83,7 +83,7 @@ const formatStatisticsValues = (data: StatisticData, chain: ChainInfo) => {
     primaryTokenUnit
   );
 
-  if (communityPoolCoin && communityPoolCoin.denom === "udsm") {
+  if (communityPoolCoin && communityPoolCoin.denom === chain.primaryTokenUnit) {
     communityPool = formatToken(
       communityPoolCoin.amount,
       tokenUnits[communityPoolCoin.denom],

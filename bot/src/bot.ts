@@ -32,6 +32,7 @@ import {
   walletRemoveMenu,
   statisticMenu,
   networkMenu,
+  initNetworkMenu,
 } from "@bot/menu";
 
 export const bot = new Bot<Context>(config.BOT_TOKEN);
@@ -56,8 +57,9 @@ bot.use(setupLocalContext());
 bot.use(setupLogger());
 bot.use(setUser());
 bot.use(walletMenu);
+bot.use(initNetworkMenu);
 bot.use(statisticMenu);
-bot.use(networkMenu);
+statisticMenu.register(networkMenu);
 walletMenu.register(walletRemoveMenu);
 bot.use(router);
 // Handlers
