@@ -11,16 +11,21 @@ feature.command("resources", logHandle("handle /resources"), async (ctx) => {
     return;
   }
 
-  const resources = await usersService.getResourcesById(
-    ctx.local.user.networkId
-  );
+  const network = await usersService.getNetwork({
+    id: ctx.local.user.networkId,
+  });
 
-  return ctx.reply(
-    `Website: ${resources?.site} \n` +
-      `Discord: ${resources?.discord} \n` +
-      `Twitter: ${resources?.twitter} \n` +
-      `Youtube: ${resources?.youtube} \n` +
-      `Blog: ${resources?.blog} \n` +
-      `Github: ${resources?.github}`
-  );
+  if (network) {
+    const resource = await usersService.getResourcesById(network.resourceId);
+    console.log(resource);
+
+    return ctx.reply(
+      `Website: ${resource?.site} \n` +
+        `Discord: ${resource?.discord} \n` +
+        `Twitter: ${resource?.twitter} \n` +
+        `Youtube: ${resource?.youtube} \n` +
+        `Blog: ${resource?.blog} \n` +
+        `Github: ${resource?.github}`
+    );
+  }
 });

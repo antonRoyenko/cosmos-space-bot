@@ -18,8 +18,6 @@ export const initNetworkMenu = new Menu<Context>("initNetwork", {
         const network = networks[i];
         range
           .text(network.fullName, async (ctx) => {
-            await ctx.replyWithChatAction("typing");
-            ctx.session.currentNetwork = network.name;
             ctx.local.user = await usersService.updateByTelegramId(telegramId, {
               data: { networkId: network.id },
             });

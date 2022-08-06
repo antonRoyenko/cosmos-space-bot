@@ -15,6 +15,7 @@ export const createService = (prisma: PrismaClient) =>
         create: {
           telegramId,
           networkId: undefined,
+          notification: { create: {} },
         },
         update: {},
       };
@@ -103,4 +104,57 @@ export const createService = (prisma: PrismaClient) =>
           userId: telegramId,
         },
       }),
+
+    getUserNotification: (id: number) =>
+      prisma.notification.findUnique({
+        where: {
+          id,
+        },
+        include: {
+          reminderNetworksIds: true,
+        },
+      }),
+
+    removeUserNotification: (id: number, ids: { id: number }) =>
+      prisma.notification.update({
+        where: {
+          id,
+        },
+        data: {
+          reminderNetworksIds: {
+            disconnect: [ids],
+          },
+        },
+      }),
+
+    upsertUserNotification: (
+      id: number,
+      {
+        networks,
+        isReminderActive,
+        notificationReminderTime,
+      }: {
+        networks?: { id: number }[];
+        isReminderActive?: boolean;
+        notificationReminderTime?: string[];
+      }
+    ) => {
+      const query: Prisma.NotificationUpsertArgs = {
+        where: {
+          id,
+        },
+        create: {
+          id,
+        },
+        update: {
+          reminderNetworksIds: {
+            connect: networks,
+          },
+          isReminderActive,
+          notificationReminderTime,
+        },
+      };
+
+      return prisma.notification.upsert(query);
+    },
   });

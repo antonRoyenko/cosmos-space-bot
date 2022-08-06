@@ -21,6 +21,11 @@ feature
     const { id: telegramId } = ctx.from;
 
     const address = ctx.message.text;
+
+    if (address.startsWith("/")) {
+      return;
+    }
+
     const prefix = bech32.decode(address).prefix;
     const network = await usersService.getNetwork({ name: prefix });
     const userWallets = await usersService.getUserWallets(telegramId);

@@ -9,9 +9,7 @@ feature.command("help", logHandle("handle /start"), async (ctx) => {
   await ctx.reply(
     "/wallet - show your assets \n" +
       "/statistic - network statistic \n" +
-      "/governance - active governance \n" +
-      "/resources - useful network resources \n" +
-      "/add - add wallet \n" +
-      "/reset - reset your wallet"
+      "/notification - notification settings \n" +
+      "/resources - useful network resources \n"
   );
 });

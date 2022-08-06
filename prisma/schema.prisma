@@ -9,15 +9,26 @@ datasource db {
 }
 
 model User {
-  id            Int      @id @default(autoincrement())
-  wallets       Wallet[]
-  telegramId    BigInt   @unique @map("telegram_id")
-  updatedAt     DateTime @updatedAt @map("updated_at")
-  createdAt     DateTime @default(now()) @map("created_at")
-  activeNetwork Network? @relation(fields: [networkId], references: [id])
-  networkId     Int?
-
+  id             Int          @id @default(autoincrement())
+  wallets        Wallet[]
+  telegramId     BigInt       @unique @map("telegram_id")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  notification    Notification  @relation(fields: [notificationId], references: [id])
+  notificationId  Int
+  networkId      Int?
+  Network        Network?     @relation(fields: [networkId], references: [id])
   @@map(name: "users")
+}
+
+model Notification {
+  id                       Int       @id @default(autoincrement())
+  reminderNetworksIds      Network[]
+  isReminderActive         Boolean   @default(false)
+  User                     User[]
+  notificationReminderTime  String[]
+
+  @@map(name: "notifications")
 }
 
 model Wallet {
@@ -32,15 +43,16 @@ model Wallet {
 }
 
 model Network {
-  id          Int       @id @default(autoincrement())
-  name        String    @unique
-  fullName    String
-  resource    Resource? @relation(fields: [resourceId], references: [id])
-  resourceId  Int       @unique
-  user        User[]
-  publicUrl   String
-  wsPublicUrl String
-  wallet      Wallet[]
+  id           Int            @id @default(autoincrement())
+  name         String         @unique
+  fullName     String
+  resource     Resource?      @relation(fields: [resourceId], references: [id])
+  resourceId   Int            @unique
+  user         User[]
+  publicUrl    String
+  wsPublicUrl  String
+  wallet       Wallet[]
+  Notification  Notification[]
 
   @@map(name: "networks")
 }

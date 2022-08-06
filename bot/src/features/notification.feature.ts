@@ -1,6 +1,6 @@
 import { logHandle } from "@bot/helpers/logging";
 import { router } from "@bot/middlewares";
-import { governanceSubscription } from "@bot/graphql/queries/governanceSubscription";
+import { notificationMenu } from "@bot/menu";
 
 export const feature = router.route("notification");
 
@@ -8,9 +8,8 @@ feature.command(
   "notification",
   logHandle("handle /notification"),
   async (ctx) => {
-    await ctx.replyWithChatAction("typing");
-    governanceSubscription();
+    await ctx.reply("Choose", { reply_markup: notificationMenu });
 
-    return null;
+    // governanceSubscription();
   }
 );

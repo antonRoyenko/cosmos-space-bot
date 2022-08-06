@@ -33,7 +33,11 @@ import {
   statisticMenu,
   networkMenu,
   initNetworkMenu,
+  notificationMenu,
 } from "@bot/menu";
+import { reminderDailyMenu } from "@bot/menu/notification/daily";
+import { networksReminderMenu } from "@bot/menu/notification/networksReminder";
+import { networkTimeReminderMenu } from "@bot/menu/notification/networkTimeReminder";
 
 export const bot = new Bot<Context>(config.BOT_TOKEN);
 
@@ -59,12 +63,16 @@ bot.use(setUser());
 bot.use(walletMenu);
 bot.use(initNetworkMenu);
 bot.use(statisticMenu);
+bot.use(notificationMenu);
 statisticMenu.register(networkMenu);
 walletMenu.register(walletRemoveMenu);
+notificationMenu.register(reminderDailyMenu);
+reminderDailyMenu.register(networksReminderMenu);
+reminderDailyMenu.register(networkTimeReminderMenu);
 bot.use(router);
 // Handlers
-
 bot.use(helpFeature);
+
 bot.use(statFeature);
 bot.use(botAdminFeature);
 bot.use(setupFeature);
