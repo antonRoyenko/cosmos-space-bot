@@ -98,6 +98,8 @@ export const createService = (prisma: PrismaClient) =>
         },
       }),
 
+    getUsers: () => prisma.user.findMany(),
+
     getUserWallets: (telegramId: number) =>
       prisma.wallet.findMany({
         where: {
@@ -133,10 +135,12 @@ export const createService = (prisma: PrismaClient) =>
         networks,
         isReminderActive,
         notificationReminderTime,
+        timezone,
       }: {
         networks?: { id: number }[];
         isReminderActive?: boolean;
         notificationReminderTime?: string[];
+        timezone?: string;
       }
     ) => {
       const query: Prisma.NotificationUpsertArgs = {
@@ -152,6 +156,7 @@ export const createService = (prisma: PrismaClient) =>
           },
           isReminderActive,
           notificationReminderTime,
+          timezone,
         },
       };
 

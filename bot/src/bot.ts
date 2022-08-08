@@ -38,6 +38,7 @@ import {
 import { reminderDailyMenu } from "@bot/menu/notification/daily";
 import { networksReminderMenu } from "@bot/menu/notification/networksReminder";
 import { networkTimeReminderMenu } from "@bot/menu/notification/networkTimeReminder";
+import { timezoneMenu } from "@bot/menu/notification/timezone";
 
 export const bot = new Bot<Context>(config.BOT_TOKEN);
 
@@ -69,6 +70,7 @@ walletMenu.register(walletRemoveMenu);
 notificationMenu.register(reminderDailyMenu);
 reminderDailyMenu.register(networksReminderMenu);
 reminderDailyMenu.register(networkTimeReminderMenu);
+reminderDailyMenu.register(timezoneMenu);
 bot.use(router);
 // Handlers
 bot.use(helpFeature);

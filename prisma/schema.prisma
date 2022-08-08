@@ -27,6 +27,7 @@ model Notification {
   isReminderActive         Boolean   @default(false)
   User                     User[]
   notificationReminderTime  String[]
+  timezone                 String?
 
   @@map(name: "notifications")
 }

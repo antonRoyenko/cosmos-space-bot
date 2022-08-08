@@ -1,10 +1,11 @@
 import { Menu, MenuRange } from "@grammyjs/menu";
 import { usersService } from "@bot/services";
+import { Context } from "@bot/types";
 
-export const networksReminderMenu = new Menu("reminderNetworks", {
+export const networksReminderMenu = new Menu<Context>("reminderNetworks", {
   autoAnswer: false,
 }).dynamic(async (ctx) => {
-  const range = new MenuRange();
+  const range = new MenuRange<Context>();
 
   if (ctx.from?.id) {
     const networks = await usersService.getNetworks();

@@ -28,6 +28,7 @@ const run = async () => {
   } else {
     server.listen({ host: config.BOT_SERVER_HOST, port: 3000 }, (err) => {
       if (err) throw err;
+      server.cron.startAllJobs();
       console.log("Server listening on http://localhost:3000");
     });
 

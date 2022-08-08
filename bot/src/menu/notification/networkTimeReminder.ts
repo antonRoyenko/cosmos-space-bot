@@ -1,21 +1,25 @@
 import { Menu, MenuRange } from "@grammyjs/menu";
 import { usersService } from "@bot/services";
+import { Context } from "@bot/types";
 
 const timeArr = [
-  "12 a.m.",
-  "3 a.m.",
-  "6 a.m.",
-  "9 a.m.",
-  "12 p.m.",
-  "3 p.m.",
-  "6 p.m.",
-  "9 p.m.",
+  "12:00 AM",
+  "3:00 AM",
+  "6:00 AM",
+  "9:00 AM",
+  "12:00 PM",
+  "3:00 PM",
+  "6:00 PM",
+  "9:00 PM",
 ];
 
-export const networkTimeReminderMenu = new Menu("networkTimeReminder", {
-  autoAnswer: false,
-}).dynamic(async (ctx) => {
-  const range = new MenuRange();
+export const networkTimeReminderMenu = new Menu<Context>(
+  "networkTimeReminder",
+  {
+    autoAnswer: false,
+  }
+).dynamic(async (ctx) => {
+  const range = new MenuRange<Context>();
 
   if (ctx.from?.id) {
     for (let i = 0; i < timeArr.length; i++) {

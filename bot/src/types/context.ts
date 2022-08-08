@@ -11,7 +11,8 @@ export interface LocalContextFlavor {
 
 export interface SessionData {
   currentNetwork?: string;
-  currentWallets: Array<Wallet>;
+  currentWallets: Wallet[];
+  timezone: string[];
   step:
     | "setup"
     | "wallet"
@@ -22,7 +23,8 @@ export interface SessionData {
     | "stats"
     | "governance"
     | "resources"
-    | "assets";
+    | "assets"
+    | "timezone";
 }
 
 export type Context = DefaultContext &
