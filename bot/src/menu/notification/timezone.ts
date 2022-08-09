@@ -1,5 +1,5 @@
 import { Menu, MenuRange } from "@grammyjs/menu";
-import { usersService } from "@bot/services";
+import { notificationService } from "@bot/services";
 import { Context } from "@bot/types";
 
 export const timezoneMenu = new Menu<Context>("timezoneMenu", {
@@ -11,24 +11,11 @@ export const timezoneMenu = new Menu<Context>("timezoneMenu", {
     const timezones = ctx.session.timezone;
 
     if (timezones.length > 0) {
-      for (let i = 0; i < timezones.length; i++) {
-        const timezone = timezones[i];
+      for (const timezone of timezones) {
+        const { updateNotification } = await notificationService({ ctx });
         range
           .text(timezone, async (ctx) => {
-            const user = await usersService.getUserByTelegramId(
-              Number(ctx?.from?.id)
-            );
-            const notification = await usersService.getUserNotification(
-              Number(user?.notificationId)
-            );
-
-            if (notification?.id) {
-              await usersService.upsertUserNotification(notification.id, {
-                timezone,
-              });
-            }
-
-            await ctx.reply(`You choose ${timezone} timezone`);
+            await updateNotification({ timezone });
             ctx.menu.back();
           })
           .row();

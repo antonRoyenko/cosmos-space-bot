@@ -1,5 +1,5 @@
 import { Menu } from "@grammyjs/menu";
-import { usersService } from "@bot/services";
+import { notificationService } from "@bot/services";
 import { networksReminderMenu } from "./networksReminder";
 import { networkTimeReminderMenu } from "./networkTimeReminder";
 import { Context } from "@bot/types";
@@ -20,31 +20,13 @@ export const reminderDailyMenu = new Menu<Context>("dailyReminder")
   .row()
   .text(
     async (ctx) => {
-      const user = await usersService.getUserByTelegramId(
-        Number(ctx?.from?.id)
-      );
-      const notification = await usersService.getUserNotification(
-        Number(user?.notificationId)
-      );
+      const { isReminderActive } = await notificationService({ ctx });
 
-      return notification?.isReminderActive ? "Enabled 🔔" : "Disabled 🔕";
+      return isReminderActive ? "Enabled 🔔" : "Disabled 🔕";
     },
     async (ctx) => {
-      const user = await usersService.getUserByTelegramId(
-        Number(ctx?.from?.id)
-      );
-      const notification = await usersService.getUserNotification(
-        Number(user?.notificationId)
-      );
-      await usersService.upsertByTelegramId(Number(ctx?.from?.id), {
-        update: {
-          notification: {
-            update: {
-              isReminderActive: !notification?.isReminderActive,
-            },
-          },
-        },
-      });
+      const { updateNotification } = await notificationService({ ctx });
+      await updateNotification({ reminderToggle: true });
 
       ctx.menu.update();
     }

@@ -1,5 +1,5 @@
 import { Menu, MenuRange } from "@grammyjs/menu";
-import { usersService } from "@bot/services";
+import { notificationService } from "@bot/services";
 import { Context } from "@bot/types";
 
 const timeArr = [
@@ -25,51 +25,17 @@ export const networkTimeReminderMenu = new Menu<Context>(
     for (let i = 0; i < timeArr.length; i++) {
       const time = timeArr[i];
 
-      range.text(
-        async (ctx) => {
-          const user = await usersService.getUserByTelegramId(
-            Number(ctx?.from?.id)
-          );
-          if (user?.notificationId) {
-            const notification = await usersService.getUserNotification(
-              user.notificationId
-            );
+      const { isNotificationTimeActive, updateNotificationReminderTime } =
+        await notificationService({
+          ctx,
+          timeArr,
+        });
+      const isActive = isNotificationTimeActive(time);
 
-            const notificationTime = notification?.notificationReminderTime;
-
-            return notificationTime?.includes(time)
-              ? `${time} ✅`
-              : `${time} ❎`;
-          }
-
-          return "";
-        },
-        async (ctx) => {
-          const user = await usersService.getUserByTelegramId(
-            Number(ctx?.from?.id)
-          );
-
-          if (user?.notificationId) {
-            let arr: string[] = [];
-            const notification = await usersService.getUserNotification(
-              user.notificationId
-            );
-            const notificationTime =
-              notification?.notificationReminderTime || [];
-            if (notificationTime?.includes(time)) {
-              arr = notificationTime.filter((item) => item !== time);
-            } else {
-              arr = [...notificationTime, time];
-            }
-
-            await usersService.upsertUserNotification(user.notificationId, {
-              notificationReminderTime: arr,
-            });
-          }
-
-          ctx.menu.update();
-        }
-      );
+      range.text(isActive ? `${time} ✅` : `${time} ❎`, async (ctx) => {
+        await updateNotificationReminderTime(time);
+        ctx.menu.update();
+      });
 
       if ((i + 1) % 2 == 0) {
         range.row();

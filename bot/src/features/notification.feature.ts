@@ -24,7 +24,6 @@ feature.on("message", async (ctx) => {
     code: "",
   };
   const parseCountry = getCountry(currentCountry.code);
-  console.log(parseCountry);
   if (parseCountry?.timezones) {
     ctx.session.timezone = parseCountry.timezones;
 

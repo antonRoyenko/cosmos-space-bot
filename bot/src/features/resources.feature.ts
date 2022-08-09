@@ -17,7 +17,6 @@ feature.command("resources", logHandle("handle /resources"), async (ctx) => {
 
   if (network) {
     const resource = await usersService.getResourcesById(network.resourceId);
-    console.log(resource);
 
     return ctx.reply(
       `Website: ${resource?.site} \n` +
