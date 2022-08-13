@@ -16,8 +16,11 @@ model User {
   createdAt      DateTime     @default(now()) @map("created_at")
   notification    Notification  @relation(fields: [notificationId], references: [id])
   notificationId  Int
-  networkId      Int?
   Network        Network?     @relation(fields: [networkId], references: [id])
+  networkId      Int?
+  Alarm          Alarm?
+  timezone       String       @default("Europe/London")
+
   @@map(name: "users")
 }
 
@@ -27,9 +30,29 @@ model Notification {
   isReminderActive         Boolean   @default(false)
   User                     User[]
   notificationReminderTime  String[]
-  timezone                 String?
 
   @@map(name: "notifications")
+}
+
+model Alarm {
+  id            Int            @id @default(autoincrement())
+  alarmNetworks AlarmNetwork[]
+  isAlarmActive Boolean        @default(false)
+  User          User           @relation(fields: [userId], references: [id])
+  userId        Int            @unique
+
+  @@map(name: "alarms")
+}
+
+model AlarmNetwork {
+  id          Int      @id @default(autoincrement())
+  alarmPrices String[]
+  Network     Network? @relation(fields: [networkId], references: [id])
+  networkId   Int     @unique
+  Alarm       Alarm   @relation(fields: [alarmId], references: [id])
+  alarmId     Int
+
+  @@map(name: "alarm_networks")
 }
 
 model Wallet {
@@ -44,16 +67,17 @@ model Wallet {
 }
 
 model Network {
-  id           Int            @id @default(autoincrement())
-  name         String         @unique
-  fullName     String
-  resource     Resource?      @relation(fields: [resourceId], references: [id])
-  resourceId   Int            @unique
-  user         User[]
-  publicUrl    String
-  wsPublicUrl  String
-  wallet       Wallet[]
-  Notification  Notification[]
+  id             Int            @id @default(autoincrement())
+  name           String         @unique
+  fullName       String
+  resource       Resource?      @relation(fields: [resourceId], references: [id])
+  resourceId     Int            @unique
+  user           User[]
+  publicUrl      String
+  wsPublicUrl    String
+  wallet         Wallet[]
+  AlarmNetwork   AlarmNetwork[]
+  Notification    Notification[]
 
   @@map(name: "networks")
 }

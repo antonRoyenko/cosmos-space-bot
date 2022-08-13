@@ -15,6 +15,7 @@ export const middleware = (): Middleware<Context> =>
       step: "setup",
       currentWallets: [],
       timezones: [],
+      alarmNetwork: undefined,
     }),
     storage,
   });

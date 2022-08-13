@@ -49,11 +49,11 @@ server.register(fastifyCron, {
             user.notificationId
           );
 
-          if (notification?.timezone) {
-            const now = dayjs();
-            const userTime = dayjs.tz(now, notification.timezone);
-            prices += `Price reminder for ${userTime.format("LLL")} \n\n`;
+          const now = dayjs();
+          const userTime = dayjs.tz(now, user.timezone);
+          prices += `Price reminder for ${userTime.format("LLL")} \n\n`;
 
+          if (notification) {
             for (const network of notification.reminderNetworksIds) {
               const networkPrice = await getTokenPrice(network.name);
               prices += `${network.fullName} - ${networkPrice.price}$ \n`;

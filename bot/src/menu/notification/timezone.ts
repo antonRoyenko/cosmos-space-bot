@@ -1,6 +1,7 @@
 import { Menu, MenuRange } from "@grammyjs/menu";
-import { notificationService } from "@bot/services";
+import { usersService } from "@bot/services";
 import { Context } from "@bot/types";
+import { reminderDailyMenu } from "@bot/menu/notification/daily";
 
 export const timezoneMenu = new Menu<Context>("timezoneMenu", {
   autoAnswer: false,
@@ -12,18 +13,21 @@ export const timezoneMenu = new Menu<Context>("timezoneMenu", {
 
     if (timezones.length > 0) {
       for (const timezone of timezones) {
-        const { updateNotification } = await notificationService({ ctx });
         range
           .text(timezone, async (ctx) => {
-            await updateNotification({ timezone });
-            ctx.menu.back();
+            await usersService.updateByTelegramId(ctx.from?.id, {
+              data: {
+                timezone,
+              },
+            });
+            await ctx.reply("Timezone was saved", {
+              reply_markup: reminderDailyMenu,
+            });
           })
           .row();
       }
     }
   }
-
-  range.back("Back");
 
   return range;
 });

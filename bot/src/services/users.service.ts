@@ -135,7 +135,6 @@ export const createService = (prisma: PrismaClient) =>
         networks,
         isReminderActive,
         notificationReminderTime,
-        timezone,
       }: {
         networks?: { id: number }[];
         isReminderActive?: boolean;
@@ -156,10 +155,88 @@ export const createService = (prisma: PrismaClient) =>
           },
           isReminderActive,
           notificationReminderTime,
-          timezone,
         },
       };
 
       return prisma.notification.upsert(query);
     },
+
+    getAlarm: (userId: number) =>
+      prisma.alarm.findUnique({
+        where: {
+          userId,
+        },
+      }),
+
+    upsertAlarm: ({
+      userId,
+      isAlarmActive,
+    }: {
+      isAlarmActive?: boolean;
+      userId: number;
+    }) => {
+      const query: Prisma.AlarmUpsertArgs = {
+        where: {
+          userId,
+        },
+        create: {
+          userId,
+        },
+        update: {
+          isAlarmActive: isAlarmActive,
+        },
+      };
+
+      return prisma.alarm.upsert(query);
+    },
+
+    getAlarmNetworks: (alarmId: number) =>
+      prisma.alarmNetwork.findMany({
+        where: {
+          alarmId,
+        },
+      }),
+
+    getAlarmNetwork: (networkId: number) =>
+      prisma.alarmNetwork.findUnique({
+        where: {
+          networkId,
+        },
+      }),
+
+    upsertAlarmNetwork: ({
+      networkId,
+      alarmPrices,
+      alarmId,
+    }: {
+      networkId: number;
+      alarmPrices: string[];
+      alarmId: number;
+    }) => {
+      const query: Prisma.AlarmNetworkUpsertArgs = {
+        where: {
+          networkId,
+        },
+        create: {
+          networkId,
+          alarmPrices,
+          alarmId,
+        },
+        update: {
+          alarmPrices,
+        },
+      };
+
+      return prisma.alarmNetwork.upsert(query);
+    },
+
+    removeAlarmPrice: (id: number, prices: string[]) =>
+      prisma.alarmNetwork.update({
+        where: {
+          id,
+        },
+        data: {
+          alarmPrices: prices,
+        },
+      }),
   });

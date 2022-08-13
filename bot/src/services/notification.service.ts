@@ -6,10 +6,8 @@ type Notification = {
   isReminderActive: boolean;
   updateNotification: ({
     reminderToggle,
-    timezone,
   }: {
     reminderToggle?: boolean;
-    timezone?: string;
   }) => Promise<void>;
 };
 
@@ -63,17 +61,12 @@ export async function createService({
 
   const updateNotification = async ({
     reminderToggle,
-    timezone,
   }: {
     reminderToggle?: boolean;
-    timezone?: string;
   }) => {
     await usersService.upsertUserNotification(Number(notification?.id), {
       ...(Boolean(reminderToggle) && {
         isReminderActive: !isReminderActive,
-      }),
-      ...(timezone && {
-        timezone,
       }),
     });
   };
