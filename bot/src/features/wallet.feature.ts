@@ -29,7 +29,9 @@ feature
     const prefix = bech32.decode(address).prefix;
     const network = await usersService.getNetwork({ name: prefix });
     const userWallets = await usersService.getUserWallets(telegramId);
-    const user = await usersService.getUserByTelegramId(telegramId);
+    const user = await usersService.getUserByTelegramId({
+      telegramId: telegramId,
+    });
 
     if (userWallets.some(({ wallet }) => wallet === address)) {
       return ctx.reply("You already have this wallet");

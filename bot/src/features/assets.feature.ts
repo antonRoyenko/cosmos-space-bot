@@ -15,7 +15,9 @@ feature.command("assets", logHandle("handle /assets"), async (ctx: Context) => {
   ctx.session.step = "assets";
   let output = "";
   let wallets: Wallet[] = [];
-  const user = await usersService.getUserByTelegramId(Number(ctx.from?.id));
+  const user = await usersService.getUserByTelegramId({
+    telegramId: Number(ctx.from?.id),
+  });
   if (user) {
     wallets = await usersService.getUserWallets(user.id);
   }

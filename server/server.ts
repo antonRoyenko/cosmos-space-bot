@@ -2,11 +2,6 @@ import fastify from "fastify";
 import { BotError, webhookCallback } from "grammy";
 import fastifyStatic from "@fastify/static";
 import fastifyCors from "@fastify/cors";
-import fastifyCron from "fastify-cron";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
-import timezone from "dayjs/plugin/timezone";
-import localizedFormat from "dayjs/plugin/localizedFormat";
 import { register } from "prom-client";
 import { bot } from "@bot/bot";
 import { config } from "@bot/config";
@@ -15,8 +10,7 @@ import { handleError } from "@bot/helpers/error-handler";
 import path from "path";
 import { usersService } from "@bot/services";
 import { bech32 } from "bech32";
-import { getTokenPrice } from "@bot/graphql/queries/getTokenPrice";
-import { sendNotification } from "@server/telegram";
+import { cron } from "@server/cron";
 
 export const server = fastify({
   logger,
@@ -31,47 +25,7 @@ server.register(fastifyStatic, {
 
 server.register(fastifyCors, { origin: "*" });
 
-server.register(fastifyCron, {
-  jobs: [
-    {
-      cronTime: "0 * * * *",
-
-      onTick: async () => {
-        dayjs.extend(utc);
-        dayjs.extend(timezone);
-        dayjs.extend(localizedFormat);
-
-        const users = await usersService.getUsers();
-
-        for (const user of users) {
-          let prices = "";
-          const notification = await usersService.getUserNotification(
-            user.notificationId
-          );
-
-          const now = dayjs();
-          const userTime = dayjs.tz(now, user.timezone);
-          prices += `Price reminder for ${userTime.format("LLL")} \n\n`;
-
-          if (notification) {
-            for (const network of notification.reminderNetworksIds) {
-              const networkPrice = await getTokenPrice(network.name);
-              prices += `${network.fullName} - ${networkPrice.price}$ \n`;
-            }
-
-            if (
-              notification.notificationReminderTime.includes(
-                userTime.format("LT")
-              )
-            ) {
-              sendNotification(prices, "HTML", Number(user.telegramId));
-            }
-          }
-        }
-      },
-    },
-  ],
-});
+cron(server);
 
 server.setNotFoundHandler((_, res) => {
   res.sendFile("index.html");

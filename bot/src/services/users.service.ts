@@ -91,10 +91,17 @@ export const createService = (prisma: PrismaClient) =>
 
     getNetworks: () => prisma.network.findMany(),
 
-    getUserByTelegramId: (telegramId: number) =>
+    getUserByTelegramId: ({
+      telegramId,
+      id,
+    }: {
+      telegramId?: number;
+      id?: number;
+    }) =>
       prisma.user.findUnique({
         where: {
           telegramId,
+          id,
         },
       }),
 
@@ -168,6 +175,8 @@ export const createService = (prisma: PrismaClient) =>
         },
       }),
 
+    getAlarms: () => prisma.alarm.findMany(),
+
     upsertAlarm: ({
       userId,
       isAlarmActive,
@@ -197,7 +206,7 @@ export const createService = (prisma: PrismaClient) =>
         },
       }),
 
-    getAlarmNetwork: (networkId: number) =>
+    getAlarmNetwork: (networkId?: number) =>
       prisma.alarmNetwork.findUnique({
         where: {
           networkId,
