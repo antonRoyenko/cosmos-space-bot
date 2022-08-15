@@ -36,11 +36,12 @@ import {
   notificationMenu,
 } from "@bot/menu";
 import { reminderDailyMenu } from "@bot/menu/notification/daily";
-import { networksReminderMenu } from "@bot/menu/notification/networksReminder";
-import { networkTimeReminderMenu } from "@bot/menu/notification/networkTimeReminder";
+import { networksReminderMenu } from "@bot/menu/notification/reminder";
+import { networkTimeReminderMenu } from "@bot/menu/notification/reminderTime";
 import { timezoneMenu } from "@bot/menu/notification/timezone";
 import { alarmMenu } from "@bot/menu/notification/alarm";
 import { alarmNetworksMenu } from "@bot/menu/notification/alarmNetworks";
+import { governanceMenu } from "@bot/menu/notification/governance";
 
 export const bot = new Bot<Context>(config.BOT_TOKEN);
 
@@ -71,6 +72,7 @@ statisticMenu.register(networkMenu);
 walletMenu.register(walletRemoveMenu);
 notificationMenu.register(reminderDailyMenu);
 notificationMenu.register(alarmMenu);
+notificationMenu.register(governanceMenu);
 reminderDailyMenu.register(networksReminderMenu);
 reminderDailyMenu.register(networkTimeReminderMenu);
 reminderDailyMenu.register(timezoneMenu);

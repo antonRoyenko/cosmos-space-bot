@@ -22,14 +22,10 @@ feature.command(
 );
 
 feature
-  .filter((ctx) => {
-    console.log(ctx.session.alarmNetwork);
-    return !_.isEmpty(ctx.session.alarmNetwork);
-  })
+  .filter((ctx) => !_.isEmpty(ctx.session.alarmNetwork))
   .on("message", async (ctx) => {
     const network = ctx.session.alarmNetwork;
     const price = ctx.message.text || "";
-    console.log(123, price, network);
 
     if (network) {
       const { updateAlarmNetworks } = await alarmService({ ctx, network });
@@ -44,7 +40,6 @@ feature
 feature
   .filter((ctx) => ctx.session.step === "timezone")
   .on("message", async (ctx) => {
-    console.log(55);
     const country = ctx.message.text || "";
 
     const currentCountry = countries.find(({ name }) => name === country) || {
@@ -68,7 +63,6 @@ feature.callbackQuery("no", async (ctx) => {
 });
 
 feature.callbackQuery(/^deleteAlarm:/, async (ctx) => {
-  console.log(356);
   const data = ctx.callbackQuery.data;
   // eslint-disable-next-line no-useless-escape
   const [networkId, price] = data.match(/\d{1,2}([\.,][\d{1,2}])?/g) || [];

@@ -14,12 +14,11 @@ model User {
   telegramId     BigInt         @unique @map("telegram_id")
   updatedAt      DateTime       @updatedAt @map("updated_at")
   createdAt      DateTime       @default(now()) @map("created_at")
-  notification    Notification   @relation(fields: [notificationId], references: [id])
+  notification    Notification    @relation(fields: [notificationId], references: [id])
   notificationId  Int
   Network        Network?       @relation(fields: [networkId], references: [id])
   networkId      Int?
   Alarm          Alarm?
-  AlarmNetwork   AlarmNetwork[]
   timezone       String         @default("Europe/London")
 
   @@map(name: "users")
@@ -27,10 +26,11 @@ model User {
 
 model Notification {
   id                       Int       @id @default(autoincrement())
-  reminderNetworksIds      Network[]
+  reminderNetworks         Network[] @relation("reminder")
+  governanceNetworks       Network[] @relation("governance")
   isReminderActive         Boolean   @default(false)
   User                     User[]
-  notificationReminderTime String[]
+  notificationReminderTime  String[]
 
   @@map(name: "notifications")
 }
@@ -52,8 +52,6 @@ model AlarmNetwork {
   networkId   Int      @unique
   Alarm       Alarm    @relation(fields: [alarmId], references: [id])
   alarmId     Int
-  User        User     @relation(fields: [userId], references: [id])
-  userId      Int      @unique
 
   @@map(name: "alarm_networks")
 }
@@ -70,17 +68,18 @@ model Wallet {
 }
 
 model Network {
-  id           Int            @id @default(autoincrement())
-  name         String         @unique
-  fullName     String
-  resource     Resource?      @relation(fields: [resourceId], references: [id])
-  resourceId   Int            @unique
-  user         User[]
-  publicUrl    String
-  wsPublicUrl  String
-  wallet       Wallet[]
-  AlarmNetwork AlarmNetwork[]
-  Notification Notification[]
+  id                     Int            @id @default(autoincrement())
+  name                   String         @unique
+  fullName               String
+  resource               Resource?      @relation(fields: [resourceId], references: [id])
+  resourceId             Int            @unique
+  user                   User[]
+  publicUrl              String
+  wsPublicUrl            String
+  wallet                 Wallet[]
+  AlarmNetwork           AlarmNetwork[]
+  reminderNotification    Notification[] @relation("reminder")
+  governanceNotification  Notification[] @relation("governance")
 
   @@map(name: "networks")
 }

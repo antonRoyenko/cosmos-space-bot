@@ -13,7 +13,8 @@ type Notification = {
 
 type Networks = {
   isNetworkActive: boolean;
-  updateNetwork: () => Promise<void>;
+  updateNetwork: (isGov?: boolean) => Promise<void>;
+  isGovActive: boolean;
 };
 
 type NetworkTime = {
@@ -73,35 +74,67 @@ export async function createService({
 
   if (network) {
     const isNetworkActive =
-      notification?.reminderNetworksIds.some(
+      notification?.reminderNetworks.some(
         (reminderNetwork) => reminderNetwork.id === network.id
       ) || false;
+    const isGovActive =
+      notification?.governanceNetworks.some(
+        (govNetwork) => govNetwork.id === network.id
+      ) || false;
 
-    const updateNetwork = async () => {
-      const reminderArr = notification?.reminderNetworksIds || [];
+    const updateNetwork = async (isGov = false) => {
+      const reminderArr = notification?.reminderNetworks || [];
+      const govArr = notification?.governanceNetworks || [];
+
       const isReminderArrIncludeNetwork = reminderArr.some(
         (reminderNetwork) => reminderNetwork.id === network.id
       );
+      const isGovArrIncludeNetwork = govArr.some(
+        (govNetwork) => govNetwork.id === network.id
+      );
 
-      if (isReminderArrIncludeNetwork) {
-        await usersService.removeUserNotification(user.notificationId, {
-          id: network.id,
-        });
+      if (isReminderArrIncludeNetwork || isGovArrIncludeNetwork) {
+        const deleteItem = !isGov
+          ? {
+              reminderNetwork: {
+                id: network.id,
+              },
+            }
+          : {
+              governanceNetwork: {
+                id: network.id,
+              },
+            };
+        console.log(2, user.notificationId, deleteItem);
+
+        await usersService.removeUserNotification(
+          user.notificationId,
+          deleteItem
+        );
       } else {
         const reminderNetworksIds = [
           ...reminderArr.map((network) => ({ id: network.id })),
           { id: network.id },
         ];
+        const govNetworksIds = [
+          ...govArr.map((network) => ({ id: network.id })),
+          { id: network.id },
+        ];
+        const updatedItems = !isGov
+          ? { networks: reminderNetworksIds }
+          : { governanceNetworks: govNetworksIds };
 
-        await usersService.upsertUserNotification(Number(notification?.id), {
-          networks: reminderNetworksIds,
-        });
+        await usersService.upsertUserNotification(
+          Number(notification?.id),
+          updatedItems
+        );
       }
     };
 
     return {
       isNetworkActive,
       updateNetwork,
+      isGovActive,
     };
   }
 
@@ -111,7 +144,7 @@ export async function createService({
       notificationTime?.includes(time);
 
     const updateNotificationReminderTime = async (time: string) => {
-      let arr: string[] = [];
+      let arr: string[];
 
       if (notificationTime?.includes(time)) {
         arr = notificationTime.filter((item) => item !== time);

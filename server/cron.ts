@@ -24,13 +24,13 @@ export function cron(server: any) {
             let prices = "";
             const notification = (await usersService.getUserNotification(
               user.notificationId
-            )) || { reminderNetworksIds: [], notificationReminderTime: "" };
+            )) || { reminderNetworks: [], notificationReminderTime: "" };
 
             const now = dayjs();
             const userTime = dayjs.tz(now, user.timezone);
             prices += `Price reminder for ${userTime.format("LLL")} \n\n`;
 
-            for (const network of notification.reminderNetworksIds) {
+            for (const network of notification.reminderNetworks) {
               const networkPrice = await getTokenPrice(network.name);
               prices += `${network.fullName} - ${networkPrice.price}$ \n`;
             }
@@ -52,7 +52,6 @@ export function cron(server: any) {
           const alarms = await usersService.getAlarms();
           for (const alarm of alarms) {
             const alarmNetworks = await usersService.getAlarmNetworks(alarm.id);
-            console.log(alarmNetworks);
 
             for (const alarmNetwork of alarmNetworks) {
               const network = (await usersService.getNetwork({

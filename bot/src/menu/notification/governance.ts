@@ -2,7 +2,7 @@ import { Menu, MenuRange } from "@grammyjs/menu";
 import { notificationService, usersService } from "@bot/services";
 import { Context } from "@bot/types";
 
-export const networksReminderMenu = new Menu<Context>("reminderNetworks", {
+export const governanceMenu = new Menu<Context>("governance", {
   autoAnswer: false,
 }).dynamic(async (ctx) => {
   const range = new MenuRange<Context>();
@@ -12,16 +12,16 @@ export const networksReminderMenu = new Menu<Context>("reminderNetworks", {
 
     if (networks.length > 0) {
       for (const network of networks) {
-        const { isNetworkActive } = await notificationService({ ctx, network });
-        const { updateNetwork } = await notificationService({ ctx, network });
+        const { isGovActive, updateNetwork } = await notificationService({
+          ctx,
+          network,
+        });
 
         range
           .text(
-            isNetworkActive
-              ? `${network.fullName} 🔔`
-              : `${network.fullName} 🔕`,
+            isGovActive ? `${network.fullName} 🔔` : `${network.fullName} 🔕`,
             async (ctx) => {
-              await updateNetwork();
+              await updateNetwork(true);
               ctx.menu.update();
             }
           )

@@ -120,19 +120,36 @@ export const createService = (prisma: PrismaClient) =>
           id,
         },
         include: {
-          reminderNetworksIds: true,
+          reminderNetworks: true,
+          governanceNetworks: true,
         },
       }),
 
-    removeUserNotification: (id: number, ids: { id: number }) =>
+    removeUserNotification: (
+      id: number,
+      {
+        reminderNetwork = {},
+        governanceNetwork = {},
+      }: {
+        reminderNetwork?: { id: number } | Record<string, never>;
+        governanceNetwork?: { id: number } | Record<string, never>;
+      }
+    ) =>
       prisma.notification.update({
         where: {
           id,
         },
         data: {
-          reminderNetworksIds: {
-            disconnect: [ids],
-          },
+          ...(!_.isEmpty(reminderNetwork) && {
+            reminderNetworks: {
+              disconnect: [reminderNetwork],
+            },
+          }),
+          ...(!_.isEmpty(governanceNetwork) && {
+            governanceNetworks: {
+              disconnect: [governanceNetwork],
+            },
+          }),
         },
       }),
 
@@ -142,11 +159,13 @@ export const createService = (prisma: PrismaClient) =>
         networks,
         isReminderActive,
         notificationReminderTime,
+        governanceNetworks,
       }: {
         networks?: { id: number }[];
         isReminderActive?: boolean;
         notificationReminderTime?: string[];
         timezone?: string;
+        governanceNetworks?: { id: number }[];
       }
     ) => {
       const query: Prisma.NotificationUpsertArgs = {
@@ -157,8 +176,11 @@ export const createService = (prisma: PrismaClient) =>
           id,
         },
         update: {
-          reminderNetworksIds: {
+          reminderNetworks: {
             connect: networks,
+          },
+          governanceNetworks: {
+            connect: governanceNetworks,
           },
           isReminderActive,
           notificationReminderTime,

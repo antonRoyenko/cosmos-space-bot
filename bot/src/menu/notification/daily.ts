@@ -1,7 +1,7 @@
 import { Menu } from "@grammyjs/menu";
 import { notificationService } from "@bot/services";
-import { networksReminderMenu } from "./networksReminder";
-import { networkTimeReminderMenu } from "./networkTimeReminder";
+import { networksReminderMenu } from "./reminder";
+import { networkTimeReminderMenu } from "./reminderTime";
 import { Context } from "@bot/types";
 
 export const reminderDailyMenu = new Menu<Context>("dailyReminder")
