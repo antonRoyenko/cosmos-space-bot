@@ -31,7 +31,7 @@ model Notification {
   isReminderActive         Boolean                  @default(false) @map("is_reminder_active")
   isAlarmActive            Boolean                  @default(false) @map("is_alarm_active")
   user                     User?
-  notificationReminderTime String[]                  @map("notification_reminder_time")
+  notificationReminderTime  String[]                 @map("notification_reminder_time")
 
   @@map(name: "notifications")
 }
@@ -71,11 +71,11 @@ model Wallet {
 }
 
 model Network {
-  id                      Int                      @id @default(autoincrement())
-  name                    String                   @unique
+  id                      Int                     @id @default(autoincrement())
+  name                    String                  @unique
   fullName                String
-  resource                Resource?                @relation(fields: [resourceId], references: [id])
-  resourceId              Int                      @unique
+  resource                Resource?               @relation(fields: [resourceId], references: [id])
+  resourceId              Int                     @unique
   user                    User[]
   publicUrl               String
   wsPublicUrl             String
