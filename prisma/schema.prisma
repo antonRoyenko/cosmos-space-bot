@@ -9,77 +9,80 @@ datasource db {
 }
 
 model User {
-  id             Int            @id @default(autoincrement())
+  id             Int          @id @default(autoincrement())
   wallets        Wallet[]
-  telegramId     BigInt         @unique @map("telegram_id")
-  updatedAt      DateTime       @updatedAt @map("updated_at")
-  createdAt      DateTime       @default(now()) @map("created_at")
-  notification    Notification    @relation(fields: [notificationId], references: [id])
-  notificationId  Int
-  Network        Network?       @relation(fields: [networkId], references: [id])
-  networkId      Int?
-  Alarm          Alarm?
-  timezone       String         @default("Europe/London")
+  telegramId     BigInt       @unique @map("telegram_id")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  notification    Notification  @relation(fields: [notificationId], references: [id])
+  notificationId  Int          @unique @map("notification_id")
+  Network        Network?     @relation(fields: [networkId], references: [id])
+  networkId      Int?         @map("network_id")
+  alarm          Alarm[]
+  timezone       String       @default("Europe/London")
 
   @@map(name: "users")
 }
 
 model Notification {
-  id                       Int       @id @default(autoincrement())
-  reminderNetworks         Network[] @relation("reminder")
-  governanceNetworks       Network[] @relation("governance")
-  isReminderActive         Boolean   @default(false)
-  User                     User[]
-  notificationReminderTime  String[]
+  id                       Int                      @id @default(autoincrement())
+  networks                 NetworksInNotification[]
+  governanceTimeStart      DateTime?                @map("governance_time_start")
+  isReminderActive         Boolean                  @default(false) @map("is_reminder_active")
+  isAlarmActive            Boolean                  @default(false) @map("is_alarm_active")
+  user                     User?
+  notificationReminderTime String[]                  @map("notification_reminder_time")
 
   @@map(name: "notifications")
 }
 
+model NetworksInNotification {
+  id                  Int           @id @default(autoincrement())
+  notification         Notification?  @relation(fields: [notificationId], references: [id])
+  notificationId       Int?          @map("notification_id")
+  reminderNetwork     Network?      @relation("reminder_networks", fields: [reminderNetworkId], references: [id])
+  reminderNetworkId   Int?          @map("reminder_network_id")
+  governanceNetwork   Network?      @relation("governance_networks", fields: [governanceNetworkId], references: [id])
+  governanceNetworkId Int?          @map("governance_network_id")
+
+  @@map(name: "networks_in_notification")
+}
+
 model Alarm {
-  id            Int            @id @default(autoincrement())
-  alarmNetworks AlarmNetwork[]
-  isAlarmActive Boolean        @default(false)
-  User          User           @relation(fields: [userId], references: [id])
-  userId        Int            @unique
+  id          Int      @id @default(autoincrement())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int      @unique @map("user_id")
+  alarmPrices String[] @map("alarm_prices")
+  network     Network? @relation(fields: [networkId], references: [id])
+  networkId   Int      @unique @map("network_id")
 
   @@map(name: "alarms")
 }
 
-model AlarmNetwork {
-  id          Int      @id @default(autoincrement())
-  alarmPrices String[]
-  Network     Network? @relation(fields: [networkId], references: [id])
-  networkId   Int      @unique
-  Alarm       Alarm    @relation(fields: [alarmId], references: [id])
-  alarmId     Int
-
-  @@map(name: "alarm_networks")
-}
-
 model Wallet {
   id        Int     @id @default(autoincrement())
-  wallet    String
+  address   String
   network   Network @relation(fields: [networkId], references: [id])
-  networkId Int
+  networkId Int     @map("network_id")
   User      User    @relation(fields: [userId], references: [id])
-  userId    Int     @unique
+  userId    Int     @unique @map("user_id")
 
   @@map(name: "wallets")
 }
 
 model Network {
-  id                     Int            @id @default(autoincrement())
-  name                   String         @unique
-  fullName               String
-  resource               Resource?      @relation(fields: [resourceId], references: [id])
-  resourceId             Int            @unique
-  user                   User[]
-  publicUrl              String
-  wsPublicUrl            String
-  wallet                 Wallet[]
-  AlarmNetwork           AlarmNetwork[]
-  reminderNotification    Notification[] @relation("reminder")
-  governanceNotification  Notification[] @relation("governance")
+  id                      Int                      @id @default(autoincrement())
+  name                    String                   @unique
+  fullName                String
+  resource                Resource?                @relation(fields: [resourceId], references: [id])
+  resourceId              Int                      @unique
+  user                    User[]
+  publicUrl               String
+  wsPublicUrl             String
+  wallet                  Wallet[]
+  Alarm                   Alarm[]
+  governanceNotifications  NetworksInNotification[] @relation("reminder_networks")
+  reminderNotifications    NetworksInNotification[] @relation("governance_networks")
 
   @@map(name: "networks")
 }
