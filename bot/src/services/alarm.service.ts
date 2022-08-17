@@ -31,38 +31,44 @@ export async function createService({
     notificationId: 0,
     telegramId: 0,
   };
-  let alarm = await usersService.getAlarm(user.id);
+  const alarm = await usersService.getAlarm({ userId: user.id });
+  const notification = (await usersService.getUserNotification(user.id)) || {
+    id: 0,
+    isAlarmActive: false,
+  };
 
-  if (!alarm) {
-    alarm = await usersService.upsertAlarm({ userId: user.id });
-  }
-
-  const isAlarmActive = alarm?.isAlarmActive || false;
-
-  const updateAlarm = async () => {
+  if (!alarm && network) {
     await usersService.upsertAlarm({
       userId: user.id,
-      isAlarmActive: !isAlarmActive,
+      networkId: network.id,
+    });
+  }
+
+  const isAlarmActive = notification.isAlarmActive;
+
+  const updateAlarm = async () => {
+    await usersService.upsertUserNotification(Number(user?.id), {
+      isReminderActive: !isAlarmActive,
     });
   };
 
   if (network) {
-    const alarmNetwork = await usersService.getAlarmNetwork(network.id);
+    const alarmNetwork = await usersService.getAlarm({ networkId: network.id });
 
     const updateAlarmNetworks = async (price: string, network: Network) => {
-      let arr = alarmNetwork?.alarmPrices || [];
+      let prices = alarmNetwork?.alarmPrices || [];
       if (alarmNetwork?.alarmPrices.includes(price)) {
-        arr = arr.filter((item) => item !== price);
+        prices = prices.filter((item) => item !== price);
       } else {
-        arr = [...arr, price];
+        prices = [...prices, price];
       }
+      console.log(prices);
 
-      console.log(56, alarm, arr);
       if (alarm) {
-        await usersService.upsertAlarmNetwork({
+        await usersService.upsertAlarm({
+          userId: user.id,
+          alarmPrices: prices,
           networkId: network.id,
-          alarmPrices: arr,
-          alarmId: alarm.id,
         });
       }
     };

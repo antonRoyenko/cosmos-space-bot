@@ -4,9 +4,9 @@ import { SubscriptionClient } from "subscriptions-transport-ws";
 import ws from "ws";
 
 // TODO need migrate problem in graphql-ws (Sec-WebSocket-Accept)
-const getWsClient = function () {
+const getWsClient = function (url: string) {
   const client = new SubscriptionClient(
-    "wss://gql.desmos.forbole.com/v1/graphql",
+    url,
     {
       reconnect: true,
       lazy: true,
@@ -16,7 +16,7 @@ const getWsClient = function () {
   return client;
 };
 
-export const createSubscriptionObservable = (query: any) => {
-  const link = new WebSocketLink(getWsClient());
+export const createSubscriptionObservable = (query: any, url: string) => {
+  const link = new WebSocketLink(getWsClient(url));
   return execute(link, { query: query });
 };

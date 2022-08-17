@@ -12,7 +12,7 @@ export const networksReminderMenu = new Menu<Context>("reminderNetworks", {
 
     if (networks.length > 0) {
       for (const network of networks) {
-        const { isNetworkActive, updateNetwork } = await notificationService({
+        const { isNetworkActive, updateReminder } = await notificationService({
           ctx,
           network,
         });
@@ -23,7 +23,7 @@ export const networksReminderMenu = new Menu<Context>("reminderNetworks", {
               ? `${network.fullName} 🔔`
               : `${network.fullName} 🔕`,
             async (ctx) => {
-              await updateNetwork();
+              await updateReminder();
               ctx.menu.update();
             }
           )

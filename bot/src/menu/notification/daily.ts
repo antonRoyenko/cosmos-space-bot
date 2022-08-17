@@ -26,7 +26,7 @@ export const reminderDailyMenu = new Menu<Context>("dailyReminder")
     },
     async (ctx) => {
       const { updateNotification } = await notificationService({ ctx });
-      await updateNotification({ reminderToggle: true });
+      await updateNotification();
 
       ctx.menu.update();
     }

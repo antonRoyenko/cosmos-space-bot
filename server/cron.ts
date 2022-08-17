@@ -18,19 +18,34 @@ export function cron(server: any) {
           dayjs.extend(timezone);
           dayjs.extend(localizedFormat);
 
-          const users = await usersService.getUsers();
+          const notifications = await usersService.getAllNotifications();
 
-          for (const user of users) {
+          for (const notification of notifications) {
             let prices = "";
-            const notification = (await usersService.getUserNotification(
-              user.notificationId
-            )) || { reminderNetworks: [], notificationReminderTime: "" };
+            const reminderNetworks =
+              await usersService.getAllNetworkInNotification({
+                where: {
+                  notificationId: notification.id,
+                },
+              });
+            const user = (await usersService.getUserByTelegramId({
+              id: notification.userId,
+            })) || {
+              timezone: "",
+              telegramId: 0,
+            };
 
             const now = dayjs();
             const userTime = dayjs.tz(now, user.timezone);
             prices += `Price reminder for ${userTime.format("LLL")} \n\n`;
 
-            for (const network of notification.reminderNetworks) {
+            for (const reminder of reminderNetworks) {
+              const network = (await usersService.getNetwork({
+                id: Number(reminder.reminderNetworkId),
+              })) || {
+                name: "",
+                fullName: "",
+              };
               const networkPrice = await getTokenPrice(network.name);
               prices += `${network.fullName} - ${networkPrice.price}$ \n`;
             }
@@ -49,42 +64,36 @@ export function cron(server: any) {
         cronTime: "*/2 * * * *",
 
         onTick: async () => {
-          const alarms = await usersService.getAlarms();
+          const alarms = await usersService.getAllAlarms();
           for (const alarm of alarms) {
-            const alarmNetworks = await usersService.getAlarmNetworks(alarm.id);
+            const network = (await usersService.getNetwork({
+              id: alarm.networkId,
+            })) || { name: "", fullName: "" };
 
-            for (const alarmNetwork of alarmNetworks) {
-              const network = (await usersService.getNetwork({
-                id: alarmNetwork.networkId,
-              })) || { name: "", fullName: "" };
+            const networkPrice = await getTokenPrice(network.name);
 
-              const networkPrice = await getTokenPrice(network.name);
+            if (alarm.alarmPrices.length === 0) return;
 
-              if (alarmNetwork.alarmPrices.length === 0) return;
+            const closest = alarm.alarmPrices
+              .filter((item) => Number(item) > networkPrice.price)
+              .reduce(function (prev, curr) {
+                return Math.abs(Number(curr) - networkPrice.price) <
+                  Math.abs(Number(prev) - networkPrice.price)
+                  ? curr
+                  : prev;
+              });
 
-              const closest = alarmNetwork.alarmPrices
-                .filter((item) => Number(item) > networkPrice.price)
-                .reduce(function (prev, curr) {
-                  return Math.abs(Number(curr) - networkPrice.price) <
-                    Math.abs(Number(prev) - networkPrice.price)
-                    ? curr
-                    : prev;
-                });
+            const user = (await usersService.getUserByTelegramId({
+              id: alarm.userId,
+            })) || { telegramId: 0 };
 
-              const user = (await usersService.getUserByTelegramId({
-                id: alarm.userId,
-              })) || { telegramId: 0 };
-
-              await sendNotification(
-                `Alarm ${network.fullName} price is - ${networkPrice.price}`,
-                "HTML",
-                Number(user.telegramId)
-              );
-              const prices = alarmNetwork.alarmPrices.filter(
-                (item) => item !== closest
-              );
-              await usersService.removeAlarmPrice(alarmNetwork.id, prices);
-            }
+            await sendNotification(
+              `Alarm ${network.fullName} price is - ${networkPrice.price}`,
+              "HTML",
+              Number(user.telegramId)
+            );
+            const prices = alarm.alarmPrices.filter((item) => item !== closest);
+            await usersService.removeAlarmPrice(alarm.id, prices);
           }
         },
       },

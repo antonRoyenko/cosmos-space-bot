@@ -14,8 +14,7 @@ model User {
   telegramId     BigInt       @unique @map("telegram_id")
   updatedAt      DateTime     @updatedAt @map("updated_at")
   createdAt      DateTime     @default(now()) @map("created_at")
-  notification    Notification  @relation(fields: [notificationId], references: [id])
-  notificationId  Int          @unique @map("notification_id")
+  notification    Notification?
   Network        Network?     @relation(fields: [networkId], references: [id])
   networkId      Int?         @map("network_id")
   alarm          Alarm[]
@@ -27,11 +26,11 @@ model User {
 model Notification {
   id                       Int                      @id @default(autoincrement())
   networks                 NetworksInNotification[]
-  governanceTimeStart      DateTime?                @map("governance_time_start")
   isReminderActive         Boolean                  @default(false) @map("is_reminder_active")
   isAlarmActive            Boolean                  @default(false) @map("is_alarm_active")
-  user                     User?
   notificationReminderTime  String[]                 @map("notification_reminder_time")
+  user                     User                     @relation(fields: [userId], references: [id])
+  userId                   Int                      @unique @map("user_id")
 
   @@map(name: "notifications")
 }
@@ -41,9 +40,10 @@ model NetworksInNotification {
   notification         Notification?  @relation(fields: [notificationId], references: [id])
   notificationId       Int?          @map("notification_id")
   reminderNetwork     Network?      @relation("reminder_networks", fields: [reminderNetworkId], references: [id])
-  reminderNetworkId   Int?          @map("reminder_network_id")
+  reminderNetworkId   Int?          @unique @map("reminder_network_id")
   governanceNetwork   Network?      @relation("governance_networks", fields: [governanceNetworkId], references: [id])
-  governanceNetworkId Int?          @map("governance_network_id")
+  governanceNetworkId Int?          @unique @map("governance_network_id")
+  governanceTimeStart DateTime?     @map("governance_time_start")
 
   @@map(name: "networks_in_notification")
 }

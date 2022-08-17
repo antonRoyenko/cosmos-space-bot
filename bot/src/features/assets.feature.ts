@@ -24,18 +24,18 @@ feature.command("assets", logHandle("handle /assets"), async (ctx: Context) => {
 
   if (wallets.length > 0) {
     await Promise.all(
-      wallets.map(async ({ wallet, networkId }) => {
-        const prefix = bech32.decode(wallet).prefix;
+      wallets.map(async ({ address, networkId }) => {
+        const prefix = bech32.decode(address).prefix;
         const url = await usersService.getNetwork({ id: networkId });
         const publicUrl = url?.publicUrl || "";
-        const data = await getBalance(publicUrl, wallet, prefix);
+        const data = await getBalance(publicUrl, address, prefix);
         const prices = await getTokenPrice(prefix);
         const { first, seventh, thirty } = prices.PNL(
           toNumber(data.total.value)
         );
 
         output +=
-          `Wallet: ${wallet} \n` +
+          `Wallet: ${address} \n` +
           `\nBalance in ${data.available.displayDenom}: \n` +
           `Available - ${data.available.value} \n` +
           `Delagated - ${data.delegate.value} \n` +

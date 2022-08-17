@@ -10,11 +10,7 @@ export const alarmMenu = new Menu<Context>("alarm")
   )
   .row()
   .text("Delete alarms", async (ctx) => {
-    const user = ctx.local.user || {
-      id: 0,
-    };
-    const alarm = (await usersService.getAlarm(user.id)) || { id: 0 };
-    const alarmNetwork = await usersService.getAlarmNetworks(alarm.id);
+    const alarmNetwork = await usersService.getAllAlarms();
 
     const inlineKeyboard = new InlineKeyboard();
 
@@ -38,11 +34,7 @@ export const alarmMenu = new Menu<Context>("alarm")
   .row()
   .text("List alarms", async (ctx) => {
     let output = "You have alarms on: \n";
-    const user = ctx.local.user || {
-      id: 0,
-    };
-    const alarm = (await usersService.getAlarm(user.id)) || { id: 0 };
-    const alarmNetwork = await usersService.getAlarmNetworks(alarm.id);
+    const alarmNetwork = await usersService.getAllAlarms();
 
     for await (const alarm of alarmNetwork) {
       const network = (await usersService.getNetwork({

@@ -1,6 +1,11 @@
 import { Menu, MenuRange } from "@grammyjs/menu";
 import { notificationService, usersService } from "@bot/services";
 import { Context } from "@bot/types";
+import {
+  governanceSubscription,
+  observer,
+} from "@bot/graphql/queries/governanceSubscription";
+import dayjs from "dayjs";
 
 export const governanceMenu = new Menu<Context>("governance", {
   autoAnswer: false,
@@ -12,16 +17,22 @@ export const governanceMenu = new Menu<Context>("governance", {
 
     if (networks.length > 0) {
       for (const network of networks) {
-        const { isGovActive, updateNetwork } = await notificationService({
+        const { isGovActive, updateGovernance } = await notificationService({
           ctx,
           network,
         });
+        const time = dayjs().toDate();
 
         range
           .text(
             isGovActive ? `${network.fullName} 🔔` : `${network.fullName} 🔕`,
             async (ctx) => {
-              await updateNetwork(true);
+              if (!isGovActive) {
+                // governanceSubscription(network.wsPublicUrl, ctx, time);
+              } else {
+                // observer.unsubscribe();
+              }
+              await updateGovernance(time);
               ctx.menu.update();
             }
           )

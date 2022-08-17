@@ -5,9 +5,10 @@ import { getCountry } from "countries-and-timezones";
 import { countries } from "@bot/constants/country";
 import { timezoneMenu } from "@bot/menu/notification/timezone";
 import _ from "lodash";
-import { alarmService, usersService } from "@bot/services";
+import { alarmService } from "@bot/services";
 import { agreementKeyboard } from "@bot/menu/keyboards";
 import { alarmMenu } from "@bot/menu/notification/alarm";
+import { usersService } from "@bot/services";
 
 export const feature = router.route("notification");
 
@@ -66,7 +67,9 @@ feature.callbackQuery(/^deleteAlarm:/, async (ctx) => {
   const data = ctx.callbackQuery.data;
   // eslint-disable-next-line no-useless-escape
   const [networkId, price] = data.match(/\d{1,2}([\.,][\d{1,2}])?/g) || [];
-  const alarm = (await usersService.getAlarmNetwork(Number(networkId))) || {
+  const alarm = (await usersService.getAlarm({
+    networkId: Number(networkId),
+  })) || {
     id: 0,
     alarmPrices: [],
   };

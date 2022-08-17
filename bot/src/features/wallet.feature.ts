@@ -33,7 +33,7 @@ feature
       telegramId: telegramId,
     });
 
-    if (userWallets.some(({ wallet }) => wallet === address)) {
+    if (userWallets.some((walelt) => walelt.address === address)) {
       return ctx.reply("You already have this wallet");
     }
 

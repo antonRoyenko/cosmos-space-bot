@@ -20,8 +20,8 @@ export const walletMenu = new Menu<Context>("wallets", {
       const userWallets = await usersService.getUserWallets(telegramId);
 
       if (userWallets) {
-        userWallets.forEach(({ wallet }, key) => {
-          wallets += `Wallet ${key + 1} - ${wallet} \n`;
+        userWallets.forEach(({ address }, key) => {
+          wallets += `Wallet ${key + 1} - ${address} \n`;
         });
       }
 

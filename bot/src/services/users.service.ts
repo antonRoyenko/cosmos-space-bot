@@ -26,7 +26,7 @@ export const createService = (prisma: PrismaClient) =>
     upsertWallet: <T extends DeepPartial<Prisma.WalletUpsertArgs>>(
       id: number,
       networkId: number,
-      wallet: string,
+      address: string,
       args?: Prisma.SelectSubset<T, Prisma.UserUpsertArgs>
     ) => {
       const query: Prisma.WalletUpsertArgs = {
@@ -36,7 +36,7 @@ export const createService = (prisma: PrismaClient) =>
         create: {
           userId: id,
           networkId,
-          wallet,
+          address,
         },
         update: {},
       };
@@ -117,71 +117,32 @@ export const createService = (prisma: PrismaClient) =>
     getUserNotification: (id: number) =>
       prisma.notification.findUnique({
         where: {
-          id,
-        },
-        include: {
-          reminderNetworks: true,
-          governanceNetworks: true,
+          userId: id,
         },
       }),
 
-    removeUserNotification: (
-      id: number,
-      {
-        reminderNetwork = {},
-        governanceNetwork = {},
-      }: {
-        reminderNetwork?: { id: number } | Record<string, never>;
-        governanceNetwork?: { id: number } | Record<string, never>;
-      }
-    ) =>
-      prisma.notification.update({
-        where: {
-          id,
-        },
-        data: {
-          ...(!_.isEmpty(reminderNetwork) && {
-            reminderNetworks: {
-              disconnect: [reminderNetwork],
-            },
-          }),
-          ...(!_.isEmpty(governanceNetwork) && {
-            governanceNetworks: {
-              disconnect: [governanceNetwork],
-            },
-          }),
-        },
-      }),
+    getAllNotifications: () => prisma.notification.findMany(),
 
     upsertUserNotification: (
       id: number,
       {
-        networks,
         isReminderActive,
         notificationReminderTime,
-        governanceNetworks,
       }: {
         networks?: { id: number }[];
         isReminderActive?: boolean;
         notificationReminderTime?: string[];
         timezone?: string;
-        governanceNetworks?: { id: number }[];
       }
     ) => {
       const query: Prisma.NotificationUpsertArgs = {
         where: {
-          id,
+          userId: id,
         },
         create: {
-          id,
+          userId: id,
         },
         update: {
-          reminderNetworks: {
-            connect: networks,
-          },
-          governanceNetworks: {
-            connect: governanceNetworks,
-          },
           isReminderActive,
           notificationReminderTime,
         },
@@ -190,21 +151,47 @@ export const createService = (prisma: PrismaClient) =>
       return prisma.notification.upsert(query);
     },
 
-    getAlarm: (userId: number) =>
+    getAlarm: ({
+      userId,
+      networkId,
+    }: {
+      userId?: number;
+      networkId?: number;
+    }) =>
       prisma.alarm.findUnique({
         where: {
           userId,
+          networkId,
         },
       }),
 
-    getAlarms: () => prisma.alarm.findMany(),
+    getAllAlarms: (args?: Prisma.AlarmFindManyArgs) =>
+      prisma.alarm.findMany(args),
+
+    getNetworkInNotification: (
+      args: Prisma.NetworksInNotificationFindUniqueArgsBase
+    ) => prisma.networksInNotification.findUnique(args),
+
+    getAllNetworkInNotification: (
+      args: Prisma.NetworksInNotificationFindManyArgs
+    ) => prisma.networksInNotification.findMany(args),
+
+    createNetworkInNotification: (
+      args: Prisma.NetworksInNotificationCreateArgs
+    ) => prisma.networksInNotification.create(args),
+
+    removeNetworkInNotification: (
+      args: Prisma.NetworksInNotificationDeleteArgs
+    ) => prisma.networksInNotification.delete(args),
 
     upsertAlarm: ({
       userId,
-      isAlarmActive,
+      networkId,
+      alarmPrices,
     }: {
-      isAlarmActive?: boolean;
       userId: number;
+      networkId: number;
+      alarmPrices?: string[];
     }) => {
       const query: Prisma.AlarmUpsertArgs = {
         where: {
@@ -212,57 +199,18 @@ export const createService = (prisma: PrismaClient) =>
         },
         create: {
           userId,
+          networkId,
         },
         update: {
-          isAlarmActive: isAlarmActive,
+          alarmPrices,
         },
       };
 
       return prisma.alarm.upsert(query);
     },
 
-    getAlarmNetworks: (alarmId: number) =>
-      prisma.alarmNetwork.findMany({
-        where: {
-          alarmId,
-        },
-      }),
-
-    getAlarmNetwork: (networkId?: number) =>
-      prisma.alarmNetwork.findUnique({
-        where: {
-          networkId,
-        },
-      }),
-
-    upsertAlarmNetwork: ({
-      networkId,
-      alarmPrices,
-      alarmId,
-    }: {
-      networkId: number;
-      alarmPrices: string[];
-      alarmId: number;
-    }) => {
-      const query: Prisma.AlarmNetworkUpsertArgs = {
-        where: {
-          networkId,
-        },
-        create: {
-          networkId,
-          alarmPrices,
-          alarmId,
-        },
-        update: {
-          alarmPrices,
-        },
-      };
-
-      return prisma.alarmNetwork.upsert(query);
-    },
-
     removeAlarmPrice: (id: number, prices: string[]) =>
-      prisma.alarmNetwork.update({
+      prisma.alarm.update({
         where: {
           id,
         },

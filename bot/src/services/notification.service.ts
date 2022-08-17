@@ -4,17 +4,14 @@ import { Network } from "@prisma/client";
 
 type Notification = {
   isReminderActive: boolean;
-  updateNotification: ({
-    reminderToggle,
-  }: {
-    reminderToggle?: boolean;
-  }) => Promise<void>;
+  updateNotification: () => Promise<void>;
 };
 
 type Networks = {
   isNetworkActive: boolean;
-  updateNetwork: (isGov?: boolean) => Promise<void>;
   isGovActive: boolean;
+  updateGovernance: (time?: Date) => Promise<void>;
+  updateReminder: () => Promise<void>;
 };
 
 type NetworkTime = {
@@ -51,95 +48,83 @@ export async function createService({
   timeArr?: string[];
 }) {
   const user = ctx.local.user || {
+    id: 0,
     notificationId: 0,
     telegramId: 0,
   };
-  const notification = await usersService.getUserNotification(
-    user.notificationId
-  );
+  const notification = (await usersService.getUserNotification(user.id)) || {
+    id: 0,
+    isReminderActive: false,
+    notificationReminderTime: [""],
+  };
 
-  const isReminderActive = notification?.isReminderActive || false;
+  const isReminderActive = notification.isReminderActive || false;
 
-  const updateNotification = async ({
-    reminderToggle,
-  }: {
-    reminderToggle?: boolean;
-  }) => {
-    await usersService.upsertUserNotification(Number(notification?.id), {
-      ...(Boolean(reminderToggle) && {
-        isReminderActive: !isReminderActive,
-      }),
+  const updateNotification = async () => {
+    await usersService.upsertUserNotification(user.id, {
+      isReminderActive: !isReminderActive,
     });
   };
 
   if (network) {
-    const isNetworkActive =
-      notification?.reminderNetworks.some(
-        (reminderNetwork) => reminderNetwork.id === network.id
-      ) || false;
-    const isGovActive =
-      notification?.governanceNetworks.some(
-        (govNetwork) => govNetwork.id === network.id
-      ) || false;
+    const reminderNetwork = await usersService.getNetworkInNotification({
+      where: {
+        reminderNetworkId: network.id,
+      },
+    });
+    const governanceNetwork = await usersService.getNetworkInNotification({
+      where: {
+        governanceNetworkId: network.id,
+      },
+    });
+    const isNetworkActive = !!reminderNetwork;
+    const isGovActive = !!governanceNetwork;
 
-    const updateNetwork = async (isGov = false) => {
-      const reminderArr = notification?.reminderNetworks || [];
-      const govArr = notification?.governanceNetworks || [];
-
-      const isReminderArrIncludeNetwork = reminderArr.some(
-        (reminderNetwork) => reminderNetwork.id === network.id
-      );
-      const isGovArrIncludeNetwork = govArr.some(
-        (govNetwork) => govNetwork.id === network.id
-      );
-
-      if (isReminderArrIncludeNetwork || isGovArrIncludeNetwork) {
-        const deleteItem = !isGov
-          ? {
-              reminderNetwork: {
-                id: network.id,
-              },
-            }
-          : {
-              governanceNetwork: {
-                id: network.id,
-              },
-            };
-        console.log(2, user.notificationId, deleteItem);
-
-        await usersService.removeUserNotification(
-          user.notificationId,
-          deleteItem
-        );
+    const updateGovernance = async (time: Date) => {
+      if (isGovActive) {
+        await usersService.removeNetworkInNotification({
+          where: {
+            governanceNetworkId: network.id,
+          },
+        });
       } else {
-        const reminderNetworksIds = [
-          ...reminderArr.map((network) => ({ id: network.id })),
-          { id: network.id },
-        ];
-        const govNetworksIds = [
-          ...govArr.map((network) => ({ id: network.id })),
-          { id: network.id },
-        ];
-        const updatedItems = !isGov
-          ? { networks: reminderNetworksIds }
-          : { governanceNetworks: govNetworksIds };
+        await usersService.createNetworkInNotification({
+          data: {
+            notificationId: notification.id,
+            governanceNetworkId: network.id,
+            governanceTimeStart: time,
+          },
+        });
+      }
+    };
 
-        await usersService.upsertUserNotification(
-          Number(notification?.id),
-          updatedItems
-        );
+    const updateReminder = async () => {
+      if (isNetworkActive) {
+        await usersService.removeNetworkInNotification({
+          where: {
+            reminderNetworkId: network.id,
+          },
+        });
+      } else {
+        await usersService.createNetworkInNotification({
+          data: {
+            notificationId: notification.id,
+            reminderNetworkId: network.id,
+          },
+        });
       }
     };
 
     return {
       isNetworkActive,
-      updateNetwork,
       isGovActive,
+      updateGovernance,
+      updateReminder,
     };
   }
 
   if (timeArr && timeArr.length > 0) {
-    const notificationTime = notification?.notificationReminderTime || [];
+    const notificationTime = notification.notificationReminderTime;
     const isNotificationTimeActive = (time: string) =>
       notificationTime?.includes(time);
 
@@ -152,7 +137,7 @@ export async function createService({
         arr = [...notificationTime, time];
       }
 
-      await usersService.upsertUserNotification(user.notificationId, {
+      await usersService.upsertUserNotification(user.id, {
         notificationReminderTime: arr,
       });
     };
