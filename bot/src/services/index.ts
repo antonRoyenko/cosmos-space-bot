@@ -1,6 +1,6 @@
-import { prisma } from "@server/prisma";
-import { createService as createUsersService } from "./users.service";
-export { createService as notificationService } from "./notification.service";
-export { createService as alarmService } from "./alarm.service";
-
-export const usersService = createUsersService(prisma);
+export { alarmsService } from "./alarms.service";
+export { networksInNotificationService } from "./networksInNotification.service";
+export { notificationsService } from "./notifications.service";
+export { resourcesService } from "./resources.service";
+export { usersService } from "./users.service";
+export { walletsService } from "./wallets.service";
