@@ -1,5 +1,5 @@
 import { Menu } from "@grammyjs/menu";
-import { notificationService } from "@bot/services";
+import { notificationsService } from "@bot/services";
 import { networksReminderMenu } from "./reminder";
 import { networkTimeReminderMenu } from "./reminderTime";
 import { Context } from "@bot/types";
@@ -20,13 +20,13 @@ export const reminderDailyMenu = new Menu<Context>("dailyReminder")
   .row()
   .text(
     async (ctx) => {
-      const { isReminderActive } = await notificationService({ ctx });
+      const { isReminderActive } = await notificationsService({ ctx });
 
       return isReminderActive ? "Enabled 🔔" : "Disabled 🔕";
     },
     async (ctx) => {
-      const { updateNotification } = await notificationService({ ctx });
-      await updateNotification();
+      const { updateNotification } = await notificationsService({ ctx });
+      await updateNotification({ triggerReminderActivity: true });
 
       ctx.menu.update();
     }

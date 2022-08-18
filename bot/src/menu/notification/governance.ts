@@ -1,5 +1,5 @@
 import { Menu, MenuRange } from "@grammyjs/menu";
-import { notificationService, usersService } from "@bot/services";
+import { networksService, networksInNotificationService } from "@bot/services";
 import { Context } from "@bot/types";
 import {
   governanceSubscription,
@@ -13,14 +13,16 @@ export const governanceMenu = new Menu<Context>("governance", {
   const range = new MenuRange<Context>();
 
   if (ctx.from?.id) {
-    const networks = await usersService.getNetworks();
+    const { getAllNetworks } = networksService();
+    const networks = await getAllNetworks();
 
     if (networks.length > 0) {
       for (const network of networks) {
-        const { isGovActive, updateGovernance } = await notificationService({
-          ctx,
-          network,
-        });
+        const { isGovActive, updateGovernance } =
+          await networksInNotificationService({
+            ctx,
+            network,
+          });
         const time = dayjs().toDate();
 
         range
@@ -28,9 +30,9 @@ export const governanceMenu = new Menu<Context>("governance", {
             isGovActive ? `${network.fullName} 🔔` : `${network.fullName} 🔕`,
             async (ctx) => {
               if (!isGovActive) {
-                // governanceSubscription(network.wsPublicUrl, ctx, time);
+                governanceSubscription(network.wsPublicUrl, ctx, time);
               } else {
-                // observer.unsubscribe();
+                observer.unsubscribe();
               }
               await updateGovernance(time);
               ctx.menu.update();

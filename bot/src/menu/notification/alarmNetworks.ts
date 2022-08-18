@@ -1,5 +1,5 @@
 import { Menu, MenuRange } from "@grammyjs/menu";
-import { usersService } from "@bot/services";
+import { networksService } from "@bot/services";
 import { Context } from "@bot/types";
 import { getTokenPrice } from "@bot/graphql/queries/getTokenPrice";
 
@@ -9,7 +9,8 @@ export const alarmNetworksMenu = new Menu<Context>("alarmNetworks", {
   const range = new MenuRange<Context>();
 
   if (ctx.from?.id) {
-    const networks = await usersService.getNetworks();
+    const { getAllNetworks } = networksService();
+    const networks = await getAllNetworks();
 
     if (networks.length > 0) {
       for (const network of networks) {

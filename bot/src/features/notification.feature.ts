@@ -5,10 +5,9 @@ import { getCountry } from "countries-and-timezones";
 import { countries } from "@bot/constants/country";
 import { timezoneMenu } from "@bot/menu/notification/timezone";
 import _ from "lodash";
-import { alarmService } from "@bot/services";
+import { alarmsService } from "@bot/services";
 import { agreementKeyboard } from "@bot/menu/keyboards";
 import { alarmMenu } from "@bot/menu/notification/alarm";
-import { usersService } from "@bot/services";
 
 export const feature = router.route("notification");
 
@@ -29,8 +28,8 @@ feature
     const price = ctx.message.text || "";
 
     if (network) {
-      const { updateAlarmNetworks } = await alarmService({ ctx, network });
-      await updateAlarmNetworks(price, network);
+      const { updateAlarmNetworks } = await alarmsService({ ctx, network });
+      await updateAlarmNetworks(price, network.id);
 
       await ctx.reply(`Do you want add more ?`, {
         reply_markup: agreementKeyboard,
@@ -67,14 +66,8 @@ feature.callbackQuery(/^deleteAlarm:/, async (ctx) => {
   const data = ctx.callbackQuery.data;
   // eslint-disable-next-line no-useless-escape
   const [networkId, price] = data.match(/\d{1,2}([\.,][\d{1,2}])?/g) || [];
-  const alarm = (await usersService.getAlarm({
-    networkId: Number(networkId),
-  })) || {
-    id: 0,
-    alarmPrices: [],
-  };
-  const prices = alarm?.alarmPrices.filter((item) => item !== price);
-  await usersService.removeAlarmPrice(alarm.id, prices);
+  const { updateAlarmNetworks } = await alarmsService({ ctx });
+  await updateAlarmNetworks(price, Number(networkId));
   ctx.session.step = "notification";
   await ctx.reply("Price was removed", { reply_markup: notificationMenu });
 });

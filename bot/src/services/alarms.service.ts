@@ -1,23 +1,23 @@
-import { usersService } from "@bot/services/index";
 import { Context } from "@bot/types";
 import { Network } from "@prisma/client";
 import { alarmDao } from "@bot/dao";
-
-type Networks = {
-  updateAlarmNetworks: (time: string, network: Network) => Promise<void>;
-};
 
 export async function alarmsService({
   ctx,
   network,
 }: {
-  ctx: Context;
-  network: Network;
-}): Promise<Networks> {
-  const user = ctx.local.user || {
+  ctx?: Context;
+  network?: Network;
+} = {}) {
+  const user = ctx?.local.user || {
     id: 0,
   };
-  const alarm = await alarmDao.getAlarm({ where: { userId: user.id } });
+  const alarm = (await alarmDao.getAlarm({ where: { userId: user.id } })) || {
+    id: 0,
+    userId: 0,
+    alarmPrices: [""],
+    networkId: 0,
+  };
 
   if (!alarm && network) {
     await alarmDao.createAlarm({
@@ -28,7 +28,7 @@ export async function alarmsService({
     });
   }
 
-  const updateAlarmNetworks = async (price: string, network: Network) => {
+  const updateAlarmNetworks = async (price: string, networkId: number) => {
     let prices = alarm?.alarmPrices || [];
     if (alarm?.alarmPrices.includes(price)) {
       prices = prices.filter((item) => item !== price);
@@ -41,7 +41,7 @@ export async function alarmsService({
       await alarmDao.updateAlarm({
         where: {
           userId: user.id,
-          networkId: network.id,
+          networkId: networkId,
         },
         data: {
           alarmPrices: prices,
@@ -50,7 +50,11 @@ export async function alarmsService({
     }
   };
 
+  const getAllAlarms = () => alarmDao.getAllAlarms();
+
   return {
     updateAlarmNetworks,
+    alarm,
+    getAllAlarms,
   };
 }

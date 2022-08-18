@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { createSubscriptionObservable } from "@bot/utils/apollo";
 import { ProposalsSubscriber } from "@bot/graphql/general/proposals";
 import gql from "graphql-tag";
@@ -28,7 +29,12 @@ export const governanceSubscription = function (
           status === govStatus.PROPOSAL_STATUS_VOTING_PERIOD
       );
       const item = activeProposals[0];
-      console.log(item.voting_start_time);
+      if (!item) {
+        return;
+      }
+      if (!dayjs(item.voting_start_time).isBefore(dayjs(time))) {
+        ctx.reply(`${item.title} \n \n` + `${item.description}`);
+      }
     },
     (err) => {
       console.log("Err");

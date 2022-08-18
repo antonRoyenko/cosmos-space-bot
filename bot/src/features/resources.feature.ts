@@ -1,22 +1,24 @@
 import { logHandle } from "@bot/helpers/logging";
 import { router } from "@bot/middlewares";
-import { usersService } from "@bot/services";
+import { networksService, resourcesService } from "@bot/services";
 
 export const feature = router.route("resources");
 
 feature.command("resources", logHandle("handle /resources"), async (ctx) => {
   await ctx.replyWithChatAction("typing");
+  const { getNetwork } = networksService();
+  const { getResource } = resourcesService();
   ctx.session.step = "resources";
   if (!ctx.local.user?.networkId) {
     return;
   }
 
-  const network = await usersService.getNetwork({
-    id: ctx.local.user.networkId,
+  const network = await getNetwork({
+    networkId: ctx.local.user.networkId,
   });
 
   if (network) {
-    const resource = await usersService.getResourcesById(network.resourceId);
+    const resource = await getResource(network.resourceId);
 
     return ctx.reply(
       `Website: ${resource?.site} \n` +

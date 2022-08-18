@@ -3,7 +3,8 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import localizedFormat from "dayjs/plugin/localizedFormat";
-import { usersService } from "@bot/services";
+import { usersService, networksService, alarmsService } from "@bot/services";
+import { notificationDao, networkInNotificationDao } from "@bot/dao";
 import { getTokenPrice } from "@bot/graphql/queries/getTokenPrice";
 import { sendNotification } from "@server/telegram";
 
@@ -18,17 +19,22 @@ export function cron(server: any) {
           dayjs.extend(timezone);
           dayjs.extend(localizedFormat);
 
-          const notifications = await usersService.getAllNotifications();
+          const { getUser } = usersService();
+          const { getNetwork } = networksService();
+          // const { getAllNotifications } = await notificationsService({});
+          // const {} = networksInNotificationService();
+
+          const notifications = await notificationDao.getAllNotifications();
 
           for (const notification of notifications) {
             let prices = "";
             const reminderNetworks =
-              await usersService.getAllNetworkInNotification({
+              await networkInNotificationDao.getAllNetworkInNotification({
                 where: {
                   notificationId: notification.id,
                 },
               });
-            const user = (await usersService.getUserByTelegramId({
+            const user = (await getUser({
               id: notification.userId,
             })) || {
               timezone: "",
@@ -40,8 +46,8 @@ export function cron(server: any) {
             prices += `Price reminder for ${userTime.format("LLL")} \n\n`;
 
             for (const reminder of reminderNetworks) {
-              const network = (await usersService.getNetwork({
-                id: Number(reminder.reminderNetworkId),
+              const network = (await getNetwork({
+                networkId: Number(reminder.reminderNetworkId),
               })) || {
                 name: "",
                 fullName: "",
@@ -64,10 +70,14 @@ export function cron(server: any) {
         cronTime: "*/2 * * * *",
 
         onTick: async () => {
-          const alarms = await usersService.getAllAlarms();
+          const { getAllAlarms, updateAlarmNetworks } = await alarmsService();
+          const { getNetwork } = networksService();
+          const { getUser } = usersService();
+
+          const alarms = await getAllAlarms();
           for (const alarm of alarms) {
-            const network = (await usersService.getNetwork({
-              id: alarm.networkId,
+            const network = (await getNetwork({
+              networkId: alarm.networkId,
             })) || { name: "", fullName: "" };
 
             const networkPrice = await getTokenPrice(network.name);
@@ -83,7 +93,7 @@ export function cron(server: any) {
                   : prev;
               });
 
-            const user = (await usersService.getUserByTelegramId({
+            const user = (await getUser({
               id: alarm.userId,
             })) || { telegramId: 0 };
 
@@ -92,8 +102,7 @@ export function cron(server: any) {
               "HTML",
               Number(user.telegramId)
             );
-            const prices = alarm.alarmPrices.filter((item) => item !== closest);
-            await usersService.removeAlarmPrice(alarm.id, prices);
+            await updateAlarmNetworks(closest, alarm.id);
           }
         },
       },

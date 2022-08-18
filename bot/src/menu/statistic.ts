@@ -7,7 +7,7 @@ import { nFormatter } from "@bot/utils/nFormatter";
 import { toNumber } from "lodash";
 import { config } from "@bot/chains";
 import { atomConfig } from "@bot/chains/atom";
-import { usersService } from "@bot/services";
+import { networksService, usersService } from "@bot/services";
 import { ChainInfo } from "@bot/types/general";
 import { networkMenu } from "@bot/menu";
 
@@ -15,7 +15,8 @@ export const statisticMenu = new Menu<Context>("statistic", {
   autoAnswer: false,
 }).dynamic(async (ctx) => {
   const { currentNetwork } = ctx.session;
-  const network = await usersService.getNetwork({ name: currentNetwork });
+  const { getNetwork } = networksService();
+  const network = await getNetwork({ name: currentNetwork });
 
   if (network) {
     const range = new MenuRange<Context>();
@@ -40,8 +41,9 @@ async function statisticCallback(ctx: Context) {
       config.find(({ network }) => network === currentNetwork) || atomConfig;
     const { tokenUnits, primaryTokenUnit } = chain;
     const prices = await getTokenPrice(currentNetwork);
-    const url = await usersService.getNetwork({ name: currentNetwork });
-    const publicUrl = url?.publicUrl || "";
+    const { getNetwork } = networksService();
+    const network = await getNetwork({ name: currentNetwork });
+    const publicUrl = network?.publicUrl || "";
     const denom = tokenUnits[primaryTokenUnit].display;
 
     const {

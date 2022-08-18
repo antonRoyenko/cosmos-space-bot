@@ -1,10 +1,17 @@
 import { networkDao } from "@bot/dao";
 
-export const resourcesService = () => {
-  const getNetwork = async (networkId: number) => {
+export const networksService = () => {
+  const getNetwork = async ({
+    networkId,
+    name,
+  }: {
+    networkId?: number;
+    name?: string;
+  }) => {
     return await networkDao.getNetwork({
       where: {
         id: networkId,
+        name,
       },
     });
   };

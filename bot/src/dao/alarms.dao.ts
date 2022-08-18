@@ -7,6 +7,6 @@ export const createDao = (prisma: PrismaClient) => ({
 
   getAlarm: (args: Prisma.AlarmFindUniqueArgs) => prisma.alarm.findUnique(args),
 
-  getAllNotifications: (args?: Prisma.AlarmFindManyArgs) =>
+  getAllAlarms: (args?: Prisma.AlarmFindManyArgs) =>
     prisma.alarm.findMany(args),
 });

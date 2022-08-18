@@ -1,5 +1,5 @@
 import { Menu, MenuRange } from "@grammyjs/menu";
-import { notificationService, usersService } from "@bot/services";
+import { networksService, networksInNotificationService } from "@bot/services";
 import { Context } from "@bot/types";
 
 export const networksReminderMenu = new Menu<Context>("reminderNetworks", {
@@ -8,14 +8,16 @@ export const networksReminderMenu = new Menu<Context>("reminderNetworks", {
   const range = new MenuRange<Context>();
 
   if (ctx.from?.id) {
-    const networks = await usersService.getNetworks();
+    const { getAllNetworks } = networksService();
+    const networks = await getAllNetworks();
 
     if (networks.length > 0) {
       for (const network of networks) {
-        const { isNetworkActive, updateReminder } = await notificationService({
-          ctx,
-          network,
-        });
+        const { isNetworkActive, updateReminder } =
+          await networksInNotificationService({
+            ctx,
+            network,
+          });
 
         range
           .text(

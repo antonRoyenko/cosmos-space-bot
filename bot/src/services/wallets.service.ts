@@ -1,17 +1,21 @@
 import { Context } from "@bot/types";
 import { walletDao } from "@bot/dao";
 
-export const walletsService = (ctx: Context) => {
-  const user = ctx.local.user || {
+export const walletsService = (ctx?: Context) => {
+  const user = ctx?.local.user || {
     id: 0,
     notificationId: 0,
     telegramId: 0,
   };
 
-  const createUserWallet = async (networkId: number, address: string) => {
+  const createUserWallet = async (
+    networkId: number,
+    address: string,
+    userId?: number
+  ) => {
     return await walletDao.createWallet({
       data: {
-        userId: user.id,
+        userId: !userId ? user.id : userId,
         networkId,
         address,
       },
@@ -32,5 +36,11 @@ export const walletsService = (ctx: Context) => {
         id,
       },
     });
+  };
+
+  return {
+    createUserWallet,
+    getAllUserWallets,
+    removeUserWallet,
   };
 };

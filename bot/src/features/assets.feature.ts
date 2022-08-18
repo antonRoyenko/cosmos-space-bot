@@ -4,7 +4,7 @@ import { router } from "@bot/middlewares";
 import { getBalance } from "@bot/graphql/queries/getBalance";
 import { getTokenPrice } from "@bot/graphql/queries/getTokenPrice";
 import { toNumber } from "lodash";
-import { usersService } from "@bot/services";
+import { walletsService, networksService } from "@bot/services";
 import { bech32 } from "bech32";
 import { Wallet } from "@prisma/client";
 
@@ -14,19 +14,15 @@ feature.command("assets", logHandle("handle /assets"), async (ctx: Context) => {
   await ctx.replyWithChatAction("typing");
   ctx.session.step = "assets";
   let output = "";
-  let wallets: Wallet[] = [];
-  const user = await usersService.getUserByTelegramId({
-    telegramId: Number(ctx.from?.id),
-  });
-  if (user) {
-    wallets = await usersService.getUserWallets(user.id);
-  }
+  const { getAllUserWallets } = walletsService(ctx);
+  const wallets: Wallet[] = await getAllUserWallets();
 
   if (wallets.length > 0) {
     await Promise.all(
       wallets.map(async ({ address, networkId }) => {
+        const { getNetwork } = networksService();
         const prefix = bech32.decode(address).prefix;
-        const url = await usersService.getNetwork({ id: networkId });
+        const url = await getNetwork({ networkId });
         const publicUrl = url?.publicUrl || "";
         const data = await getBalance(publicUrl, address, prefix);
         const prices = await getTokenPrice(prefix);

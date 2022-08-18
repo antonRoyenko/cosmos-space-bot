@@ -1,7 +1,7 @@
 import { Menu, MenuRange } from "@grammyjs/menu";
 import { Context } from "@bot/types";
 import { walletRemoveMenu } from "./walletRemove";
-import { usersService } from "@bot/services";
+import { walletsService } from "@bot/services";
 
 export const walletMenu = new Menu<Context>("wallets", {
   autoAnswer: false,
@@ -16,8 +16,8 @@ export const walletMenu = new Menu<Context>("wallets", {
     .row()
     .text("Wallet(s) list", async (ctx) => {
       let wallets = "";
-      const { id: telegramId } = ctx.from;
-      const userWallets = await usersService.getUserWallets(telegramId);
+      const { getAllUserWallets } = walletsService(ctx);
+      const userWallets = await getAllUserWallets();
 
       if (userWallets) {
         userWallets.forEach(({ address }, key) => {

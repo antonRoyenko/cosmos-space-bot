@@ -1,5 +1,5 @@
 import { Menu, MenuRange } from "@grammyjs/menu";
-import { notificationService } from "@bot/services";
+import { notificationsService } from "@bot/services";
 import { Context } from "@bot/types";
 
 const timeArr = [
@@ -26,7 +26,7 @@ export const networkTimeReminderMenu = new Menu<Context>(
       const time = timeArr[i];
 
       const { isNotificationTimeActive, updateNotificationReminderTime } =
-        await notificationService({
+        await notificationsService({
           ctx,
           timeArr,
         });

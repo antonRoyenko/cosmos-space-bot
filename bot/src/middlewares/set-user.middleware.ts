@@ -5,9 +5,10 @@ import { usersService } from "@bot/services";
 
 export const middleware = (): Middleware<Context> => async (ctx, next) => {
   if (ctx.from?.is_bot === false) {
+    const { upsertUser } = usersService(ctx);
     const { id: telegramId } = ctx.from;
 
-    ctx.local.user = await usersService.upsertByTelegramId(telegramId);
+    ctx.local.user = await upsertUser(telegramId);
   }
 
   return next();

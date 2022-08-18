@@ -2,7 +2,7 @@ import { router } from "@bot/middlewares";
 import { logHandle } from "@bot/helpers/logging";
 import { Context } from "@bot/types";
 import { walletMenu } from "@bot/menu";
-import { usersService } from "@bot/services";
+import { networksService, walletsService } from "@bot/services";
 import { bech32 } from "bech32";
 
 export const feature = router.route("wallet");
@@ -18,7 +18,8 @@ feature
   )
   .on("message:text", logHandle("handle wallet"), async (ctx) => {
     await ctx.replyWithChatAction("typing");
-    const { id: telegramId } = ctx.from;
+    const { getNetwork } = networksService();
+    const { createUserWallet, getAllUserWallets } = walletsService(ctx);
 
     const address = ctx.message.text;
 
@@ -27,22 +28,15 @@ feature
     }
 
     const prefix = bech32.decode(address).prefix;
-    const network = await usersService.getNetwork({ name: prefix });
-    const userWallets = await usersService.getUserWallets(telegramId);
-    const user = await usersService.getUserByTelegramId({
-      telegramId: telegramId,
-    });
+    const network = await getNetwork({ name: prefix });
+    const userWallets = await getAllUserWallets();
 
     if (userWallets.some((walelt) => walelt.address === address)) {
       return ctx.reply("You already have this wallet");
     }
 
-    if (network && user) {
-      const wallet = await usersService.upsertWallet(
-        user.id,
-        network.id,
-        address
-      );
+    if (network) {
+      const wallet = await createUserWallet(network.id, address);
 
       ctx.session.currentWallets = [...userWallets, wallet];
     }

@@ -15,10 +15,9 @@ export const timezoneMenu = new Menu<Context>("timezoneMenu", {
       for (const timezone of timezones) {
         range
           .text(timezone, async (ctx) => {
-            await usersService.updateByTelegramId(ctx.from?.id, {
-              data: {
-                timezone,
-              },
+            const { updateUser } = usersService(ctx);
+            await updateUser({
+              timezone,
             });
             await ctx.reply("Timezone was saved", {
               reply_markup: reminderDailyMenu,

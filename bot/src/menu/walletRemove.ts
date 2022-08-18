@@ -1,5 +1,5 @@
 import { Menu, MenuRange } from "@grammyjs/menu";
-import { usersService } from "@bot/services";
+import { usersService, walletsService } from "@bot/services";
 import { Context } from "@bot/types";
 
 export const walletRemoveMenu = new Menu<Context>("walletRemove", {
@@ -9,8 +9,8 @@ export const walletRemoveMenu = new Menu<Context>("walletRemove", {
   const range = new MenuRange<Context>();
 
   if (ctx.from?.id) {
-    const { id: telegramId } = ctx.from;
-    const userWallets = await usersService.getUserWallets(telegramId);
+    const { getAllUserWallets, removeUserWallet } = walletsService(ctx);
+    const userWallets = await getAllUserWallets();
 
     if (userWallets) {
       for (let i = 0; i < userWallets.length; i++) {
@@ -18,10 +18,7 @@ export const walletRemoveMenu = new Menu<Context>("walletRemove", {
         range
           .text(currWallet.toString(), async (ctx) => {
             await ctx.replyWithChatAction("typing");
-            await usersService.removeWallet(telegramId);
-            ctx.session.currentWallets = await usersService.getUserWallets(
-              telegramId
-            );
+            await removeUserWallet(currWallet.id);
             return ctx.reply(`Wallet ${currWallet} was successful removed`);
           })
           .row();

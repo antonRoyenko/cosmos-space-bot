@@ -1,5 +1,9 @@
 import { Menu } from "@grammyjs/menu";
-import { alarmService, usersService } from "@bot/services";
+import {
+  alarmsService,
+  notificationsService,
+  networksService,
+} from "@bot/services";
 import { alarmNetworksMenu } from "./alarmNetworks";
 import { Context } from "@bot/types";
 import { InlineKeyboard } from "grammy";
@@ -10,13 +14,15 @@ export const alarmMenu = new Menu<Context>("alarm")
   )
   .row()
   .text("Delete alarms", async (ctx) => {
-    const alarmNetwork = await usersService.getAllAlarms();
+    const { getAllAlarms } = await alarmsService({ ctx });
+    const { getNetwork } = networksService();
+    const alarms = await getAllAlarms();
 
     const inlineKeyboard = new InlineKeyboard();
 
-    for await (const alarm of alarmNetwork) {
-      const network = (await usersService.getNetwork({
-        id: alarm.networkId,
+    for await (const alarm of alarms) {
+      const network = (await getNetwork({
+        networkId: alarm.networkId,
       })) || { fullName: "", id: 0 };
 
       alarm.alarmPrices.forEach((price) => {
@@ -34,12 +40,14 @@ export const alarmMenu = new Menu<Context>("alarm")
   .row()
   .text("List alarms", async (ctx) => {
     let output = "You have alarms on: \n";
-    const alarmNetwork = await usersService.getAllAlarms();
+    const { getAllAlarms } = await alarmsService({ ctx });
+    const { getNetwork } = networksService();
+    const alarms = await getAllAlarms();
 
-    for await (const alarm of alarmNetwork) {
-      const network = (await usersService.getNetwork({
-        id: alarm.networkId,
-      })) || { fullName: "" };
+    for await (const alarm of alarms) {
+      const network = (await getNetwork({
+        networkId: alarm.networkId,
+      })) || { fullName: "", id: 0 };
 
       output += `${network.fullName} at price: ${alarm.alarmPrices.join(
         "$, "
@@ -51,13 +59,13 @@ export const alarmMenu = new Menu<Context>("alarm")
   .row()
   .text(
     async (ctx) => {
-      const { isAlarmActive } = await alarmService({ ctx });
+      const { isAlarmActive } = await notificationsService({ ctx });
 
       return isAlarmActive ? "Enabled 🔔" : "Disabled 🔕";
     },
     async (ctx) => {
-      const { updateAlarm } = await alarmService({ ctx });
-      await updateAlarm();
+      const { updateNotification } = await notificationsService({ ctx });
+      await updateNotification({ triggerAlarmActivity: true });
 
       ctx.menu.update();
     }

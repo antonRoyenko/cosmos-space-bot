@@ -1,18 +1,18 @@
 import { userDao } from "@bot/dao";
 import { Context } from "@bot/types";
 
-export const usersService = (ctx: Context) => {
-  const user = ctx.local.user || {
+export const usersService = (ctx?: Context) => {
+  const user = ctx?.local.user || {
     telegramId: 0,
   };
 
-  const upsertUser = async () => {
+  const upsertUser = async (telegramId: number) => {
     return await userDao.upsertUser({
       where: {
-        telegramId: user.telegramId,
+        telegramId: telegramId,
       },
       create: {
-        telegramId: user.telegramId,
+        telegramId: telegramId,
         notification: { create: {} },
       },
       update: {},
@@ -37,10 +37,16 @@ export const usersService = (ctx: Context) => {
     });
   };
 
-  const getUser = async (id: number) => {
+  const getUser = async ({
+    id,
+    telegramId,
+  }: {
+    id?: number;
+    telegramId?: number;
+  }) => {
     return await userDao.getUser({
       where: {
-        telegramId: user.telegramId,
+        telegramId: !telegramId ? user.telegramId : telegramId,
         id,
       },
     });

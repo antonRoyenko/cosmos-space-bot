@@ -1,5 +1,5 @@
 import { Menu, MenuRange } from "@grammyjs/menu";
-import { usersService } from "@bot/services";
+import { networksService, usersService } from "@bot/services";
 import { Context } from "@bot/types";
 import { walletMenu } from "@bot/menu/wallet";
 
@@ -10,16 +10,17 @@ export const initNetworkMenu = new Menu<Context>("initNetwork", {
   const range = new MenuRange<Context>();
 
   if (ctx.from?.id) {
-    const networks = await usersService.getNetworks();
-    const { id: telegramId } = ctx.from;
+    const { getAllNetworks } = networksService();
+    const networks = await getAllNetworks();
 
     if (networks.length > 0) {
       for (let i = 0; i < networks.length; i++) {
         const network = networks[i];
         range
           .text(network.fullName, async (ctx) => {
-            ctx.local.user = await usersService.updateByTelegramId(telegramId, {
-              data: { networkId: network.id },
+            const { updateUser } = usersService(ctx);
+            await updateUser({
+              networkId: network.id,
             });
 
             return await ctx.reply("Please choose wallet action", {

@@ -5,7 +5,16 @@ import { notificationDao } from "@bot/dao";
 
 type Notification = {
   isReminderActive: boolean;
-  updateNotification: () => Promise<void>;
+  isAlarmActive: boolean;
+  updateNotification: ({
+    triggerReminderActivity,
+    triggerAlarmActivity,
+    notificationReminderTime,
+  }: {
+    triggerReminderActivity?: boolean;
+    triggerAlarmActivity?: boolean;
+    notificationReminderTime?: string[];
+  }) => Promise<void>;
 };
 
 type NetworkTime = {
@@ -16,24 +25,24 @@ type NetworkTime = {
 export async function notificationsService({
   ctx,
 }: {
-  ctx: Context;
+  ctx?: Context;
 }): Promise<Notification>;
 export async function notificationsService({
   ctx,
   timeArr,
 }: {
-  ctx: Context;
-  timeArr: string[];
+  ctx?: Context;
+  timeArr?: string[];
 }): Promise<NetworkTime>;
 export async function notificationsService({
   ctx,
   timeArr,
 }: {
-  ctx: Context;
+  ctx?: Context;
   network?: Network;
   timeArr?: string[];
 }) {
-  const user = ctx.local.user || {
+  const user = ctx?.local.user || {
     id: 0,
   };
   const notification = (await notificationDao.getNotification({
@@ -74,9 +83,6 @@ export async function notificationsService({
         notificationReminderTime,
       },
     });
-    await usersService.upsertUserNotification(user.id, {
-      isReminderActive: !isReminderActive,
-    });
   };
 
   if (timeArr && timeArr.length > 0) {
@@ -104,6 +110,7 @@ export async function notificationsService({
 
   return {
     isReminderActive,
+    isAlarmActive,
     updateNotification,
   };
 }

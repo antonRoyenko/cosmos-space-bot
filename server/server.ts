@@ -8,7 +8,7 @@ import { config } from "@bot/config";
 import { logger } from "@bot/logger";
 import { handleError } from "@bot/helpers/error-handler";
 import path from "path";
-import { usersService } from "@bot/services";
+import { networksService, walletsService, usersService } from "@bot/services";
 import { bech32 } from "bech32";
 import { cron } from "@server/cron";
 
@@ -56,14 +56,18 @@ server.get("/metrics", async (req, res) => {
 
 server.post<postWalletRequest>("/update_wallet/:id", async (req, res) => {
   try {
+    const { getNetwork } = networksService();
+    const { createUserWallet } = walletsService();
+    const { getUser } = usersService();
     const telegramId = Number(req.params.id);
+    const user = await getUser({ telegramId });
     const address = req.body.wallet;
     const prefix = bech32.decode(address).prefix;
-    const network = await usersService.getNetwork({ name: prefix });
+    const network = (await getNetwork({ name: prefix })) || {
+      id: 0,
+    };
 
-    if (network && network.id) {
-      await usersService.upsertWallet(telegramId, network.id, address);
-    }
+    await createUserWallet(network.id, address, user?.id);
 
     return req.body;
   } catch (err) {
