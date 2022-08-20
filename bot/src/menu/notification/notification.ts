@@ -1,14 +1,14 @@
-import { reminderDailyMenu } from "./dailyReminder";
+import { dailyReminderMenu } from "@bot/menu";
 import { alarmMenu } from "./alarm";
 import { Context } from "@bot/types";
-import { governanceMenu } from "@bot/menu/notification/governance";
+import { proposalMenu } from "@bot/menu/notification/proposal";
 import { menuCreator } from "@bot/utils/menuCreator";
 
 const menuList = [
   {
     text: "Daily reminder",
     callback: (ctx: Context) =>
-      ctx.reply("Choose 123", { reply_markup: reminderDailyMenu }),
+      ctx.reply("Choose 123", { reply_markup: dailyReminderMenu }),
   },
   { row: true },
   {
@@ -21,7 +21,7 @@ const menuList = [
     text: "Governance",
     callback: (ctx: Context) =>
       ctx.reply("Choose governance network(s)", {
-        reply_markup: governanceMenu,
+        reply_markup: proposalMenu,
       }),
   },
 ];

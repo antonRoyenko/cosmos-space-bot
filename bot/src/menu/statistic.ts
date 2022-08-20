@@ -33,7 +33,6 @@ export const statisticMenu = new Menu<Context>("statistic", {
 
 async function statisticCallback(ctx: Context) {
   await ctx.replyWithChatAction("typing");
-  ctx.session.step = "stats";
   const { currentNetwork } = ctx.session;
 
   if (currentNetwork) {

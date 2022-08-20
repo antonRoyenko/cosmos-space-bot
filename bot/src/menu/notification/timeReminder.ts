@@ -21,25 +21,23 @@ export const networkTimeReminderMenu = new Menu<Context>(
 ).dynamic(async (ctx) => {
   const range = new MenuRange<Context>();
 
-  if (ctx.from?.id) {
-    for (let i = 0; i < timeArr.length; i++) {
-      const time = timeArr[i];
+  for (let i = 0; i < timeArr.length; i++) {
+    const time = timeArr[i];
 
-      const { isNotificationTimeActive, updateNotificationReminderTime } =
-        await notificationsService({
-          ctx,
-          timeArr,
-        });
-      const isActive = isNotificationTimeActive(time);
-
-      range.text(isActive ? `${time} ✅` : `${time} ❎`, async (ctx) => {
-        await updateNotificationReminderTime(time);
-        ctx.menu.update();
+    const { isNotificationTimeActive, updateNotificationReminderTime } =
+      await notificationsService({
+        ctx,
+        timeArr,
       });
+    const isActive = isNotificationTimeActive(time);
 
-      if ((i + 1) % 2 == 0) {
-        range.row();
-      }
+    range.text(isActive ? `${time} ✅` : `${time} ❎`, async (ctx) => {
+      await updateNotificationReminderTime(time);
+      ctx.menu.update();
+    });
+
+    if ((i + 1) % 2 == 0) {
+      range.row();
     }
   }
   range.row().back("Go back");

@@ -1,5 +1,5 @@
 import { Context } from "@bot/types";
-import { alarmNetworksMenu } from "@bot/menu/notification/alarmNetworks";
+import { networksAlarmMenu } from "@bot/menu";
 import {
   alarmsService,
   networksService,
@@ -9,7 +9,7 @@ import { InlineKeyboard } from "grammy";
 import { MenuFlavor } from "@grammyjs/menu";
 
 export async function addAlarmCallback(ctx: Context) {
-  await ctx.reply("Choose Network", { reply_markup: alarmNetworksMenu });
+  await ctx.reply("Choose Network", { reply_markup: networksAlarmMenu });
 }
 
 export async function deleteAlarmCallback(ctx: Context) {

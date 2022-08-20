@@ -12,7 +12,6 @@ export const feature = router.route("assets");
 
 feature.command("assets", logHandle("handle /assets"), async (ctx: Context) => {
   await ctx.replyWithChatAction("typing");
-  ctx.session.step = "assets";
   let output = "";
   const { getAllUserWallets } = walletsService(ctx);
   const wallets: Wallet[] = await getAllUserWallets();

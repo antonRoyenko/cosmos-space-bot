@@ -56,9 +56,11 @@ export const fetchRewards = async (url: string, address: string) => {
     delegationRewards: [],
   };
   try {
-    return await request(url, AccountDelegationBalanceDocument, {
+    const test: any = await request(url, AccountDelegationRewardsDocument, {
       address,
     });
+    console.log(test.delegationRewards.coins);
+    return test;
   } catch (error) {
     return defaultReturnValue;
   }

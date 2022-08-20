@@ -2,12 +2,11 @@ import { logHandle } from "@bot/helpers/logging";
 import { router } from "@bot/middlewares";
 import { getProposals } from "@bot/graphql/queries/getProposals";
 
-export const feature = router.route("governance");
+export const feature = router.route("proposal");
 
-feature.command("governance", logHandle("handle /start"), async (ctx) => {
+feature.command("proposal", logHandle("handle /proposal"), async (ctx) => {
   await ctx.replyWithChatAction("typing");
   let output = "";
-  ctx.session.step = "governance";
 
   const { proposals, activeProposals } = await getProposals();
 

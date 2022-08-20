@@ -1,6 +1,6 @@
 import { isUserId } from "grammy-guard";
 
-// import { usersService } from "@bot/services";
+import { userDao } from "@bot/dao";
 import { config } from "@bot/config";
 import { getGroupChatCommands } from "@bot/helpers/bot-commands";
 import { logHandle } from "@bot/helpers/logging";
@@ -10,15 +10,15 @@ export const feature = router
   .route("wallet")
   .filter(isUserId(config.BOT_ADMIN_USER_ID));
 
-// feature.command("stats", logHandle("handle /stats"), async (ctx) => {
-//   await ctx.replyWithChatAction("typing");
-//
-//   const usersCount = await usersService.count();
-//
-//   const stats = `Users count: ${usersCount}`;
-//
-//   return ctx.reply(stats);
-// });
+feature.command("stats", logHandle("handle /stats"), async (ctx) => {
+  await ctx.replyWithChatAction("typing");
+
+  const usersCount = await userDao.count();
+
+  const stats = `Users count: ${usersCount}`;
+
+  return ctx.reply(stats);
+});
 
 feature.command(
   "setcommands",

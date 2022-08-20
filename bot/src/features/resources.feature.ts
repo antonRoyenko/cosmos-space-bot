@@ -24,8 +24,8 @@ feature.command("resources", logHandle("handle /resources"), async (ctx) => {
       `Website: ${resource?.site} \n` +
         `Discord: ${resource?.discord} \n` +
         `Twitter: ${resource?.twitter} \n` +
-        `Youtube: ${resource?.youtube} \n` +
-        `Blog: ${resource?.blog} \n` +
+        `Youtube: ${resource?.youtube ?? "<not found>"} \n` +
+        `Blog: ${resource?.blog ?? "<not found>"} \n` +
         `Github: ${resource?.github}`
     );
   }

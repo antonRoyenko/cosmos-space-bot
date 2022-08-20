@@ -6,7 +6,7 @@ import { countries } from "@bot/constants/country";
 import { timezoneMenu } from "@bot/menu/notification/timezone";
 import _ from "lodash";
 import { alarmsService } from "@bot/services";
-import { agreementKeyboard } from "@bot/menu/keyboards";
+import { agreementKeyboard } from "@bot/menu/util";
 import { alarmMenu } from "@bot/menu/notification/alarm";
 
 export const feature = router.route("notification");
@@ -16,8 +16,6 @@ feature.command(
   logHandle("handle /notification"),
   async (ctx) => {
     await ctx.reply("Choose", { reply_markup: notificationMenu });
-
-    // governanceSubscription();
   }
 );
 

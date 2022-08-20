@@ -18,12 +18,12 @@ import { apiCallsLogger } from "@bot/transformers";
 import {
   botAdminFeature,
   helpFeature,
-  setupFeature,
+  startFeature,
   walletFeature,
-  statFeature,
-  govFeature,
-  resFeature,
-  notifFeature,
+  statisticFeature,
+  proposalFeature,
+  resourcesFeature,
+  notificationFeature,
   assetsFeature,
 } from "@bot/features";
 import { handleError } from "@bot/helpers/error-handler";
@@ -33,14 +33,14 @@ import {
   statisticMenu,
   networkMenu,
   notificationMenu,
+  dailyReminderMenu,
+  alarmMenu,
+  proposalMenu,
+  networkTimeReminderMenu,
+  networksReminderMenu,
+  timezoneMenu,
+  networksAlarmMenu,
 } from "@bot/menu";
-import { reminderDailyMenu } from "@bot/menu/notification/dailyReminder";
-import { networksReminderMenu } from "@bot/menu/notification/reminder";
-import { networkTimeReminderMenu } from "@bot/menu/notification/reminderTime";
-import { timezoneMenu } from "@bot/menu/notification/timezone";
-import { alarmMenu } from "@bot/menu/notification/alarm";
-import { alarmNetworksMenu } from "@bot/menu/notification/alarmNetworks";
-import { governanceMenu } from "@bot/menu/notification/governance";
 
 export const bot = new Bot<Context>(config.BOT_TOKEN);
 
@@ -68,25 +68,25 @@ bot.use(statisticMenu);
 bot.use(notificationMenu);
 statisticMenu.register(networkMenu);
 walletMenu.register(walletRemoveMenu);
-notificationMenu.register(reminderDailyMenu);
+notificationMenu.register(dailyReminderMenu);
 notificationMenu.register(alarmMenu);
-notificationMenu.register(governanceMenu);
-reminderDailyMenu.register(networksReminderMenu);
-reminderDailyMenu.register(networkTimeReminderMenu);
-reminderDailyMenu.register(timezoneMenu);
-alarmMenu.register(alarmNetworksMenu);
+notificationMenu.register(proposalMenu);
+dailyReminderMenu.register(networksReminderMenu);
+dailyReminderMenu.register(networkTimeReminderMenu);
+dailyReminderMenu.register(timezoneMenu);
+alarmMenu.register(networksAlarmMenu);
 bot.use(router);
 // Handlers
 bot.use(helpFeature);
 
-bot.use(statFeature);
+bot.use(statisticFeature);
 bot.use(botAdminFeature);
-bot.use(setupFeature);
+bot.use(startFeature);
 bot.use(walletFeature);
 bot.use(assetsFeature);
-bot.use(govFeature);
-bot.use(resFeature);
-bot.use(notifFeature);
+bot.use(proposalFeature);
+bot.use(resourcesFeature);
+bot.use(notificationFeature);
 
 if (config.isDev) {
   bot.catch(handleError);

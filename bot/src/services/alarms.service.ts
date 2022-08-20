@@ -34,7 +34,6 @@ export async function alarmsService({
       prices = [...prices, price];
     }
 
-    console.log(prices);
     await alarmDao.upsertAlarm({
       where: {
         userId_networkId: {

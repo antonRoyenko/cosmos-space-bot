@@ -96,6 +96,7 @@ const formatAllBalance = (data: BalanceData, chain: ChainInfo) => {
 
     return Big(a).plus(dsmCoins.amount).toPrecision();
   }, "0");
+
   const rewardsAmount = formatToken(
     rewards,
     tokenUnits[primaryTokenUnit],

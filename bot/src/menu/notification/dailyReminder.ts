@@ -41,4 +41,4 @@ const menuList = [
   },
 ];
 
-export const reminderDailyMenu = menuCreator("dailyReminder", menuList);
+export const dailyReminderMenu = menuCreator("dailyReminder", menuList);

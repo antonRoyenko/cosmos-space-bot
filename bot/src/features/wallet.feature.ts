@@ -4,6 +4,7 @@ import { Context } from "@bot/types";
 import { walletMenu } from "@bot/menu";
 import { networksService, walletsService } from "@bot/services";
 import { bech32 } from "bech32";
+import { agreementKeyboard } from "@bot/menu/util";
 
 export const feature = router.route("wallet");
 
@@ -13,9 +14,7 @@ feature.command("wallet", logHandle("handle /wallet"), async (ctx: Context) => {
 });
 
 feature
-  .filter(
-    (ctx) => ctx.session.step === "wallet" || ctx.session.step === "setup"
-  )
+  .filter((ctx) => ctx.session.step === "wallet")
   .on("message:text", logHandle("handle wallet"), async (ctx) => {
     await ctx.replyWithChatAction("typing");
     const { getNetwork } = networksService();
@@ -36,11 +35,19 @@ feature
     }
 
     if (network) {
-      const wallet = await createUserWallet(network.id, address);
-
-      ctx.session.currentWallets = [...userWallets, wallet];
+      await createUserWallet(network.id, address);
     }
 
-    ctx.session.step = "home";
-    return ctx.reply("Perfect! Now you can use /assets command");
+    await ctx.reply(`Do you want add more ?`, {
+      reply_markup: agreementKeyboard,
+    });
   });
+
+feature.callbackQuery("yes", async (ctx) => {
+  await ctx.reply(`Add one more price alarm`);
+});
+
+feature.callbackQuery("no", async (ctx) => {
+  ctx.session.step = "home";
+  return ctx.reply("Perfect! Now you can use /assets command");
+});

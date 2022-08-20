@@ -8,4 +8,6 @@ export const createDao = (prisma: PrismaClient) => ({
   getUser: (args: Prisma.UserFindUniqueArgs) => prisma.user.findUnique(args),
 
   getAllUser: () => prisma.user.findMany(),
+
+  count: () => prisma.user.count(),
 });
