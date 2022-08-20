@@ -28,7 +28,8 @@ feature
     const price = ctx.message.text || "";
 
     if (network) {
-      const { updateAlarmNetworks } = await alarmsService({ ctx, network });
+      const { updateAlarmNetworks } = await alarmsService({ ctx });
+      console.log(99, network.id);
       await updateAlarmNetworks(price, network.id);
 
       await ctx.reply(`Do you want add more ?`, {

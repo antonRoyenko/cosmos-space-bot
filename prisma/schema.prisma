@@ -51,11 +51,12 @@ model NetworksInNotification {
 model Alarm {
   id          Int      @id @default(autoincrement())
   user        User     @relation(fields: [userId], references: [id])
-  userId      Int      @unique @map("user_id")
+  userId      Int      @map("user_id")
   alarmPrices String[] @map("alarm_prices")
   network     Network? @relation(fields: [networkId], references: [id])
   networkId   Int      @unique @map("network_id")
 
+  @@unique([userId, networkId])
   @@map(name: "alarms")
 }
 
@@ -65,7 +66,7 @@ model Wallet {
   network   Network @relation(fields: [networkId], references: [id])
   networkId Int     @map("network_id")
   User      User    @relation(fields: [userId], references: [id])
-  userId    Int     @unique @map("user_id")
+  userId    Int     @map("user_id")
 
   @@map(name: "wallets")
 }

@@ -32,10 +32,9 @@ import {
   walletRemoveMenu,
   statisticMenu,
   networkMenu,
-  initNetworkMenu,
   notificationMenu,
 } from "@bot/menu";
-import { reminderDailyMenu } from "@bot/menu/notification/daily";
+import { reminderDailyMenu } from "@bot/menu/notification/dailyReminder";
 import { networksReminderMenu } from "@bot/menu/notification/reminder";
 import { networkTimeReminderMenu } from "@bot/menu/notification/reminderTime";
 import { timezoneMenu } from "@bot/menu/notification/timezone";
@@ -65,7 +64,6 @@ bot.use(setupLocalContext());
 bot.use(setupLogger());
 bot.use(setUser());
 bot.use(walletMenu);
-bot.use(initNetworkMenu);
 bot.use(statisticMenu);
 bot.use(notificationMenu);
 statisticMenu.register(networkMenu);

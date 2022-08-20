@@ -8,8 +8,8 @@ feature.command("help", logHandle("handle /start"), async (ctx) => {
 
   await ctx.reply(
     "/wallet - show your assets \n" +
-      "/statistic - network statistic \n" +
+      "/statistics - cryptocurrency statistics \n" +
       "/notification - notification settings \n" +
-      "/resources - useful network resources \n"
+      "/resources - network links \n"
   );
 });

@@ -1,9 +1,10 @@
 import { PrismaClient, Prisma } from "@prisma/client";
 
 export const createDao = (prisma: PrismaClient) => ({
-  createAlarm: (args: Prisma.AlarmCreateArgs) => prisma.alarm.create(args),
-
-  updateAlarm: (args: Prisma.AlarmUpdateArgs) => prisma.alarm.update(args),
+  upsertAlarm: (args: Prisma.AlarmUpsertArgs) => {
+    console.log(98, args);
+    return prisma.alarm.upsert(args);
+  },
 
   getAlarm: (args: Prisma.AlarmFindUniqueArgs) => prisma.alarm.findUnique(args),
 

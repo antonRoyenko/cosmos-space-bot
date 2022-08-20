@@ -21,8 +21,6 @@ export function cron(server: any) {
 
           const { getUser } = usersService();
           const { getNetwork } = networksService();
-          // const { getAllNotifications } = await notificationsService({});
-          // const {} = networksInNotificationService();
 
           const notifications = await notificationDao.getAllNotifications();
 
@@ -34,6 +32,7 @@ export function cron(server: any) {
                   notificationId: notification.id,
                 },
               });
+            console.log(1);
             const user = (await getUser({
               id: notification.userId,
             })) || {
@@ -78,31 +77,32 @@ export function cron(server: any) {
           for (const alarm of alarms) {
             const network = (await getNetwork({
               networkId: alarm.networkId,
-            })) || { name: "", fullName: "" };
+            })) || { name: "", fullName: "", id: 0 };
 
             const networkPrice = await getTokenPrice(network.name);
 
             if (alarm.alarmPrices.length === 0) return;
 
-            const closest = alarm.alarmPrices
-              .filter((item) => Number(item) > networkPrice.price)
-              .reduce(function (prev, curr) {
-                return Math.abs(Number(curr) - networkPrice.price) <
-                  Math.abs(Number(prev) - networkPrice.price)
-                  ? curr
-                  : prev;
-              });
+            // const closest = alarm.alarmPrices
+            //   .filter((item) => Number(item) > networkPrice.price)
+            //   .reduce(function (prev, curr) {
+            //     return Math.abs(Number(curr) - networkPrice.price) <
+            //       Math.abs(Number(prev) - networkPrice.price)
+            //       ? curr
+            //       : prev;
+            //   });
 
-            const user = (await getUser({
+            const user = await getUser({
               id: alarm.userId,
-            })) || { telegramId: 0 };
+            });
 
-            await sendNotification(
-              `Alarm ${network.fullName} price is - ${networkPrice.price}`,
-              "HTML",
-              Number(user.telegramId)
-            );
-            await updateAlarmNetworks(closest, alarm.id);
+            // await sendNotification(
+            //   `Alarm ${network.fullName} price is - ${networkPrice.price}`,
+            //   "HTML",
+            //   Number(user?.telegramId)
+            // );
+            //
+            // await updateAlarmNetworks(closest, network.id, user?.id);
           }
         },
       },

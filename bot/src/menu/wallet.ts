@@ -28,7 +28,7 @@ export const walletMenu = new Menu<Context>("wallets", {
       await ctx.reply(wallets);
     })
     .row()
-    .text("Delete wallet(s)", (ctx) =>
+    .text("Delete wallet", (ctx) =>
       ctx.reply("Choose wallet which you want remove", {
         reply_markup: walletRemoveMenu,
       })

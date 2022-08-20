@@ -7,7 +7,7 @@ import { nFormatter } from "@bot/utils/nFormatter";
 import { toNumber } from "lodash";
 import { config } from "@bot/chains";
 import { atomConfig } from "@bot/chains/atom";
-import { networksService, usersService } from "@bot/services";
+import { networksService } from "@bot/services";
 import { ChainInfo } from "@bot/types/general";
 import { networkMenu } from "@bot/menu";
 

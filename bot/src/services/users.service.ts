@@ -44,11 +44,9 @@ export const usersService = (ctx?: Context) => {
     id?: number;
     telegramId?: number;
   }) => {
+    const args = telegramId ? { telegramId } : { id };
     return await userDao.getUser({
-      where: {
-        telegramId: !telegramId ? user.telegramId : telegramId,
-        id,
-      },
+      where: args,
     });
   };
 
