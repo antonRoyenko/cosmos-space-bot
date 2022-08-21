@@ -1,6 +1,8 @@
 import { Context } from "@bot/types";
-import { Network } from "@prisma/client";
-import { alarmDao, userDao } from "@bot/dao";
+import { alarmDao } from "@bot/dao";
+import { alarmPricesService } from "./alarmPrices.service";
+import { networksService } from "./networks.service";
+import { getTokenPrice } from "@bot/graphql/queries/getTokenPrice";
 
 export async function alarmsService({
   ctx,
@@ -25,14 +27,22 @@ export async function alarmsService({
     networkId: number,
     userId?: number
   ) => {
-    const alarm = await getAlarm(networkId);
-    let prices = alarm?.alarmPrices || [];
-    console.log(4, prices, alarm);
-    if (alarm?.alarmPrices.includes(price)) {
-      prices = prices.filter((item) => item !== price);
-    } else {
-      prices = [...prices, price];
-    }
+    const { getAllAlarmPrices } = alarmPricesService();
+    const { getNetwork } = networksService();
+
+    const alarm = (await getAlarm(networkId)) || { id: 0 };
+    const network = (await getNetwork({ networkId })) || {
+      name: "",
+    };
+    const alarmPrices = (await getAllAlarmPrices(alarm.id)) || {
+      id: 0,
+    };
+    const tokenPrices = await getTokenPrice(network.name);
+    const createAlarmPrice = {
+      price: Number(price),
+      coingeckoPrice: tokenPrices.price,
+    };
+    const alarmPrice = alarmPrices.find((item) => item.price === Number(price));
 
     await alarmDao.upsertAlarm({
       where: {
@@ -44,15 +54,24 @@ export async function alarmsService({
       create: {
         networkId: networkId,
         userId: userId ? userId : user.id,
-        alarmPrices: prices,
+        alarmPrices: {
+          create: createAlarmPrice,
+        },
       },
-      update: {
-        alarmPrices: prices,
-      },
+      update: !alarmPrice?.id
+        ? {
+            alarmPrices: {
+              create: createAlarmPrice,
+            },
+          }
+        : {},
     });
   };
 
-  const getAllAlarms = () => alarmDao.getAllAlarms();
+  const getAllAlarms = (all = false) => {
+    const args = all ? {} : { where: { userId: user.id } };
+    return alarmDao.getAllAlarms(args);
+  };
 
   return {
     updateAlarmNetworks,

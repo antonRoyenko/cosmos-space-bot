@@ -16,6 +16,7 @@ export const networksAlarmMenu = new Menu<Context>("alarmNetworks", {
       range
         .text(network.fullName, async (ctx) => {
           ctx.session.alarmNetwork = network;
+          ctx.session.step = "notification";
           const { price } = await getTokenPrice(network.name);
 
           await ctx.reply(

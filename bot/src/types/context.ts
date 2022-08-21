@@ -3,7 +3,7 @@ import { FluentContextFlavor } from "@grammyjs/fluent";
 import { ParseModeContext } from "@grammyjs/parse-mode";
 
 import { LocalContext } from "@bot/context";
-import { Network, Wallet } from "@prisma/client";
+import { Network } from "@prisma/client";
 
 export interface LocalContextFlavor {
   local: LocalContext;

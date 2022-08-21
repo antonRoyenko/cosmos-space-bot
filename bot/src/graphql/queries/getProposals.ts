@@ -1,6 +1,6 @@
 import { fetchProposal } from "@bot/graphql/queries/fetchProposal";
 import _ from "lodash";
-import { govStatus } from "@bot/constants/gov";
+import { proposalStatus } from "@bot/constants/proposalStatus";
 import { ProposalsQuery } from "../types/general_types";
 
 export const getProposals = async () => {
@@ -21,7 +21,7 @@ export const getProposals = async () => {
 export const formatProposals = (data: ProposalsQuery) => {
   const { proposals } = data;
   const activeProposals = proposals.filter(
-    ({ status }) => status === govStatus.PROPOSAL_STATUS_VOTING_PERIOD
+    ({ status }) => status === proposalStatus.PROPOSAL_STATUS_VOTING_PERIOD
   );
 
   return {

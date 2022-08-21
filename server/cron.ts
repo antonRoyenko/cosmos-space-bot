@@ -3,7 +3,12 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import localizedFormat from "dayjs/plugin/localizedFormat";
-import { usersService, networksService, alarmsService } from "@bot/services";
+import {
+  usersService,
+  networksService,
+  alarmsService,
+  alarmPricesService,
+} from "@bot/services";
 import { notificationDao, networkInNotificationDao } from "@bot/dao";
 import { getTokenPrice } from "@bot/graphql/queries/getTokenPrice";
 import { sendNotification } from "@server/telegram";
@@ -32,7 +37,6 @@ export function cron(server: any) {
                   notificationId: notification.id,
                 },
               });
-            console.log(1);
             const user = (await getUser({
               id: notification.userId,
             })) || {
@@ -69,40 +73,46 @@ export function cron(server: any) {
         cronTime: "*/2 * * * *",
 
         onTick: async () => {
-          const { getAllAlarms, updateAlarmNetworks } = await alarmsService();
+          const { getAllAlarms } = await alarmsService();
+          const { getAllAlarmPrices, removeAlarmPrice } = alarmPricesService();
           const { getNetwork } = networksService();
           const { getUser } = usersService();
 
-          const alarms = await getAllAlarms();
+          const alarms = await getAllAlarms(true);
           for (const alarm of alarms) {
             const network = (await getNetwork({
               networkId: alarm.networkId,
             })) || { name: "", fullName: "", id: 0 };
 
             const networkPrice = await getTokenPrice(network.name);
+            const alarmPrices = await getAllAlarmPrices(alarm.id);
 
-            if (alarm.alarmPrices.length === 0) return;
-
-            // const closest = alarm.alarmPrices
-            //   .filter((item) => Number(item) > networkPrice.price)
-            //   .reduce(function (prev, curr) {
-            //     return Math.abs(Number(curr) - networkPrice.price) <
-            //       Math.abs(Number(prev) - networkPrice.price)
-            //       ? curr
-            //       : prev;
-            //   });
+            if (alarmPrices.length === 0) return;
 
             const user = await getUser({
               id: alarm.userId,
             });
 
-            // await sendNotification(
-            //   `Alarm ${network.fullName} price is - ${networkPrice.price}`,
-            //   "HTML",
-            //   Number(user?.telegramId)
-            // );
-            //
-            // await updateAlarmNetworks(closest, network.id, user?.id);
+            const sendMessage = async (id: number) => {
+              await sendNotification(
+                `Alarm ${network.fullName} price is - ${networkPrice.price}`,
+                "HTML",
+                Number(user?.telegramId)
+              );
+              await removeAlarmPrice(id);
+            };
+
+            for (const price of alarmPrices) {
+              const isPositive = price.price - price.coingeckoPrice > 0;
+
+              if (isPositive && networkPrice.price > price.price) {
+                await sendMessage(price.id);
+              }
+
+              if (!isPositive && networkPrice.price < price.price) {
+                await sendMessage(price.id);
+              }
+            }
           }
         },
       },

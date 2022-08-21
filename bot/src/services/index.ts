@@ -1,4 +1,5 @@
 export { alarmsService } from "./alarms.service";
+export { alarmPricesService } from "./alarmPrices.service";
 export { networksInNotificationService } from "./networksInNotification.service";
 export { notificationsService } from "./notifications.service";
 export { resourcesService } from "./resources.service";

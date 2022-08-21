@@ -5,7 +5,7 @@ import gql from "graphql-tag";
 import { Subscription } from "@bot/types/general";
 import { Context } from "@bot/types";
 import _ from "lodash";
-import { govStatus } from "@bot/constants/gov";
+import { proposalStatus } from "@bot/constants/proposalStatus";
 
 export let observer: Subscription;
 
@@ -26,7 +26,7 @@ export const governanceSubscription = function (
       const proposals = _.get(eventData, ["data", "proposals"], []);
       const activeProposals = proposals.filter(
         ({ status }: { status: string }) =>
-          status === govStatus.PROPOSAL_STATUS_VOTING_PERIOD
+          status === proposalStatus.PROPOSAL_STATUS_VOTING_PERIOD
       );
       const item = activeProposals[0];
       if (!item) {

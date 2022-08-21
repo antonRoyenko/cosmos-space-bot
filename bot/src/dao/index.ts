@@ -1,5 +1,6 @@
 import { prisma } from "@server/prisma";
 import { createDao as createAlarmDao } from "./alarms.dao";
+import { createDao as createAlarmPricesDao } from "./alarmPrices.dao";
 import { createDao as createNetworkInNotificationDao } from "./networksInNotification.dao";
 import { createDao as createNotificationDao } from "./notifications.dao";
 import { createDao as createResourceDao } from "./resources.dao";
@@ -14,3 +15,4 @@ export const resourceDao = createResourceDao(prisma);
 export const userDao = createUserDao(prisma);
 export const walletDao = createWalletDao(prisma);
 export const networkDao = createNetworkDao(prisma);
+export const alarmPricesDao = createAlarmPricesDao(prisma);

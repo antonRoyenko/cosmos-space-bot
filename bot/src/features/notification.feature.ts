@@ -5,7 +5,7 @@ import { getCountry } from "countries-and-timezones";
 import { countries } from "@bot/constants/country";
 import { timezoneMenu } from "@bot/menu/notification/timezone";
 import _ from "lodash";
-import { alarmsService } from "@bot/services";
+import { alarmPricesService, alarmsService } from "@bot/services";
 import { agreementKeyboard } from "@bot/menu/util";
 import { alarmMenu } from "@bot/menu/notification/alarm";
 
@@ -27,7 +27,6 @@ feature
 
     if (network) {
       const { updateAlarmNetworks } = await alarmsService({ ctx });
-      console.log(99, network.id);
       await updateAlarmNetworks(price, network.id);
 
       await ctx.reply(`Do you want add more ?`, {
@@ -52,21 +51,25 @@ feature
     }
   });
 
-feature.callbackQuery("yes", async (ctx) => {
-  await ctx.reply(`Add one more price alarm`);
-});
+feature
+  .filter((ctx) => ctx.session.step === "notification")
+  .callbackQuery("yes", async (ctx) => {
+    await ctx.reply(`Add one more price alarm`);
+  });
 
-feature.callbackQuery("no", async (ctx) => {
-  ctx.session.alarmNetwork = undefined;
-  await ctx.reply("Alarm saved", { reply_markup: alarmMenu });
-});
+feature
+  .filter((ctx) => ctx.session.step === "notification")
+  .callbackQuery("no", async (ctx) => {
+    ctx.session.alarmNetwork = undefined;
+    await ctx.reply("Alarm saved", { reply_markup: alarmMenu });
+  });
 
 feature.callbackQuery(/^deleteAlarm:/, async (ctx) => {
   const data = ctx.callbackQuery.data;
   // eslint-disable-next-line no-useless-escape
-  const [networkId, price] = data.match(/\d{1,2}([\.,][\d{1,2}])?/g) || [];
-  const { updateAlarmNetworks } = await alarmsService({ ctx });
-  await updateAlarmNetworks(price, Number(networkId));
+  const [alarmPriceId] = data.match(/\d{1,2}([\.,][\d{1,2}])?/g) || [];
+  const { removeAlarmPrice } = alarmPricesService();
+  await removeAlarmPrice(Number(alarmPriceId));
   ctx.session.step = "notification";
   await ctx.reply("Price was removed", { reply_markup: notificationMenu });
 });

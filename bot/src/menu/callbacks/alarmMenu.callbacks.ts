@@ -2,11 +2,13 @@ import { Context } from "@bot/types";
 import { networksAlarmMenu } from "@bot/menu";
 import {
   alarmsService,
+  alarmPricesService,
   networksService,
   notificationsService,
 } from "@bot/services";
 import { InlineKeyboard } from "grammy";
 import { MenuFlavor } from "@grammyjs/menu";
+import _ from "lodash";
 
 export async function addAlarmCallback(ctx: Context) {
   await ctx.reply("Choose Network", { reply_markup: networksAlarmMenu });
@@ -15,6 +17,7 @@ export async function addAlarmCallback(ctx: Context) {
 export async function deleteAlarmCallback(ctx: Context) {
   const { getAllAlarms } = await alarmsService({ ctx });
   const { getNetwork } = networksService();
+  const { getAllAlarmPrices } = alarmPricesService();
 
   const alarms = await getAllAlarms();
 
@@ -24,12 +27,13 @@ export async function deleteAlarmCallback(ctx: Context) {
     const network = (await getNetwork({
       networkId: alarm.networkId,
     })) || { fullName: "", id: 0 };
+    const alarmPrices = await getAllAlarmPrices(alarm.id);
 
-    alarm.alarmPrices.forEach((price) => {
+    alarmPrices.forEach((item) => {
       inlineKeyboard
         .text(
-          `${network.fullName} price - ${price}$`,
-          `deleteAlarm:networkId=${network.id}&price=${price}`
+          `${network.fullName} price - ${item.price}$`,
+          `deleteAlarm:alarmPriceId=${item.id}`
         )
         .row();
     });
@@ -47,16 +51,17 @@ export async function listAlarmsCallback(ctx: Context) {
   let output = "You have alarms on: \n";
   const { getAllAlarms } = await alarmsService({ ctx });
   const { getNetwork } = networksService();
+  const { getAllAlarmPrices } = alarmPricesService();
   const alarms = await getAllAlarms();
 
   for await (const alarm of alarms) {
     const network = (await getNetwork({
       networkId: alarm.networkId,
     })) || { fullName: "", id: 0 };
+    const alarmPrices = await getAllAlarmPrices(alarm.id);
+    const priceArr = _.map(alarmPrices, "price");
 
-    output += `${network.fullName} at price: ${alarm.alarmPrices.join(
-      "$, "
-    )}$ \n`;
+    output += `${network.fullName} at price: ${priceArr.join("$, ")}$ \n`;
   }
 
   return ctx.reply(output);

@@ -43,11 +43,15 @@ feature
     });
   });
 
-feature.callbackQuery("yes", async (ctx) => {
-  await ctx.reply(`Add one more price alarm`);
-});
+feature
+  .filter((ctx) => ctx.session.step === "wallet")
+  .callbackQuery("yes", async (ctx) => {
+    await ctx.reply(`Add one more price alarm`);
+  });
 
-feature.callbackQuery("no", async (ctx) => {
-  ctx.session.step = "home";
-  return ctx.reply("Perfect! Now you can use /assets command");
-});
+feature
+  .filter((ctx) => ctx.session.step === "wallet")
+  .callbackQuery("no", async (ctx) => {
+    ctx.session.step = "home";
+    return ctx.reply("Perfect! Now you can use /assets command");
+  });
