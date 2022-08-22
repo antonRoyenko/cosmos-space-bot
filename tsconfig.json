@@ -23,9 +23,6 @@
       "@bot/*": [
         "./bot/src/*"
       ],
-      "@web/*": [
-        "./web/*"
-      ],
       "@server/*": [
         "./server/*"
       ]
@@ -34,9 +31,6 @@
   },
   "include": [
     "bot/**/*.ts",
-    "web/**/*.tsx",
-    "web/**/*.ts",
-    "web/**/*",
     "server/**/*.ts",
     "types/**/*.ts",
     "prisma/seed.ts"

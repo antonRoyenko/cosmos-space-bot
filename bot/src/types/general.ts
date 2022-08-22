@@ -2,7 +2,6 @@ import {
   MarketDataQuery,
   TokenomicsQuery,
 } from "@bot/graphql/types/general_types";
-import { Bech32Address } from "@keplr-wallet/cosmos";
 import { Bech32Config } from "@keplr-wallet/types";
 
 export type TokenUnit = {
