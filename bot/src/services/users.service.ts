@@ -19,20 +19,13 @@ export const usersService = (ctx?: Context) => {
     });
   };
 
-  const updateUser = async ({
-    timezone,
-    networkId,
-  }: {
-    timezone?: string;
-    networkId?: number;
-  }) => {
+  const updateUser = async ({ timezone }: { timezone?: string }) => {
     return await userDao.updateUser({
       where: {
         telegramId: user.telegramId,
       },
       data: {
         timezone,
-        networkId,
       },
     });
   };

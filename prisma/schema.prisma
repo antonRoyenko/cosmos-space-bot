@@ -15,8 +15,6 @@ model User {
   updatedAt      DateTime     @updatedAt @map("updated_at")
   createdAt      DateTime     @default(now()) @map("created_at")
   notification    Notification?
-  Network        Network?     @relation(fields: [networkId], references: [id])
-  networkId      Int?         @map("network_id")
   alarm          Alarm[]
   timezone       String       @default("Europe/London")
 
@@ -88,7 +86,6 @@ model Network {
   fullName                String
   resource                Resource?               @relation(fields: [resourceId], references: [id])
   resourceId              Int                     @unique
-  user                    User[]
   publicUrl               String
   wsPublicUrl             String
   wallet                  Wallet[]

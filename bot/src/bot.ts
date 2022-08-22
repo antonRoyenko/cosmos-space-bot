@@ -31,7 +31,6 @@ import { handleError } from "@bot/helpers/error-handler";
 import {
   walletMenu,
   walletRemoveMenu,
-  statisticMenu,
   networksStatisticMenu,
   notificationMenu,
   dailyReminderMenu,
@@ -66,10 +65,9 @@ bot.use(setupLocalContext());
 bot.use(setupLogger());
 bot.use(setUser());
 bot.use(walletMenu);
-bot.use(statisticMenu);
 bot.use(notificationMenu);
+bot.use(networksStatisticMenu);
 bot.use(networksResourcesMenu);
-statisticMenu.register(networksStatisticMenu);
 walletMenu.register(walletRemoveMenu);
 notificationMenu.register(dailyReminderMenu);
 notificationMenu.register(alarmMenu);
