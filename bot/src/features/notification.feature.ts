@@ -7,6 +7,7 @@ import { timezoneMenu, alarmMenu } from "@bot/menu";
 import _ from "lodash";
 import { alarmPricesService, alarmsService } from "@bot/services";
 import { agreementKeyboard } from "@bot/menu/utils";
+import { isNumber } from "@bot/utils/isNumber";
 
 export const feature = router.route("notification");
 
@@ -24,6 +25,16 @@ feature
     const network = ctx.session.alarmNetwork;
     const price = ctx.message.text || "";
 
+    if (price.includes("$")) {
+      await ctx.reply("Number should be without $");
+      return;
+    }
+
+    if (!isNumber(price)) {
+      await ctx.reply("Price is incorrect");
+      return;
+    }
+
     if (network) {
       const { updateAlarmNetworks } = await alarmsService({ ctx });
       await updateAlarmNetworks(price, network.id);
@@ -39,9 +50,16 @@ feature
   .on("message", async (ctx) => {
     const country = ctx.message.text || "";
 
-    const currentCountry = countries.find(({ name }) => name === country) || {
+    const currentCountry = countries.find(
+      ({ name }) => name.toLowerCase() === country.toLowerCase()
+    ) || {
       code: "",
     };
+
+    if (!currentCountry.code) {
+      return ctx.reply("Incorrect name country");
+    }
+
     const parseCountry = getCountry(currentCountry.code);
     if (parseCountry?.timezones) {
       ctx.session.timezone = parseCountry.timezones;

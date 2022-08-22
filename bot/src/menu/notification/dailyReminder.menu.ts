@@ -17,14 +17,14 @@ const menuList = [
   },
   {
     text: "Choose Time",
-    callback: chooseTimezoneCallback,
+    callback: chooseTimeCallback,
   },
   {
     row: true,
   },
   {
     text: "Choose Timezone",
-    callback: chooseTimeCallback,
+    callback: chooseTimezoneCallback,
   },
   {
     row: true,
