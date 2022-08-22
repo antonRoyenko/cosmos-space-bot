@@ -10,10 +10,9 @@ export interface LocalContextFlavor {
 }
 
 export interface SessionData {
-  currentNetwork?: string;
   timezone: string[];
   alarmNetwork?: Network;
-  step:
+  step?:
     | "wallet"
     | "walletMenu"
     | "admin"

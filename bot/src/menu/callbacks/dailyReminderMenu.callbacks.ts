@@ -1,6 +1,6 @@
 import { Context } from "@bot/types";
-import { networksReminderMenu } from "@bot/menu/notification/networksReminder";
-import { networkTimeReminderMenu } from "@bot/menu/notification/timeReminder";
+import { networksReminderMenu } from "@bot/menu/notification/networksReminder.menu";
+import { networkTimeReminderMenu } from "@bot/menu/notification/timeReminder.menu";
 import { notificationsService } from "@bot/services";
 import { MenuFlavor } from "@grammyjs/menu";
 

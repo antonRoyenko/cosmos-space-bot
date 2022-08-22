@@ -9,14 +9,14 @@ import { config } from "@bot/chains";
 import { atomConfig } from "@bot/chains/atom";
 import { networksService } from "@bot/services";
 import { ChainInfo } from "@bot/types/general";
-import { networkMenu } from "@bot/menu";
+import { networksStatisticMenu } from "@bot/menu";
 
 export const statisticMenu = new Menu<Context>("statistic", {
   autoAnswer: false,
 }).dynamic(async (ctx) => {
-  const { currentNetwork } = ctx.session;
+  const user = ctx?.local.user;
   const { getNetwork } = networksService();
-  const network = await getNetwork({ name: currentNetwork });
+  const network = await getNetwork({ networkId: Number(user?.networkId) });
 
   if (network) {
     const range = new MenuRange<Context>();
@@ -24,7 +24,7 @@ export const statisticMenu = new Menu<Context>("statistic", {
       .text(`Show ${network.fullName} statistic`, statisticCallback)
       .row()
       .text("Change network", (ctx) =>
-        ctx.reply("Choose network", { reply_markup: networkMenu })
+        ctx.reply("Choose network", { reply_markup: networksStatisticMenu })
       );
 
     return range;
@@ -33,15 +33,20 @@ export const statisticMenu = new Menu<Context>("statistic", {
 
 async function statisticCallback(ctx: Context) {
   await ctx.replyWithChatAction("typing");
-  const { currentNetwork } = ctx.session;
+  const user = ctx?.local.user;
+  const { getNetwork } = networksService();
+  const currentNetwork = await getNetwork({
+    networkId: Number(user?.networkId),
+  });
 
   if (currentNetwork) {
     const chain: ChainInfo =
-      config.find(({ network }) => network === currentNetwork) || atomConfig;
+      config.find(({ network }) => network === currentNetwork.name) ||
+      atomConfig;
     const { tokenUnits, primaryTokenUnit } = chain;
-    const prices = await getTokenPrice(currentNetwork);
+    const prices = await getTokenPrice(currentNetwork.name);
     const { getNetwork } = networksService();
-    const network = await getNetwork({ name: currentNetwork });
+    const network = await getNetwork({ name: currentNetwork.name });
     const publicUrl = network?.publicUrl || "";
     const denom = tokenUnits[primaryTokenUnit].display;
 

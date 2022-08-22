@@ -3,11 +3,10 @@ import { router } from "@bot/middlewares";
 import { notificationMenu } from "@bot/menu";
 import { getCountry } from "countries-and-timezones";
 import { countries } from "@bot/constants/country";
-import { timezoneMenu } from "@bot/menu/notification/timezone";
+import { timezoneMenu, alarmMenu } from "@bot/menu";
 import _ from "lodash";
 import { alarmPricesService, alarmsService } from "@bot/services";
-import { agreementKeyboard } from "@bot/menu/util";
-import { alarmMenu } from "@bot/menu/notification/alarm";
+import { agreementKeyboard } from "@bot/menu/utils";
 
 export const feature = router.route("notification");
 

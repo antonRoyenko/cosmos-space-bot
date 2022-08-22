@@ -25,13 +25,14 @@ import {
   resourcesFeature,
   notificationFeature,
   assetsFeature,
+  // unknownFeature,
 } from "@bot/features";
 import { handleError } from "@bot/helpers/error-handler";
 import {
   walletMenu,
   walletRemoveMenu,
   statisticMenu,
-  networkMenu,
+  networksStatisticMenu,
   notificationMenu,
   dailyReminderMenu,
   alarmMenu,
@@ -40,6 +41,7 @@ import {
   networksReminderMenu,
   timezoneMenu,
   networksAlarmMenu,
+  networksResourcesMenu,
 } from "@bot/menu";
 
 export const bot = new Bot<Context>(config.BOT_TOKEN);
@@ -66,7 +68,8 @@ bot.use(setUser());
 bot.use(walletMenu);
 bot.use(statisticMenu);
 bot.use(notificationMenu);
-statisticMenu.register(networkMenu);
+bot.use(networksResourcesMenu);
+statisticMenu.register(networksStatisticMenu);
 walletMenu.register(walletRemoveMenu);
 notificationMenu.register(dailyReminderMenu);
 notificationMenu.register(alarmMenu);
@@ -75,7 +78,7 @@ dailyReminderMenu.register(networksReminderMenu);
 dailyReminderMenu.register(networkTimeReminderMenu);
 dailyReminderMenu.register(timezoneMenu);
 alarmMenu.register(networksAlarmMenu);
-bot.use(router);
+
 // Handlers
 bot.use(helpFeature);
 
@@ -87,6 +90,14 @@ bot.use(assetsFeature);
 bot.use(proposalFeature);
 bot.use(resourcesFeature);
 bot.use(notificationFeature);
+
+router.otherwise(
+  async (ctx) =>
+    await ctx.reply(
+      "Sorry, I don't understand you, please use /help for description command"
+    )
+);
+bot.use(router);
 
 if (config.isDev) {
   bot.catch(handleError);

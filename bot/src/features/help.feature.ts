@@ -4,11 +4,10 @@ import { router } from "@bot/middlewares";
 export const feature = router.route("help");
 
 feature.command("help", logHandle("handle /start"), async (ctx) => {
-  ctx.session.step = "help";
-
   await ctx.reply(
-    "/wallet - show your assets \n" +
-      "/statistics - cryptocurrency statistics \n" +
+    "/wallet - manage your wallets \n" +
+      "/assets - show your assets \n" +
+      "/statistic - cryptocurrency statistics \n" +
       "/notification - notification settings \n" +
       "/resources - network links \n"
   );

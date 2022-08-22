@@ -1,7 +1,8 @@
-export { walletMenu } from "./wallet";
-export { walletRemoveMenu } from "./walletRemove";
-export { statisticMenu } from "./statistic";
-export { networkMenu } from "./networks";
+export { walletMenu } from "./wallet.menu";
+export { walletRemoveMenu } from "./walletRemove.menu";
+export { statisticMenu } from "./statistic.meu";
+export { networksStatisticMenu } from "./networksStatistic.menu";
+export { networksResourcesMenu } from "./networksResources.menu";
 
 export {
   alarmMenu,

@@ -1,6 +1,6 @@
 import { Menu, MenuRange } from "@grammyjs/menu";
 import { Context } from "@bot/types";
-import { walletRemoveMenu } from "./walletRemove";
+import { walletRemoveMenu } from "@bot/menu";
 import { walletsService } from "@bot/services";
 
 export const walletMenu = new Menu<Context>("wallets", {

@@ -1,8 +1,8 @@
-export { alarmMenu } from "./alarm";
-export { networksAlarmMenu } from "./networksAlarm";
-export { dailyReminderMenu } from "./dailyReminder";
-export { notificationMenu } from "./notification";
-export { proposalMenu } from "./proposal";
-export { networksReminderMenu } from "./networksReminder";
-export { networkTimeReminderMenu } from "./timeReminder";
-export { timezoneMenu } from "./timezone";
+export { alarmMenu } from "./alarm.menu";
+export { networksAlarmMenu } from "./networksAlarm.menu";
+export { dailyReminderMenu } from "./dailyReminder.menu";
+export { notificationMenu } from "./notification.menu";
+export { proposalMenu } from "./proposal.menu";
+export { networksReminderMenu } from "./networksReminder.menu";
+export { networkTimeReminderMenu } from "./timeReminder.menu";
+export { timezoneMenu } from "./timezone.menu";

@@ -4,7 +4,9 @@ import { Context } from "@bot/types";
 import { walletMenu } from "@bot/menu";
 import { networksService, walletsService } from "@bot/services";
 import { bech32 } from "bech32";
-import { agreementKeyboard } from "@bot/menu/util";
+import { agreementKeyboard } from "@bot/menu/utils";
+import { isValidAddress } from "@bot/utils/isValid";
+import { config } from "@bot/chains";
 
 export const feature = router.route("wallet");
 
@@ -21,12 +23,24 @@ feature
     const { createUserWallet, getAllUserWallets } = walletsService(ctx);
 
     const address = ctx.message.text;
+    const parsedValue = address.replace(/\s+/g, "");
 
-    if (address.startsWith("/")) {
-      return;
+    console.log(address, parsedValue, isValidAddress(parsedValue));
+
+    if (!isValidAddress(parsedValue)) {
+      return ctx.reply("Please enter valid address");
     }
 
     const prefix = bech32.decode(address).prefix;
+    const isValidChain = config.some(({ network }) => {
+      console.log(network, prefix);
+      return network === prefix;
+    });
+
+    if (!isValidChain) {
+      return ctx.reply("I'm don't support this chain");
+    }
+
     const network = await getNetwork({ name: prefix });
     const userWallets = await getAllUserWallets();
 
@@ -52,6 +66,6 @@ feature
 feature
   .filter((ctx) => ctx.session.step === "wallet")
   .callbackQuery("no", async (ctx) => {
-    ctx.session.step = "home";
+    ctx.session.step = undefined;
     return ctx.reply("Perfect! Now you can use /assets command");
   });

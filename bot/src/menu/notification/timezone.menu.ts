@@ -1,7 +1,7 @@
 import { Menu, MenuRange } from "@grammyjs/menu";
 import { usersService } from "@bot/services";
 import { Context } from "@bot/types";
-import { dailyReminderMenu } from "@bot/menu/notification/dailyReminder";
+import { dailyReminderMenu } from "@bot/menu/notification/dailyReminder.menu";
 
 export const timezoneMenu = new Menu<Context>("timezoneMenu", {
   autoAnswer: false,

@@ -1,7 +1,6 @@
 import { dailyReminderMenu } from "@bot/menu";
-import { alarmMenu } from "./alarm";
 import { Context } from "@bot/types";
-import { proposalMenu } from "@bot/menu/notification/proposal";
+import { proposalMenu, alarmMenu } from "@bot/menu";
 import { menuCreator } from "@bot/utils/menuCreator";
 
 const menuList = [
