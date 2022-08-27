@@ -7,7 +7,7 @@ export const osmoConfig = {
   primaryTokenUnit: "uosmo",
   tokenUnits: {
     uosmo: {
-      display: "osmos",
+      display: "osmo",
       exponent: 6,
     },
   },

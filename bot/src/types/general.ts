@@ -43,12 +43,14 @@ export type StatisticData = {
   tokenomics: TokenomicsQuery;
 };
 
+export type TTokenPrice = {
+  id: number;
+  price: number;
+  timestamp: string;
+};
+
 export type TokenData = {
-  tokenPrice: {
-    [key: string]: {
-      usd: number;
-    };
-  };
+  tokenPrice: Array<TTokenPrice>;
   tokenHistory: Array<CoinHistoryResponse>;
 };
 

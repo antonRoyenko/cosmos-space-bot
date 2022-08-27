@@ -66,7 +66,17 @@ const formatStatisticsValues = (data: StatisticData, chain: ChainInfo) => {
     ["communityPool", 0, "coins"],
     []
   ).filter((x: Coins) => x.denom === chain.primaryTokenUnit);
-  const inflation = _.get(statistic, ["inflation", 0, "value"], 0);
+
+  let inflation = _.get(statistic, ["inflation", 0, "value"], 0);
+  if (inflation === 0) {
+    inflation = _.get(
+      _.get(statistic, ["inflation", 0, "inflation"], []).filter(
+        (x: any) => x.denom === chain.primaryTokenUnit
+      ),
+      [0, "inflation"],
+      0
+    );
+  }
 
   const [total] = _.get(statistic, ["supply", 0, "coins"], []).filter(
     (x: Coins) => x.denom === chain.primaryTokenUnit

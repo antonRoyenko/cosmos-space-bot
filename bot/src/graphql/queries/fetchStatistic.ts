@@ -1,5 +1,5 @@
 import { request } from "@bot/utils/graphqlRequest";
-import { MarketData } from "@bot/graphql/general/market_data";
+import { MarketData, EmoneyMarketData } from "@bot/graphql/general/market_data";
 import { Tokenomics } from "@bot/graphql/general/tokenomics";
 import { LatestBlockHeight } from "@bot/graphql/general/block_height";
 
@@ -15,7 +15,8 @@ export const fetchMarketData = async (publicUrl: string, denom: string) => {
     },
   };
   try {
-    const data = await request(publicUrl, MarketData, {
+    const document = denom === "ngm" ? EmoneyMarketData : MarketData;
+    const data = await request(publicUrl, document, {
       denom,
     });
 

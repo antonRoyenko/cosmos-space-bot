@@ -5,7 +5,6 @@ import { getBalance } from "@bot/graphql/queries/getBalance";
 import { getTokenPrice } from "@bot/graphql/queries/getTokenPrice";
 import { toNumber } from "lodash";
 import { walletsService, networksService } from "@bot/services";
-import { bech32 } from "bech32";
 import { Wallet } from "@prisma/client";
 
 export const feature = router.route("assets");
@@ -20,11 +19,16 @@ feature.command("assets", logHandle("handle /assets"), async (ctx: Context) => {
     await Promise.all(
       wallets.map(async ({ address, networkId }) => {
         const { getNetwork } = networksService();
-        const prefix = bech32.decode(address).prefix;
-        const url = await getNetwork({ networkId });
-        const publicUrl = url?.publicUrl || "";
-        const data = await getBalance(publicUrl, address, prefix);
-        const prices = await getTokenPrice(prefix);
+        const { coingeckoId, publicUrl, denom, network } = await getNetwork({
+          networkId,
+        });
+
+        const prices = await getTokenPrice({
+          publicUrl,
+          denom: denom,
+          apiId: coingeckoId,
+        });
+        const data = await getBalance(publicUrl, address, network.name);
         const { first, seventh, thirty } = prices.PNL(
           toNumber(data.total.value)
         );

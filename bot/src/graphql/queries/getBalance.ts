@@ -10,14 +10,15 @@ import { getDenom } from "@bot/utils/getFilterDenom";
 import { formatToken } from "@bot/utils/formatToken";
 import { BalanceData, ChainInfo } from "@bot/types/general";
 import { config } from "@bot/chains";
-import { atomConfig } from "@bot/chains/atom";
+import { cosmosConfig } from "@bot/chains/cosmos";
 
 export const getBalance = async (
   publicUrl: string,
   address: string,
   prefix: string
 ) => {
-  const chain = config.find(({ network }) => network === prefix) || atomConfig;
+  const chain =
+    config.find(({ network }) => network === prefix) || cosmosConfig;
   const promises = [
     fetchAvailableBalances(publicUrl, address),
     fetchDelegationBalance(publicUrl, address),

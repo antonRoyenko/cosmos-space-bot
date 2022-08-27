@@ -6,3 +6,9 @@ interface postWalletRequest {
     id: number;
   };
 }
+
+interface getSendMessage {
+  Params: {
+    id: number;
+  };
+}

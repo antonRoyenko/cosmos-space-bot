@@ -7,33 +7,31 @@ export const networksReminderMenu = new Menu<Context>("reminderNetworks", {
 }).dynamic(async (ctx) => {
   const range = new MenuRange<Context>();
 
-  if (ctx.from?.id) {
-    const { getAllNetworks } = networksService();
-    const networks = await getAllNetworks();
+  const { getAllNetworks } = networksService();
+  const networks = await getAllNetworks();
+  for (let i = 0; i < networks.length; i++) {
+    const network = networks[i];
 
-    if (networks.length > 0) {
-      for (const network of networks) {
-        const { isNetworkActive, updateReminder } =
-          await networksInNotificationService({
-            ctx,
-            network,
-          });
+    const { isNetworkActive, updateReminder } =
+      await networksInNotificationService({
+        ctx,
+        network,
+      });
 
-        range
-          .text(
-            isNetworkActive
-              ? `${network.fullName} 🔔`
-              : `${network.fullName} 🔕`,
-            async (ctx) => {
-              await updateReminder();
-              ctx.menu.update();
-            }
-          )
-          .row();
+    range.text(
+      isNetworkActive ? `${network.fullName} 🔔` : `${network.fullName} 🔕`,
+      async (ctx) => {
+        await updateReminder();
+        ctx.menu.update();
       }
+    );
+
+    if ((i + 1) % 2 == 0) {
+      range.row();
     }
   }
 
+  range.row();
   range.back("Back");
 
   return range;

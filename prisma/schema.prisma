@@ -97,15 +97,16 @@ model Network {
 }
 
 model Resource {
-  id      Int       @id @default(autoincrement())
-  site    String
-  discord String
-  twitter String
-  youtube String?
-  blog    String?
-  github  String
-  reddit  String?
-  network Network[]
+  id       Int       @id @default(autoincrement())
+  site     String
+  discord  String?
+  twitter  String
+  youtube  String?
+  blog     String?
+  github   String
+  reddit   String?
+  telegram String?
+  network  Network[]
 
   @@map(name: "resources")
 }

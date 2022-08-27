@@ -24,9 +24,9 @@ export async function deleteAlarmCallback(ctx: Context) {
   const inlineKeyboard = new InlineKeyboard();
 
   for await (const alarm of alarms) {
-    const network = (await getNetwork({
+    const { network } = await getNetwork({
       networkId: alarm.networkId,
-    })) || { fullName: "", id: 0 };
+    });
     const alarmPrices = await getAllAlarmPrices(alarm.id);
 
     alarmPrices.forEach((item) => {
@@ -55,9 +55,9 @@ export async function listAlarmsCallback(ctx: Context) {
   const alarms = await getAllAlarms();
 
   for await (const alarm of alarms) {
-    const network = (await getNetwork({
+    const { network } = await getNetwork({
       networkId: alarm.networkId,
-    })) || { fullName: "", id: 0 };
+    });
     const alarmPrices = await getAllAlarmPrices(alarm.id);
     const priceArr = _.map(alarmPrices, "price");
 

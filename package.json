@@ -113,7 +113,6 @@
   },
   "_moduleAliases": {
     "@bot": "dist/bot/src",
-    "@web": "dist/web",
     "@server": "dist/server"
   }
 }

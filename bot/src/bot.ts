@@ -55,8 +55,6 @@ if (config.isDev) {
   bot.use(updatesLogger());
 }
 
-// getClient("https://gql.desmos.forbole.com/v1/graphql");
-
 bot.use(collectMetrics());
 bot.use(rateLimit());
 bot.use(hydrateReply);

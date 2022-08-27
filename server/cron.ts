@@ -49,13 +49,13 @@ export function cron(server: any) {
             prices += `Price reminder for ${userTime.format("LLL")} \n\n`;
 
             for (const reminder of reminderNetworks) {
-              const network = (await getNetwork({
+              const { network, publicUrl, denom } = await getNetwork({
                 networkId: Number(reminder.reminderNetworkId),
-              })) || {
-                name: "",
-                fullName: "",
-              };
-              const networkPrice = await getTokenPrice(network.name);
+              });
+              const networkPrice = await getTokenPrice({
+                publicUrl,
+                denom,
+              });
               prices += `${network.fullName} - ${networkPrice.price}$ \n`;
             }
 
@@ -80,11 +80,14 @@ export function cron(server: any) {
 
           const alarms = await getAllAlarms(true);
           for (const alarm of alarms) {
-            const network = (await getNetwork({
+            const { publicUrl, denom, network } = await getNetwork({
               networkId: alarm.networkId,
-            })) || { name: "", fullName: "", id: 0 };
+            });
 
-            const networkPrice = await getTokenPrice(network.name);
+            const networkPrice = await getTokenPrice({
+              publicUrl,
+              denom,
+            });
             const alarmPrices = await getAllAlarmPrices(alarm.id);
 
             if (alarmPrices.length === 0) return;

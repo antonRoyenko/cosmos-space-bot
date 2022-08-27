@@ -20,3 +20,26 @@ export const MarketData = `query MarketData ($denom: String) {
   }
 }
 `;
+
+export const EmoneyMarketData = `query MarketData($denom: String) {
+  communityPool: community_pool(order_by: { height: desc }, limit: 1) {
+    coins
+  }
+  inflation: emoney_inflation(order_by: { height: desc }, limit: 1) {
+    inflation
+  }
+  tokenPrice: token_price(where: { unit_name: { _eq: $denom } }) {
+    marketCap: market_cap
+    price
+  }
+  supply {
+    coins
+  }
+  bondedTokens: staking_pool(order_by: {height: desc}, limit: 1) {
+    bonded_tokens
+  }
+  distributionParams: distribution_params {
+    params
+  }
+}
+`;

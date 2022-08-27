@@ -25,15 +25,12 @@ feature
     const address = ctx.message.text;
     const parsedValue = address.replace(/\s+/g, "");
 
-    console.log(address, parsedValue, isValidAddress(parsedValue));
-
     if (!isValidAddress(parsedValue)) {
       return ctx.reply("Please enter valid address");
     }
 
     const prefix = bech32.decode(address).prefix;
     const isValidChain = config.some(({ network }) => {
-      console.log(network, prefix);
       return network === prefix;
     });
 
@@ -41,7 +38,7 @@ feature
       return ctx.reply("I'm don't support this chain");
     }
 
-    const network = await getNetwork({ name: prefix });
+    const { network } = await getNetwork({ name: prefix });
     const userWallets = await getAllUserWallets();
 
     if (userWallets.some((walelt) => walelt.address === address)) {

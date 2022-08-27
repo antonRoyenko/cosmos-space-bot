@@ -3,72 +3,94 @@ import {
   fetchTokenHistory,
   fetchTokenPrice as fetchTokenPriceApi,
 } from "./fetchTokenPrice";
-import _ from "lodash";
 import { formatTokenPrice } from "@bot/utils/formatTokenPrice";
 import { calcTVLPercent } from "@bot/utils/calcTVLPercent";
-import { TokenData } from "@bot/types/general";
-import { config } from "@bot/chains";
-import { atomConfig } from "@bot/chains/atom";
+import { CoinHistoryResponse } from "@bot/types/general";
 
-export const getTokenPrice = async (prefix: string) => {
-  const chain = config.find(({ network }) => network === prefix) || atomConfig;
-  const apiId = chain.coingeckoId;
+export async function getTokenPrice({
+  publicUrl,
+  denom,
+}: {
+  publicUrl: string;
+  denom: string;
+}): Promise<{
+  price: number;
+}>;
+export async function getTokenPrice({
+  publicUrl,
+  denom,
+  apiId,
+}: {
+  publicUrl: string;
+  denom: string;
+  apiId: string;
+}): Promise<{
+  price: number;
+  totalFiat: (total: number) => string;
+  PNL: any;
+}>;
+export async function getTokenPrice({
+  publicUrl,
+  denom,
+  apiId,
+}: {
+  publicUrl: string;
+  denom: string;
+  apiId?: string;
+}) {
+  const price = await fetchTokenPriceApi(publicUrl, denom);
+  const currentPrice = price.tokenPrice[0].price;
 
-  const promises = [fetchTokenPriceApi(apiId), fetchTokenHistory(apiId)];
+  if (!apiId) {
+    return { price: currentPrice };
+  }
 
-  const [tokenPrice, tokenHistory] = await Promise.allSettled(promises);
+  const tokenHistory = await fetchTokenHistory(apiId);
 
-  const formattedRawData: TokenData = {
-    tokenPrice: {},
-    tokenHistory: [],
+  return {
+    price: currentPrice,
+    ...formatTokenHistory(tokenHistory.tokenPrice, currentPrice),
   };
-  formattedRawData.tokenPrice = _.get(tokenPrice, ["value", "tokenPrice"], []);
-  formattedRawData.tokenHistory = _.get(
-    tokenHistory,
-    ["value", "tokenPrice"],
-    []
-  );
+}
 
-  return formatAllTokens(formattedRawData, apiId);
-};
-
-export const formatAllTokens = (data: TokenData, apiId: string) => {
-  const currentPrice = data.tokenPrice[apiId]?.usd;
-
+export const formatTokenHistory = (
+  tokenHistory: Array<CoinHistoryResponse>,
+  price: number
+) => {
   const totalFiat = (total: number) => {
-    return `${formatTokenPrice(currentPrice * total)}$`;
+    return `${formatTokenPrice(price * total)}$`;
   };
 
   const PNL = (amount: number) => {
     let firstDayPercent = "0";
-    if (data.tokenHistory[0]?.market_data?.current_price) {
+    if (tokenHistory[0]?.market_data?.current_price) {
       firstDayPercent = calcTVLPercent(
-        currentPrice,
-        data.tokenHistory[0].market_data.current_price.usd
+        price,
+        tokenHistory[0].market_data.current_price.usd
       );
     }
 
     let seventhDayPercent = "0";
-    if (data.tokenHistory[1]?.market_data?.current_price) {
+    if (tokenHistory[1]?.market_data?.current_price) {
       seventhDayPercent = calcTVLPercent(
-        currentPrice,
-        data.tokenHistory[1].market_data.current_price.usd
+        price,
+        tokenHistory[1].market_data.current_price.usd
       );
     }
 
     let fourteenthDayPercent = "0";
-    if (data.tokenHistory[2]?.market_data?.current_price) {
+    if (tokenHistory[2]?.market_data?.current_price) {
       fourteenthDayPercent = calcTVLPercent(
-        currentPrice,
-        data.tokenHistory[2].market_data.current_price.usd
+        price,
+        tokenHistory[2].market_data.current_price.usd
       );
     }
 
     let thirtyDayPercent = "0";
-    if (data.tokenHistory[3]?.market_data?.current_price) {
+    if (tokenHistory[3]?.market_data?.current_price) {
       thirtyDayPercent = calcTVLPercent(
-        currentPrice,
-        data.tokenHistory[3].market_data.current_price.usd
+        price,
+        tokenHistory[3].market_data.current_price.usd
       );
     }
 
@@ -103,6 +125,5 @@ export const formatAllTokens = (data: TokenData, apiId: string) => {
   return {
     totalFiat,
     PNL,
-    price: currentPrice,
   };
 };

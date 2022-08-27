@@ -11,6 +11,7 @@ import path from "path";
 import { networksService, walletsService, usersService } from "@bot/services";
 import { bech32 } from "bech32";
 import { cron } from "@server/cron";
+import { sendNotification } from "@server/telegram";
 
 export const server = fastify({
   logger,
@@ -63,13 +64,22 @@ server.post<postWalletRequest>("/update_wallet/:id", async (req, res) => {
     const user = await getUser({ telegramId });
     const address = req.body.wallet;
     const prefix = bech32.decode(address).prefix;
-    const network = (await getNetwork({ name: prefix })) || {
-      id: 0,
-    };
+    const { network } = await getNetwork({ name: prefix });
 
     await createUserWallet(network.id, address, user?.id);
 
     return req.body;
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+server.get<getSendMessage>("/send_message/:id", async (req, res) => {
+  try {
+    const telegramId = Number(req.params.id);
+    const message = "Perfect! Now you can use /assets command";
+    await sendNotification(message, "HTML", telegramId);
+    return res.status(200);
   } catch (err) {
     res.status(500).send(err);
   }
