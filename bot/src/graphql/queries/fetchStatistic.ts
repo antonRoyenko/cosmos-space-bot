@@ -1,4 +1,4 @@
-import { request } from "@bot/utils/graphqlRequest";
+import { request } from "@bot/utils";
 import { MarketData, EmoneyMarketData } from "@bot/graphql/general/market_data";
 import { Tokenomics } from "@bot/graphql/general/tokenomics";
 import { LatestBlockHeight } from "@bot/graphql/general/block_height";

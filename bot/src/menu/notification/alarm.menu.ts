@@ -5,23 +5,23 @@ import {
   listAlarmsText,
   toggleAlarmActivity,
 } from "../callbacks";
-import { menuCreator } from "@bot/utils/menuCreator";
+import { menuCreator } from "@bot/utils";
 
 const menuList = [
   {
-    text: "Add alarm",
+    text: "➕ Add alarm",
     callback: addAlarmCallback,
   },
   { row: true },
   {
-    text: "Delete alarms",
+    text: "➖ Delete alarms",
     callback: deleteAlarmCallback,
   },
   {
     row: true,
   },
   {
-    text: "List alarms",
+    text: "📃 List alarms",
     callback: listAlarmsCallback,
   },
   {
@@ -35,7 +35,7 @@ const menuList = [
     row: true,
   },
   {
-    back: "Go back",
+    back: "<< Go back",
   },
 ];
 

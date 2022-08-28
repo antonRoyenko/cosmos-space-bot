@@ -41,6 +41,7 @@ import {
   timezoneMenu,
   networksAlarmMenu,
   networksResourcesMenu,
+  assetsMenu,
 } from "@bot/menu";
 
 export const bot = new Bot<Context>(config.BOT_TOKEN);
@@ -66,6 +67,7 @@ bot.use(walletMenu);
 bot.use(notificationMenu);
 bot.use(networksStatisticMenu);
 bot.use(networksResourcesMenu);
+bot.use(assetsMenu);
 walletMenu.register(walletRemoveMenu);
 notificationMenu.register(dailyReminderMenu);
 notificationMenu.register(alarmMenu);

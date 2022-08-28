@@ -6,8 +6,7 @@ import {
   fetchUnbondingBalance,
   fetchRewards,
 } from "./fetchBalance";
-import { getDenom } from "@bot/utils/getFilterDenom";
-import { formatToken } from "@bot/utils/formatToken";
+import { getDenom, formatToken } from "@bot/utils";
 import { BalanceData, ChainInfo } from "@bot/types/general";
 import { config } from "@bot/chains";
 import { cosmosConfig } from "@bot/chains/cosmos";

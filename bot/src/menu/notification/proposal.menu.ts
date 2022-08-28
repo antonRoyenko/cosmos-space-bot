@@ -7,6 +7,7 @@ import {
 } from "@bot/graphql/queries/governanceSubscription";
 import dayjs from "dayjs";
 
+// TODO find error gql.likecoin.forbole.com/v1/graphql
 export const proposalMenu = new Menu<Context>("governance", {
   autoAnswer: false,
 }).dynamic(async (ctx) => {
@@ -15,7 +16,8 @@ export const proposalMenu = new Menu<Context>("governance", {
   const { getAllNetworks } = networksService();
   const networks = await getAllNetworks();
 
-  for (const network of networks) {
+  for (let i = 0; i < networks.length; i++) {
+    const network = networks[i];
     const { isGovActive, updateGovernance } =
       await networksInNotificationService({
         ctx,
@@ -23,22 +25,25 @@ export const proposalMenu = new Menu<Context>("governance", {
       });
     const time = dayjs().toDate();
 
-    range
-      .text(
-        isGovActive ? `${network.fullName} 🔔` : `${network.fullName} 🔕`,
-        async (ctx) => {
-          if (!isGovActive) {
-            governanceSubscription(network.wsPublicUrl, ctx, time);
-          } else {
-            observer.unsubscribe();
-          }
-          await updateGovernance(time);
-          ctx.menu.update();
+    range.text(
+      isGovActive ? `🔔 ${network.fullName}` : `🔕 ${network.fullName}`,
+      async (ctx) => {
+        if (!isGovActive) {
+          governanceSubscription(network.wsPublicUrl, ctx, time);
+        } else {
+          observer.unsubscribe();
         }
-      )
-      .row();
+        await updateGovernance(time);
+        ctx.menu.update();
+      }
+    );
+
+    if ((i + 1) % 2 == 0) {
+      range.row();
+    }
   }
 
+  range.row();
   range.back("Back");
 
   return range;

@@ -31,7 +31,8 @@ export const networkTimeReminderMenu = new Menu<Context>(
       });
     const isActive = isNotificationTimeActive(time);
 
-    range.text(isActive ? `${time} ✅` : `${time} ❎`, async (ctx) => {
+    range.text(isActive ? `✅ ${time}` : `❎ ${time}`, async (ctx) => {
+      // TODO add flag emoji
       await updateNotificationReminderTime(time);
       ctx.menu.update();
     });
@@ -40,7 +41,7 @@ export const networkTimeReminderMenu = new Menu<Context>(
       range.row();
     }
   }
-  range.row().back("Go back");
+  range.row().back("<< Go back");
 
   return range;
 });

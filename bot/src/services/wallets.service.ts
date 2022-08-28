@@ -13,13 +13,6 @@ export const walletsService = (ctx?: Context) => {
     address: string,
     userId?: number
   ) => {
-    console.log({
-      data: {
-        userId: !userId ? user.id : userId,
-        networkId,
-        address,
-      },
-    });
     return await walletDao.createWallet({
       data: {
         userId: !userId ? user.id : userId,
@@ -29,10 +22,11 @@ export const walletsService = (ctx?: Context) => {
     });
   };
 
-  const getAllUserWallets = async () => {
+  const getAllUserWallets = async (id?: number) => {
+    const userId = id ?? user.id;
     return await walletDao.getAllWallets({
       where: {
-        userId: user.id,
+        userId: userId,
       },
     });
   };

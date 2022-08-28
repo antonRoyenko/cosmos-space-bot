@@ -19,7 +19,7 @@ export const networksReminderMenu = new Menu<Context>("reminderNetworks", {
       });
 
     range.text(
-      isNetworkActive ? `${network.fullName} 🔔` : `${network.fullName} 🔕`,
+      isNetworkActive ? `🔔 ${network.fullName}` : `🔕 ${network.fullName}`,
       async (ctx) => {
         await updateReminder();
         ctx.menu.update();
@@ -32,7 +32,7 @@ export const networksReminderMenu = new Menu<Context>("reminderNetworks", {
   }
 
   range.row();
-  range.back("Back");
+  range.back("<< Go back");
 
   return range;
 });

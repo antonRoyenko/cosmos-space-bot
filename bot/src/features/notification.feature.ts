@@ -7,7 +7,7 @@ import { timezoneMenu, alarmMenu } from "@bot/menu";
 import _ from "lodash";
 import { alarmPricesService, alarmsService } from "@bot/services";
 import { agreementKeyboard } from "@bot/menu/utils";
-import { isNumber } from "@bot/utils/isNumber";
+import { isNumber } from "@bot/utils";
 
 export const feature = router.route("notification");
 

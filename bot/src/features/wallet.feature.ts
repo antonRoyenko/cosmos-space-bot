@@ -5,13 +5,12 @@ import { walletMenu } from "@bot/menu";
 import { networksService, walletsService } from "@bot/services";
 import { bech32 } from "bech32";
 import { agreementKeyboard } from "@bot/menu/utils";
-import { isValidAddress } from "@bot/utils/isValid";
+import { isValidAddress } from "@bot/utils";
 import { config } from "@bot/chains";
 
 export const feature = router.route("wallet");
 
 feature.command("wallet", logHandle("handle /wallet"), async (ctx: Context) => {
-  ctx.session.step = "walletMenu";
   await ctx.reply("Choose", { reply_markup: walletMenu });
 });
 

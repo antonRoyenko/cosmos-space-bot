@@ -15,7 +15,7 @@ export const walletRemoveMenu = new Menu<Context>("walletRemove", {
     for (let i = 0; i < userWallets.length; i++) {
       const currWallet = userWallets[i];
       range
-        .text(currWallet.toString(), async (ctx) => {
+        .text(currWallet.address, async (ctx) => {
           await ctx.replyWithChatAction("typing");
           await removeUserWallet(currWallet.id);
           return ctx.reply(`Wallet ${currWallet} was successful removed`);

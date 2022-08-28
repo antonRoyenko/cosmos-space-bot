@@ -1,4 +1,4 @@
-import { request } from "@bot/utils/graphqlRequest";
+import { request } from "@bot/utils";
 import {
   AccountBalancesDocument,
   AccountDelegationBalanceDocument,
@@ -43,7 +43,7 @@ export const fetchUnbondingBalance = async (url: string, address: string) => {
     },
   };
   try {
-    return await request(url, AccountDelegationBalanceDocument, {
+    return await request(url, AccountUnbondingBalanceDocument, {
       address,
     });
   } catch (error) {

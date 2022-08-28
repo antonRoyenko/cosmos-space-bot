@@ -3,8 +3,7 @@ import {
   fetchTokenHistory,
   fetchTokenPrice as fetchTokenPriceApi,
 } from "./fetchTokenPrice";
-import { formatTokenPrice } from "@bot/utils/formatTokenPrice";
-import { calcTVLPercent } from "@bot/utils/calcTVLPercent";
+import { formatTokenPrice, calcTVLPercent } from "@bot/utils";
 import { CoinHistoryResponse } from "@bot/types/general";
 
 export async function getTokenPrice({
@@ -39,6 +38,9 @@ export async function getTokenPrice({
   apiId?: string;
 }) {
   const price = await fetchTokenPriceApi(publicUrl, denom);
+  if (price.tokenPrice.length === 0) {
+    return { price: 0 };
+  }
   const currentPrice = price.tokenPrice[0].price;
 
   if (!apiId) {
@@ -58,7 +60,7 @@ export const formatTokenHistory = (
   price: number
 ) => {
   const totalFiat = (total: number) => {
-    return `${formatTokenPrice(price * total)}$`;
+    return `${formatTokenPrice(price * total)}`;
   };
 
   const PNL = (amount: number) => {

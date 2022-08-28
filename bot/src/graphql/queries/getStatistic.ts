@@ -7,8 +7,7 @@ import {
 import Big from "big.js";
 import numeral from "numeral";
 import { ChainInfo, Coins, StatisticData } from "@bot/types/general";
-import { formatToken } from "@bot/utils/formatToken";
-import { getDenom } from "@bot/utils/getFilterDenom";
+import { formatToken, getDenom } from "@bot/utils";
 
 export const getStatistic = async (
   publicUrl: string,

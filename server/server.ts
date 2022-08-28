@@ -38,6 +38,7 @@ server.setErrorHandler(async (error, request, response) => {
 
     response.code(200).send({});
   } else {
+    console.log(44444);
     logger.error(error);
 
     response.status(500).send({ error: "Something went wrong" });
@@ -58,11 +59,22 @@ server.get("/metrics", async (req, res) => {
 server.post<postWalletRequest>("/update_wallet/:id", async (req, res) => {
   try {
     const { getNetwork } = networksService();
-    const { createUserWallet } = walletsService();
+    const { createUserWallet, getAllUserWallets } = walletsService();
     const { getUser } = usersService();
     const telegramId = Number(req.params.id);
+    if (isNaN(telegramId)) {
+      res.status(500).send({ error: "Please sign in via bot" });
+      return;
+      // res.status(500).send({ message: "Please sign in via bot" });
+    }
     const user = await getUser({ telegramId });
+    const userWallets = await getAllUserWallets(user?.id);
     const address = req.body.wallet;
+
+    if (userWallets.some((item) => item.address === address)) {
+      return req.body;
+    }
+
     const prefix = bech32.decode(address).prefix;
     const { network } = await getNetwork({ name: prefix });
 
@@ -70,6 +82,7 @@ server.post<postWalletRequest>("/update_wallet/:id", async (req, res) => {
 
     return req.body;
   } catch (err) {
+    console.log(123, err);
     res.status(500).send(err);
   }
 });

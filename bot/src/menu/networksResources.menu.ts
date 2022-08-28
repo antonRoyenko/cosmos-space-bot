@@ -15,12 +15,13 @@ export const networksResourcesMenu = new Menu<Context>("networksResources", {
   if (networks.length > 0) {
     for (let i = 0; i < networks.length; i++) {
       const network = networks[i];
-      range.text(network.fullName, async (ctx) => {
+      range.text(`${network.fullName}`, async (ctx) => {
         let output = "";
         function capitalizeFirstLetter(string: string) {
           return string.charAt(0).toUpperCase() + string.slice(1);
         }
 
+        // TODO remove preview
         const resource = (await getResource(network.resourceId)) || {
           site: "",
           discord: "",
@@ -32,7 +33,7 @@ export const networksResourcesMenu = new Menu<Context>("networksResources", {
         };
         for (const [key, value] of Object.entries(resource)) {
           if (typeof value === "string" && value.length > 0) {
-            output += `${capitalizeFirstLetter(key)}: ${value} \n`;
+            output += `🔘 <b>${capitalizeFirstLetter(key)}:</b> ${value} \n`;
           }
         }
 

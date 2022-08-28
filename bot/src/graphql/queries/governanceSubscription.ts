@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { createSubscriptionObservable } from "@bot/utils/apollo";
+import { createSubscriptionObservable } from "@bot/utils";
 import { ProposalsSubscriber } from "@bot/graphql/general/proposals";
 import gql from "graphql-tag";
 import { Subscription } from "@bot/types/general";

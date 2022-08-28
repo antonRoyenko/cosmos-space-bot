@@ -5,31 +5,32 @@ import {
   isReminderActiveText,
   toggleReminderActivity,
 } from "../callbacks";
-import { menuCreator } from "@bot/utils/menuCreator";
+import { menuCreator } from "@bot/utils";
 
 const menuList = [
   {
-    text: "Choose network",
+    text: "🛰 network",
     callback: chooseNetworkCallback,
   },
   {
     row: true,
   },
   {
-    text: "Choose Time",
+    text: "🕕 Time",
     callback: chooseTimeCallback,
   },
   {
     row: true,
   },
   {
-    text: "Choose Timezone",
+    text: "🌎 Timezone",
     callback: chooseTimezoneCallback,
   },
   {
     row: true,
   },
   {
+    // TODO fix menu creator
     text: isReminderActiveText,
     callback: toggleReminderActivity,
   },
@@ -37,7 +38,7 @@ const menuList = [
     row: true,
   },
   {
-    back: "Go back",
+    back: "<< Go back",
   },
 ];
 

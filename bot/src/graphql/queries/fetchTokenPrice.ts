@@ -1,7 +1,5 @@
-import { request } from "@bot/utils/graphqlRequest";
+import { request, getPnlDate, restRequest } from "@bot/utils";
 import { getTokenPriceByDate } from "@bot/constants/api";
-import { getPnlDate } from "@bot/utils/getPnlDate";
-import { restRequest } from "@bot/utils/restRequest";
 import { TokenPrice } from "@bot/graphql/general/token_price";
 import { TTokenPrice } from "@bot/types/general";
 
