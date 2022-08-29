@@ -30,7 +30,6 @@ const menuList = [
     row: true,
   },
   {
-    // TODO fix menu creator
     text: isReminderActiveText,
     callback: toggleReminderActivity,
   },

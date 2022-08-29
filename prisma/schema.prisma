@@ -70,12 +70,13 @@ model AlarmPrice {
 }
 
 model Wallet {
-  id        Int     @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   address   String
-  network   Network @relation(fields: [networkId], references: [id])
-  networkId Int     @map("network_id")
-  User      User    @relation(fields: [userId], references: [id])
-  userId    Int     @map("user_id")
+  network   Network    @relation(fields: [networkId], references: [id])
+  networkId Int        @map("network_id")
+  User      User       @relation(fields: [userId], references: [id])
+  userId    Int        @map("user_id")
+  createdAt DateTime   @default(now()) @map("created_at")
 
   @@map(name: "wallets")
 }

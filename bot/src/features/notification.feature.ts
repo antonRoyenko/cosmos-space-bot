@@ -8,6 +8,7 @@ import _ from "lodash";
 import { alarmPricesService, alarmsService } from "@bot/services";
 import { agreementKeyboard } from "@bot/menu/utils";
 import { isNumber } from "@bot/utils";
+import { getFlagEmoji } from "@bot/utils/getEmoji";
 
 export const feature = router.route("notification");
 
@@ -62,7 +63,9 @@ feature
 
     const parseCountry = getCountry(currentCountry.code);
     if (parseCountry?.timezones) {
-      ctx.session.timezone = parseCountry.timezones;
+      ctx.session.timezone = parseCountry.timezones.map(
+        (item) => `${getFlagEmoji(currentCountry.code)} ${item}`
+      );
 
       return ctx.reply("Choose your timezone", { reply_markup: timezoneMenu });
     }

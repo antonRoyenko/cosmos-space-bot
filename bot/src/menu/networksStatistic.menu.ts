@@ -60,9 +60,9 @@ async function statisticCallback(ctx: Context, network: Network) {
   const { first, seventh, fourteenth, thirty } = prices.PNL(1);
 
   return ctx.reply(
-    `<b>${communityPool?.displayDenom?.toUpperCase()} Price</b>: 🔥 💲${
+    `<b>${communityPool?.displayDenom?.toUpperCase()} Price: 🔥 💲${
       prices.price
-    } 🔥 \n\n` +
+    } 🔥</b> \n\n` +
       `<i>💸 APR</i> - ${formatTokenPrice(apr * 100)}% \n\n` +
       `<i>📊 Inflation</i> - ${formatTokenPrice(inflation * 100)}% \n\n` +
       `<i>🔝 Height</i> - ${height[0].height} \n\n` +

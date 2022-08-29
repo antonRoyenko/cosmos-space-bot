@@ -10,3 +10,11 @@ export function getNumberEmoji(num: number) {
 export function getPositiveOrNegativeEmoji(num: number) {
   return num >= 0 ? `📈 ${num}` : `📉 ${num}`;
 }
+
+export function getFlagEmoji(countryCode: string) {
+  const codePoints = countryCode
+    .toUpperCase()
+    .split("")
+    .map((char) => 127397 + char.charCodeAt(0));
+  return String.fromCodePoint(...codePoints);
+}

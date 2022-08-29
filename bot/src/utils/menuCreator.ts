@@ -36,7 +36,10 @@ export const menuCreator = (id: string, menuList: MenuList) => {
   const menu = new Menu<Context>(id);
 
   for (const item of menuList) {
-    if (typeof item.text === "string" && typeof item.callback === "function") {
+    if (
+      (typeof item.text === "string" || typeof item.text === "function") &&
+      typeof item.callback === "function"
+    ) {
       menu.text(item.text, item.callback);
     }
     if (item.row) {

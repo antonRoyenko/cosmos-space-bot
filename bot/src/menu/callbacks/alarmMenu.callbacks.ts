@@ -44,7 +44,7 @@ export async function deleteAlarmCallback(ctx: Context) {
 export async function listAlarmsText(ctx: Context): Promise<string> {
   const { isAlarmActive } = await notificationsService({ ctx });
 
-  return isAlarmActive ? "Enabled 🔔" : "Disabled 🔕";
+  return isAlarmActive ? "🔔 Enabled" : "🔕 Disabled";
 }
 
 export async function listAlarmsCallback(ctx: Context) {

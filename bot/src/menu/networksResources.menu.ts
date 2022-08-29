@@ -21,7 +21,6 @@ export const networksResourcesMenu = new Menu<Context>("networksResources", {
           return string.charAt(0).toUpperCase() + string.slice(1);
         }
 
-        // TODO remove preview
         const resource = (await getResource(network.resourceId)) || {
           site: "",
           discord: "",
@@ -37,7 +36,7 @@ export const networksResourcesMenu = new Menu<Context>("networksResources", {
           }
         }
 
-        return ctx.reply(output);
+        return ctx.reply(output, { disable_web_page_preview: true });
       });
       if ((i + 1) % 2 == 0) {
         range.row();

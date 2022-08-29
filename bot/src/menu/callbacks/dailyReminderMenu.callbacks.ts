@@ -20,7 +20,7 @@ export async function chooseTimezoneCallback(ctx: Context) {
 export async function isReminderActiveText(ctx: Context) {
   const { isReminderActive } = await notificationsService({ ctx });
 
-  return isReminderActive ? "Enabled 🔔" : "Disabled 🔕";
+  return isReminderActive ? " 🔔 Enabled" : "🔕 Disabled";
 }
 
 export async function toggleReminderActivity(ctx: Context & MenuFlavor) {

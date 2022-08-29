@@ -27,12 +27,14 @@ export const assetsMenu = new Menu<Context>("assets", {
   range.text("All wallets", async () => {
     await ctx.replyWithChatAction("typing");
     let output = "";
+
     await Promise.all(
-      // TODO sort by date
-      userWallets.map(async (wallet, index) => {
-        const callbackStr = await assetsCallback(wallet, index + 1);
-        output += `${callbackStr}`;
-      })
+      userWallets
+        .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+        .map(async (wallet, index) => {
+          const callbackStr = await assetsCallback(wallet, index + 1);
+          output += `${callbackStr}`;
+        })
     );
 
     return ctx.reply(output);

@@ -7,7 +7,6 @@ import {
 } from "@bot/graphql/queries/governanceSubscription";
 import dayjs from "dayjs";
 
-// TODO find error gql.likecoin.forbole.com/v1/graphql
 export const proposalMenu = new Menu<Context>("governance", {
   autoAnswer: false,
 }).dynamic(async (ctx) => {
@@ -15,8 +14,11 @@ export const proposalMenu = new Menu<Context>("governance", {
 
   const { getAllNetworks } = networksService();
   const networks = await getAllNetworks();
+  const sortedNetworks = networks.sort((a, b) =>
+    a.fullName.localeCompare(b.fullName)
+  );
 
-  for (let i = 0; i < networks.length; i++) {
+  for (let i = 0; i < sortedNetworks.length; i++) {
     const network = networks[i];
     const { isGovActive, updateGovernance } =
       await networksInNotificationService({
@@ -28,11 +30,16 @@ export const proposalMenu = new Menu<Context>("governance", {
     range.text(
       isGovActive ? `🔔 ${network.fullName}` : `🔕 ${network.fullName}`,
       async (ctx) => {
-        if (!isGovActive) {
-          governanceSubscription(network.wsPublicUrl, ctx, time);
-        } else {
-          observer.unsubscribe();
+        try {
+          if (!isGovActive) {
+            governanceSubscription(network.wsPublicUrl, ctx, time);
+          } else {
+            observer.unsubscribe();
+          }
+        } catch (e) {
+          console.error(e);
         }
+
         await updateGovernance(time);
         ctx.menu.update();
       }

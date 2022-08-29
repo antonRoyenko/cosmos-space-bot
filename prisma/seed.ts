@@ -10,7 +10,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
     wsPublicUrl: "wss://gql.agoric.forbole.com/v1/graphql",
     resource: {
       create: {
-        site: "https://agoric.com/",
+        site: "https://agoric.com",
         discord: "https://agoric.com/discord",
         twitter: "https://twitter.com/agoric",
         youtube: "https://www.youtube.com/c/agoric",
@@ -27,7 +27,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
     wsPublicUrl: "wss://gql.assetmantle.forbole.com/v1/graphql",
     resource: {
       create: {
-        site: "https://assetmantle.one/",
+        site: "https://assetmantle.one",
         discord: "https://discord.gg/BSdBQ4495d",
         twitter: "https://twitter.com/AssetMantle",
         blog: "https://assetmantle.medium.com/",
@@ -43,7 +43,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
     wsPublicUrl: "wss://gql.band.forbole.com/v1/graphql",
     resource: {
       create: {
-        site: "https://bandprotocol.com/",
+        site: "https://bandprotocol.com",
         discord: "https://discord.com/invite/3t4bsY7",
         twitter: "https://twitter.com/BandProtocol",
         blog: "https://medium.com/bandprotocol",
@@ -59,7 +59,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
     wsPublicUrl: "wss://gql.bitsong.forbole.com/v1/graphql",
     resource: {
       create: {
-        site: "https://bitsong.io/",
+        site: "https://bitsong.io",
         discord: "https://discord.com/invite/mZC9Yk3",
         twitter: "https://twitter.com/BitSongOfficial",
         blog: "https://bitsongofficial.medium.com/",
@@ -93,7 +93,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
     wsPublicUrl: "wss://gql.comdex.forbole.com/v1/graphql",
     resource: {
       create: {
-        site: "https://comdex.one/",
+        site: "https://comdex.one",
         discord: "https://bit.ly/ComdexOfficialDiscord",
         twitter: "https://twitter.com/ComdexOfficial",
         blog: "https://blog.comdex.one/",
@@ -110,7 +110,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
     wsPublicUrl: "wss://gql.cosmos.forbole.com/v1/graphql",
     resource: {
       create: {
-        site: "https://cosmos.network/",
+        site: "https://cosmos.network",
         discord: "https://discord.gg/cosmosnetwork",
         twitter: "https://twitter.com/cosmos",
         youtube: "https://www.youtube.com/c/CosmosProject",
@@ -143,7 +143,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
     wsPublicUrl: "wss://gql.desmos.forbole.com/v1/graphql",
     resource: {
       create: {
-        site: "https://www.desmos.network/",
+        site: "https://www.desmos.network",
         discord: "https://discord.desmos.network/",
         twitter: "https://discord.desmos.network/",
         youtube: "https://www.youtube.com/channel/UCWsStillLytB4OyWu3-vS4w/",
@@ -188,10 +188,10 @@ const networkData: Prisma.NetworkCreateInput[] = [
     name: "like",
     fullName: "LikeCoin",
     publicUrl: "https://gql.likecoin.forbole.com/v1/graphql",
-    wsPublicUrl: "gql.likecoin.forbole.com/v1/graphql",
+    wsPublicUrl: "wss://gql.likecoin.forbole.com/v1/graphql",
     resource: {
       create: {
-        site: "https://about.like.co/",
+        site: "https://about.like.co",
         discord: "https://discord.com/invite/likecoin",
         twitter: "https://twitter.com/likecoin",
         blog: "https://medium.com/likecoin",
@@ -220,10 +220,10 @@ const networkData: Prisma.NetworkCreateInput[] = [
     name: "pb",
     fullName: "Provenance",
     publicUrl: "https://gql.provenance.forbole.com/v1/graphql",
-    wsPublicUrl: "gql.likecoin.forbole.com/v1/graphql",
+    wsPublicUrl: "wss://gql.provenance.forbole.com/v1/graphql",
     resource: {
       create: {
-        site: "https://www.provenance.io/",
+        site: "https://www.provenance.io",
         discord: "https://discord.gg/kNZC8nwCFP",
         twitter: "https://twitter.com/provenancefdn",
         blog: "https://medium.com/@provenanceblockchain",
@@ -238,7 +238,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
     wsPublicUrl: "wss://gql.regen.forbole.com/v1/graphql",
     resource: {
       create: {
-        site: "https://www.regen.network/",
+        site: "https://www.regen.network",
         discord: "https://discord.gg/regen-network",
         twitter: "http://twitter.com/regen_network",
         youtube: "https://www.youtube.com/channel/UCICD2WukTY0MbQdQ9Quew3g",
@@ -256,7 +256,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
     wsPublicUrl: "wss://gql.rizon.forbole.com/v1/graphql",
     resource: {
       create: {
-        site: "https://rizon.world/",
+        site: "https://rizon.world",
         discord: "https://discord.com/invite/DvZFA7mpuX",
         twitter: "https://twitter.com/hdac_rizon",
         youtube: "https://www.youtube.com/c/HdacTechnologyOfficial",
@@ -273,7 +273,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
     wsPublicUrl: "wss://gql.sifchain.forbole.com/v1/graphql",
     resource: {
       create: {
-        site: "https://www.sifchain.finance/",
+        site: "https://www.sifchain.finance",
         discord: "https://discord.gg/sifchain",
         twitter: "https://twitter.com/sifchain",
         blog: "https://medium.com/sifchain-finance",
