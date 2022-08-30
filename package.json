@@ -12,7 +12,8 @@
     "dev": "tsc-watch --onSuccess \"npm run start\"",
     "start": "node dist/server/run.js",
     "prepare": "husky install",
-    "graphql:codegen": "graphql-codegen -c ./src/graphql/desmos/codegen.yml"
+    "graphql:codegen": "graphql-codegen -c ./src/graphql/desmos/codegen.yml",
+    "heroku-prebuild": "npm i --only=prod && npx prisma migrate deploy"
   },
   "author": "deptyped <deptyped@gmail.com>",
   "license": "MIT",
@@ -116,7 +117,7 @@
     "@server": "dist/server"
   },
   "engines": {
-    "node": "17.0",
-    "npm": "8.1"
+    "node": "16.13.2",
+    "npm": "8.1.2"
   }
 }
