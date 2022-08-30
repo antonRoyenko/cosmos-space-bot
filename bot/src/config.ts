@@ -20,5 +20,4 @@ export const config = cleanEnv(process.env, {
   BOT_TOKEN: str(),
   BOT_WEBHOOK: str(),
   BOT_ADMIN_USER_ID: num(),
-  DESMOS_PUBLIC_GRAPHQL_URL: str(),
 });
