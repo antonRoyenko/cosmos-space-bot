@@ -109,7 +109,7 @@
     "*.ts": "npm run lint"
   },
   "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+    "seed": "ts-node prisma/seed.ts"
   },
   "_moduleAliases": {
     "@bot": "dist/bot/src",

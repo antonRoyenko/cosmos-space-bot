@@ -285,9 +285,6 @@ const networkData: Prisma.NetworkCreateInput[] = [
 ];
 
 async function main() {
-  console.log(`start remove all data ...`);
-  await prisma.network.deleteMany({});
-  console.log(`Removing finished ...`);
   console.log(`Start seeding ...`);
   for (const u of networkData) {
     const network = await prisma.network.create({
