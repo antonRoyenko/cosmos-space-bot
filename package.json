@@ -11,7 +11,6 @@
     "build": "npm run clean && tsc",
     "dev": "tsc-watch --onSuccess \"npm run start\"",
     "start": "node dist/server/run.js",
-    "prepare": "husky install",
     "graphql:codegen": "graphql-codegen -c ./src/graphql/desmos/codegen.yml",
     "heroku-prebuild": "npm i --only=prod && npx prisma migrate deploy"
   },
