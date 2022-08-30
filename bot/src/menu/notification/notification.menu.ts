@@ -5,21 +5,21 @@ import { menuCreator } from "@bot/utils/menuCreator";
 
 const menuList = [
   {
-    text: "🗓 Daily reminder",
+    text: "🗓 Set Up Daily Report Reminders",
     callback: (ctx: Context) =>
-      ctx.reply("Choose 123", { reply_markup: dailyReminderMenu }),
+      ctx.reply("Choose the action", { reply_markup: dailyReminderMenu }),
   },
   { row: true },
   {
-    text: "⏰ Price alarm",
+    text: "⏰ Crypto price alert",
     callback: (ctx: Context) =>
-      ctx.reply("Choose 123", { reply_markup: alarmMenu }),
+      ctx.reply("Choose the action", { reply_markup: alarmMenu }),
   },
   { row: true },
   {
     text: "📝 Proposals",
     callback: (ctx: Context) =>
-      ctx.reply("Choose proposal network(s)", {
+      ctx.reply("Choose the network(s)", {
         reply_markup: proposalMenu,
       }),
   },

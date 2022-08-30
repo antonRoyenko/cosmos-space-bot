@@ -92,7 +92,7 @@ bot.use(notificationFeature);
 router.otherwise(
   async (ctx) =>
     await ctx.reply(
-      "Sorry, I don't understand you, please use /help for description command"
+      "Sorry, I don't understand you, please use /help to get the full command list"
     )
 );
 bot.use(router);

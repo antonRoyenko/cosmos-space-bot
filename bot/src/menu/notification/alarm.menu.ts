@@ -9,19 +9,19 @@ import { menuCreator } from "@bot/utils";
 
 const menuList = [
   {
-    text: "➕ Add alarm",
+    text: "➕ Add alert",
     callback: addAlarmCallback,
   },
   { row: true },
   {
-    text: "➖ Delete alarms",
+    text: "➖ Delete alert",
     callback: deleteAlarmCallback,
   },
   {
     row: true,
   },
   {
-    text: "📃 List alarms",
+    text: "📃 Alerts list",
     callback: listAlarmsCallback,
   },
   {

@@ -5,16 +5,20 @@ import { notificationsService } from "@bot/services";
 import { MenuFlavor } from "@grammyjs/menu";
 
 export async function chooseNetworkCallback(ctx: Context) {
-  await ctx.reply("Choose 234", { reply_markup: networksReminderMenu });
+  await ctx.reply("Please, choose network", {
+    reply_markup: networksReminderMenu,
+  });
 }
 
 export async function chooseTimeCallback(ctx: Context) {
-  await ctx.reply("Choose Time", { reply_markup: networkTimeReminderMenu });
+  await ctx.reply("Please, choose alarm time", {
+    reply_markup: networkTimeReminderMenu,
+  });
 }
 
 export async function chooseTimezoneCallback(ctx: Context) {
   ctx.session.step = "timezone";
-  await ctx.reply("Write your country for timezone detection");
+  await ctx.reply("Fill in the country to detect your timezone");
 }
 
 export async function isReminderActiveText(ctx: Context) {

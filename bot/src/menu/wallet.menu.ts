@@ -13,10 +13,10 @@ export const walletMenu = new Menu<Context>("wallets", {
     .url("🔑 Via Keplr", `http://127.0.0.1:3001?telegram-id=${ctx.from?.id}`)
     .text("👇 Manually", (ctx) => {
       ctx.session.step = "wallet";
-      return ctx.reply("Enter addreess of any cosmos chain");
+      return ctx.reply("Enter your address");
     })
     .row()
-    .text("💳 Wallet(s) list", async (ctx) => {
+    .text("💳 List of Wallets", async (ctx) => {
       let wallets = "";
       const { getAllUserWallets } = walletsService(ctx);
       const userWallets = await getAllUserWallets();
@@ -29,8 +29,8 @@ export const walletMenu = new Menu<Context>("wallets", {
       await ctx.reply(wallets);
     })
     .row()
-    .text("🗑 Delete wallet", (ctx) =>
-      ctx.reply("Choose wallet which you want remove", {
+    .text("🗑 Delete a wallet", (ctx) =>
+      ctx.reply("Choose the wallet that you want to remove", {
         reply_markup: walletRemoveMenu,
       })
     );

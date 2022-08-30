@@ -18,7 +18,7 @@ export const timezoneMenu = new Menu<Context>("timezoneMenu", {
           await updateUser({
             timezone,
           });
-          await ctx.reply("Timezone was saved", {
+          await ctx.reply("Timezone saved", {
             reply_markup: dailyReminderMenu,
           });
         })

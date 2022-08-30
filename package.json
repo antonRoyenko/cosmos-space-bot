@@ -114,5 +114,9 @@
   "_moduleAliases": {
     "@bot": "dist/bot/src",
     "@server": "dist/server"
+  },
+  "engines": {
+    "node": "17.0",
+    "npm": "8.1"
   }
 }

@@ -9,7 +9,7 @@ import { menuCreator } from "@bot/utils";
 
 const menuList = [
   {
-    text: "🛰 network",
+    text: "🛰 Networks",
     callback: chooseNetworkCallback,
   },
   {

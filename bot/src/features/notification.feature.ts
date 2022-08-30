@@ -16,7 +16,7 @@ feature.command(
   "notification",
   logHandle("handle /notification"),
   async (ctx) => {
-    await ctx.reply("Choose", { reply_markup: notificationMenu });
+    await ctx.reply("Choose the Action", { reply_markup: notificationMenu });
   }
 );
 
@@ -91,5 +91,5 @@ feature.callbackQuery(/^deleteAlarm:/, async (ctx) => {
   const { removeAlarmPrice } = alarmPricesService();
   await removeAlarmPrice(Number(alarmPriceId));
   ctx.session.step = "notification";
-  await ctx.reply("Price was removed", { reply_markup: notificationMenu });
+  await ctx.reply("Alarm removed", { reply_markup: notificationMenu });
 });

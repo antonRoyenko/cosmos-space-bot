@@ -5,5 +5,7 @@ import { networksStatisticMenu } from "@bot/menu";
 export const feature = router.route("statistic");
 
 feature.command("statistic", logHandle("handle /statistic"), async (ctx) => {
-  await ctx.reply("Choose", { reply_markup: networksStatisticMenu });
+  await ctx.reply("Choose the Network", {
+    reply_markup: networksStatisticMenu,
+  });
 });

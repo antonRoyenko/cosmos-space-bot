@@ -11,12 +11,15 @@ import { config } from "@bot/chains";
 export const feature = router.route("wallet");
 
 feature.command("wallet", logHandle("handle /wallet"), async (ctx: Context) => {
-  await ctx.reply("Choose", { reply_markup: walletMenu });
+  await ctx.reply("Choose the Action", {
+    reply_markup: walletMenu,
+  });
 });
 
 feature
   .filter((ctx) => ctx.session.step === "wallet")
   .on("message:text", logHandle("handle wallet"), async (ctx) => {
+    console.log(444, ctx.session.step);
     await ctx.replyWithChatAction("typing");
     const { getNetwork } = networksService();
     const { createUserWallet, getAllUserWallets } = walletsService(ctx);
@@ -25,7 +28,7 @@ feature
     const parsedValue = address.replace(/\s+/g, "");
 
     if (!isValidAddress(parsedValue)) {
-      return ctx.reply("Please enter valid address");
+      return ctx.reply("Enter a valid address");
     }
 
     const prefix = bech32.decode(address).prefix;
@@ -34,7 +37,7 @@ feature
     });
 
     if (!isValidChain) {
-      return ctx.reply("I'm don't support this chain");
+      return ctx.reply("This network is not supported");
     }
 
     const { network } = await getNetwork({ name: prefix });
@@ -63,5 +66,5 @@ feature
   .filter((ctx) => ctx.session.step === "wallet")
   .callbackQuery("no", async (ctx) => {
     ctx.session.step = undefined;
-    return ctx.reply("Perfect! Now you can use /assets command");
+    return ctx.reply("Perfect! Use /assets command");
   });

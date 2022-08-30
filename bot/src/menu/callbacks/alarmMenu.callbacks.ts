@@ -39,7 +39,9 @@ export async function deleteAlarmCallback(ctx: Context) {
     });
   }
 
-  await ctx.reply("Choose remove item", { reply_markup: inlineKeyboard });
+  await ctx.reply("Choose the wallet that you want to remove", {
+    reply_markup: inlineKeyboard,
+  });
 }
 export async function listAlarmsText(ctx: Context): Promise<string> {
   const { isAlarmActive } = await notificationsService({ ctx });
