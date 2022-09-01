@@ -9,15 +9,17 @@ import { alarmPricesService, alarmsService } from "@bot/services";
 import { agreementKeyboard } from "@bot/menu/utils";
 import { isNumber } from "@bot/utils";
 import { getFlagEmoji } from "@bot/utils/getEmoji";
+import { en } from "@bot/constants/en";
 
 export const feature = router.route("notification");
 
 feature.command(
-  "notification",
+  en.notification.command,
   logHandle("handle /notification"),
-  async (ctx) => {
-    await ctx.reply("Choose the Action", { reply_markup: notificationMenu });
-  }
+  async (ctx) =>
+    await ctx.reply(en.notification.menu.title, {
+      reply_markup: notificationMenu,
+    })
 );
 
 feature
@@ -27,12 +29,12 @@ feature
     const price = ctx.message.text || "";
 
     if (price.includes("$")) {
-      await ctx.reply("Number should be without $");
+      await ctx.reply(en.notification.alarmMenu.incorrectNumber);
       return;
     }
 
     if (!isNumber(price)) {
-      await ctx.reply("Price is incorrect");
+      await ctx.reply(en.notification.alarmMenu.incorrectPrice);
       return;
     }
 
@@ -40,7 +42,7 @@ feature
       const { updateAlarmNetworks } = await alarmsService({ ctx });
       await updateAlarmNetworks(price, network.id);
 
-      await ctx.reply(`Do you want add more ?`, {
+      await ctx.reply(en.addMoreQuestion, {
         reply_markup: agreementKeyboard,
       });
     }
@@ -58,7 +60,7 @@ feature
     };
 
     if (!currentCountry.code) {
-      return ctx.reply("Incorrect name country");
+      return ctx.reply(en.notification.reminderMenu.incorrectCountry);
     }
 
     const parseCountry = getCountry(currentCountry.code);
@@ -67,21 +69,27 @@ feature
         (item) => `${getFlagEmoji(currentCountry.code)} ${item}`
       );
 
-      return ctx.reply("Choose your timezone", { reply_markup: timezoneMenu });
+      return ctx.reply(en.notification.reminderMenu.chooseTimezone, {
+        reply_markup: timezoneMenu,
+      });
     }
   });
 
 feature
   .filter((ctx) => ctx.session.step === "notification")
-  .callbackQuery("yes", async (ctx) => {
-    await ctx.reply(`Add one more price alarm`);
-  });
+  .callbackQuery(
+    "yes",
+    async (ctx) => await ctx.reply(en.notification.alarmMenu.addMorePrice)
+  );
 
 feature
   .filter((ctx) => ctx.session.step === "notification")
   .callbackQuery("no", async (ctx) => {
     ctx.session.alarmNetwork = undefined;
-    await ctx.reply("Alarm saved", { reply_markup: alarmMenu });
+
+    await ctx.reply(en.notification.alarmMenu.alarmSaved, {
+      reply_markup: alarmMenu,
+    });
   });
 
 feature.callbackQuery(/^deleteAlarm:/, async (ctx) => {
@@ -91,5 +99,8 @@ feature.callbackQuery(/^deleteAlarm:/, async (ctx) => {
   const { removeAlarmPrice } = alarmPricesService();
   await removeAlarmPrice(Number(alarmPriceId));
   ctx.session.step = "notification";
-  await ctx.reply("Alarm removed", { reply_markup: notificationMenu });
+
+  await ctx.reply(en.notification.alarmMenu.alarmRemoved, {
+    reply_markup: notificationMenu,
+  });
 });

@@ -15,3 +15,5 @@ export { isValidAddress } from "./isValid";
 export { menuCreator } from "./menuCreator";
 export { nFormatter } from "./nFormatter";
 export { restRequest } from "./restRequest";
+export { template } from "./template";
+export { capitalizeFirstLetter } from "./capitalizeFirstLetter";

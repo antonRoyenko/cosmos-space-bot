@@ -21,4 +21,5 @@ export const config = cleanEnv(process.env, {
   BOT_WEBHOOK: str(),
   BOT_ADMIN_USER_ID: num(),
   PORT: num(),
+  UI_URL: str(),
 });

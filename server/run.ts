@@ -11,9 +11,10 @@ import { handleGracefulShutdown } from "@bot/helpers/graceful-shutdown-handler";
 prisma.$on("beforeExit", handleGracefulShutdown);
 
 const run = async () => {
-  console.log(1111, config.isProd);
   if (config.isProd) {
     server.listen({ port: config.PORT, host: config.BOT_SERVER_HOST }, () => {
+      server.cron.startAllJobs();
+
       bot.api
         .setWebhook(config.BOT_WEBHOOK, {
           allowed_updates: config.BOT_ALLOWED_UPDATES,
@@ -21,11 +22,14 @@ const run = async () => {
         .catch((err) => logger.error(err));
     });
   } else {
-    server.listen({ host: config.BOT_SERVER_HOST, port: 3000 }, (err) => {
-      if (err) throw err;
-      server.cron.startAllJobs();
-      console.log("Server listening on http://localhost:3000");
-    });
+    server.listen(
+      { host: config.BOT_SERVER_HOST, port: config.PORT },
+      (err) => {
+        if (err) throw err;
+        server.cron.startAllJobs();
+        console.log("Server listening on http://localhost:3000");
+      }
+    );
 
     bot.start({
       allowed_updates: config.BOT_ALLOWED_UPDATES,

@@ -2,7 +2,9 @@ import { Menu, MenuRange } from "@grammyjs/menu";
 import { Context } from "@bot/types";
 import { walletRemoveMenu } from "@bot/menu";
 import { walletsService } from "@bot/services";
-import { getNumberEmoji, getPositiveOrNegativeEmoji } from "@bot/utils";
+import { getNumberEmoji, template } from "@bot/utils";
+import { en } from "@bot/constants/en";
+import { config } from "@bot/config";
 
 export const walletMenu = new Menu<Context>("wallets", {
   autoAnswer: false,
@@ -10,27 +12,31 @@ export const walletMenu = new Menu<Context>("wallets", {
   ctx.session.step = undefined;
   const range = new MenuRange<Context>();
   range
-    .url("🔑 Via Keplr", `http://127.0.0.1:3001?telegram-id=${ctx.from?.id}`)
-    .text("👇 Manually", (ctx) => {
+    .url(en.wallet.menu.keplr, `${config.UI_URL}?telegram-id=${ctx.from?.id}`)
+    .text(en.wallet.menu.manually, (ctx) => {
       ctx.session.step = "wallet";
-      return ctx.reply("Enter your address");
+      return ctx.reply(en.wallet.addAddress);
     })
     .row()
-    .text("💳 List of Wallets", async (ctx) => {
+    .text(en.wallet.menu.list, async (ctx) => {
       let wallets = "";
       const { getAllUserWallets } = walletsService(ctx);
       const userWallets = await getAllUserWallets();
 
       userWallets.forEach(
         ({ address }, key) =>
-          (wallets += `Wallet ${getNumberEmoji(key + 1)} - ${address} \n\n`)
+          (wallets +=
+            template(en.wallet.showWallet, {
+              number: getNumberEmoji(key + 1),
+              address,
+            }) + "\n\n")
       );
 
       await ctx.reply(wallets);
     })
     .row()
-    .text("🗑 Delete a wallet", (ctx) =>
-      ctx.reply("Choose the wallet that you want to remove", {
+    .text(en.wallet.menu.delete, (ctx) =>
+      ctx.reply(en.wallet.deleteWallet, {
         reply_markup: walletRemoveMenu,
       })
     );

@@ -6,6 +6,7 @@ export const feature = router.route("proposal");
 
 feature.command("proposal", logHandle("handle /proposal"), async (ctx) => {
   await ctx.replyWithChatAction("typing");
+  // TODO add proposals menu
   let output = "";
 
   const { proposals, activeProposals } = await getProposals();

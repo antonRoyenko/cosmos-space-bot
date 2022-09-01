@@ -2,6 +2,8 @@ import { Menu, MenuRange } from "@grammyjs/menu";
 import { networksService } from "@bot/services";
 import { Context } from "@bot/types";
 import { getTokenPrice } from "@bot/graphql/queries/getTokenPrice";
+import { template } from "@bot/utils";
+import { en } from "@bot/constants/en";
 
 export const networksAlarmMenu = new Menu<Context>("alarmNetworks", {
   autoAnswer: false,
@@ -26,7 +28,10 @@ export const networksAlarmMenu = new Menu<Context>("alarmNetworks", {
         const { price } = await getTokenPrice({ publicUrl, denom });
 
         await ctx.reply(
-          `Current ${network.fullName} price - ${price}$ is, please put alarm price`
+          template(en.notification.alarmMenu.alarmPriceInput, {
+            networkName: network.fullName,
+            price: `${price}`,
+          })
         );
       });
 
@@ -37,7 +42,7 @@ export const networksAlarmMenu = new Menu<Context>("alarmNetworks", {
   }
 
   range.row();
-  range.back("Back");
+  range.back(en.back);
 
   return range;
 });

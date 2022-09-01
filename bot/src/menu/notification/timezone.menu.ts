@@ -15,8 +15,9 @@ export const timezoneMenu = new Menu<Context>("timezoneMenu", {
       range
         .text(timezone, async (ctx) => {
           const { updateUser } = usersService(ctx);
+          const regex = /[a-zA-Z]|[/]/g;
           await updateUser({
-            timezone,
+            timezone: timezone.match(regex)?.join(""),
           });
           await ctx.reply("Timezone saved", {
             reply_markup: dailyReminderMenu,

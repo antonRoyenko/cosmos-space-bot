@@ -6,22 +6,23 @@ import {
   toggleAlarmActivity,
 } from "../callbacks";
 import { menuCreator } from "@bot/utils";
+import { en } from "@bot/constants/en";
 
 const menuList = [
   {
-    text: "➕ Add alert",
+    text: en.notification.alarmMenu.add,
     callback: addAlarmCallback,
   },
   { row: true },
   {
-    text: "➖ Delete alert",
+    text: en.notification.alarmMenu.delete,
     callback: deleteAlarmCallback,
   },
   {
     row: true,
   },
   {
-    text: "📃 Alerts list",
+    text: en.notification.alarmMenu.list,
     callback: listAlarmsCallback,
   },
   {
@@ -35,7 +36,7 @@ const menuList = [
     row: true,
   },
   {
-    back: "<< Go back",
+    back: en.back,
   },
 ];
 

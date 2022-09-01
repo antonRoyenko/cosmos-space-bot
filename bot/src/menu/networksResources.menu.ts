@@ -1,6 +1,8 @@
 import { Menu, MenuRange } from "@grammyjs/menu";
 import { networksService, resourcesService } from "@bot/services";
 import { Context } from "@bot/types";
+import { capitalizeFirstLetter, template } from "@bot/utils";
+import { en } from "@bot/constants/en";
 
 export const networksResourcesMenu = new Menu<Context>("networksResources", {
   autoAnswer: false,
@@ -17,9 +19,6 @@ export const networksResourcesMenu = new Menu<Context>("networksResources", {
       const network = networks[i];
       range.text(`${network.fullName}`, async (ctx) => {
         let output = "";
-        function capitalizeFirstLetter(string: string) {
-          return string.charAt(0).toUpperCase() + string.slice(1);
-        }
 
         const resource = (await getResource(network.resourceId)) || {
           site: "",
@@ -30,9 +29,12 @@ export const networksResourcesMenu = new Menu<Context>("networksResources", {
           github: "",
           telegram: "",
         };
-        for (const [key, value] of Object.entries(resource)) {
-          if (typeof value === "string" && value.length > 0) {
-            output += `🔘 <b>${capitalizeFirstLetter(key)}:</b> ${value} \n`;
+        for (const [item, link] of Object.entries(resource)) {
+          if (typeof link === "string" && link.length > 0) {
+            output += template(en.resources.menu.resourceItem, {
+              item: capitalizeFirstLetter(item),
+              link,
+            });
           }
         }
 
@@ -45,7 +47,6 @@ export const networksResourcesMenu = new Menu<Context>("networksResources", {
   }
 
   range.row();
-  range.back("Back");
 
   return range;
 });

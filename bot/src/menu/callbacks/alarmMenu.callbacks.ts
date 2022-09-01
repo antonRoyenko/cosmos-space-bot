@@ -9,9 +9,13 @@ import {
 import { InlineKeyboard } from "grammy";
 import { MenuFlavor } from "@grammyjs/menu";
 import _ from "lodash";
+import { en } from "@bot/constants/en";
+import { template } from "@bot/utils";
 
 export async function addAlarmCallback(ctx: Context) {
-  await ctx.reply("Choose Network", { reply_markup: networksAlarmMenu });
+  await ctx.reply(en.notification.alarmMenu.chooseNetworkTitle, {
+    reply_markup: networksAlarmMenu,
+  });
 }
 
 export async function deleteAlarmCallback(ctx: Context) {
@@ -32,25 +36,30 @@ export async function deleteAlarmCallback(ctx: Context) {
     alarmPrices.forEach((item) => {
       inlineKeyboard
         .text(
-          `${network.fullName} price - ${item.price}$`,
+          template(en.notification.alarmMenu.coinPrice, {
+            name: network.fullName,
+            price: `${item.price}`,
+          }),
           `deleteAlarm:alarmPriceId=${item.id}`
         )
         .row();
     });
   }
 
-  await ctx.reply("Choose the wallet that you want to remove", {
+  await ctx.reply(en.notification.alarmMenu.removeWalletTitle, {
     reply_markup: inlineKeyboard,
   });
 }
 export async function listAlarmsText(ctx: Context): Promise<string> {
   const { isAlarmActive } = await notificationsService({ ctx });
 
-  return isAlarmActive ? "🔔 Enabled" : "🔕 Disabled";
+  return isAlarmActive
+    ? en.notification.alarmMenu.enabled
+    : en.notification.alarmMenu.disabled;
 }
 
 export async function listAlarmsCallback(ctx: Context) {
-  let output = "You have alarms on: \n";
+  let output = en.notification.alarmMenu.alarmList;
   const { getAllAlarms } = await alarmsService({ ctx });
   const { getNetwork } = networksService();
   const { getAllAlarmPrices } = alarmPricesService();
@@ -63,7 +72,10 @@ export async function listAlarmsCallback(ctx: Context) {
     const alarmPrices = await getAllAlarmPrices(alarm.id);
     const priceArr = _.map(alarmPrices, "price");
 
-    output += `${network.fullName} at price: ${priceArr.join("$, ")}$ \n`;
+    output += template(en.notification.alarmMenu.alarmListItem, {
+      networkName: network.fullName,
+      prices: `${priceArr.join("$, ")}`,
+    });
   }
 
   return ctx.reply(output);

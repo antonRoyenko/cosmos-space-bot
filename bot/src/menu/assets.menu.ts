@@ -2,6 +2,7 @@ import { Menu, MenuRange } from "@grammyjs/menu";
 import { Context } from "@bot/types";
 import { walletsService } from "@bot/services";
 import { assetsCallback } from "@bot/menu/callbacks";
+import { en } from "@bot/constants/en";
 
 export const assetsMenu = new Menu<Context>("assets", {
   autoAnswer: false,
@@ -24,7 +25,7 @@ export const assetsMenu = new Menu<Context>("assets", {
   }
 
   range.row();
-  range.text("All wallets", async () => {
+  range.text(en.assets.menu.all, async () => {
     await ctx.replyWithChatAction("typing");
     let output = "";
 

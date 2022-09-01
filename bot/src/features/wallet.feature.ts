@@ -7,19 +7,23 @@ import { bech32 } from "bech32";
 import { agreementKeyboard } from "@bot/menu/utils";
 import { isValidAddress } from "@bot/utils";
 import { config } from "@bot/chains";
+import { en } from "@bot/constants/en";
 
 export const feature = router.route("wallet");
 
-feature.command("wallet", logHandle("handle /wallet"), async (ctx: Context) => {
-  await ctx.reply("Choose the Action", {
-    reply_markup: walletMenu,
-  });
-});
+feature.command(
+  en.wallet.command,
+  logHandle("handle /wallet"),
+  async (ctx: Context) => {
+    await ctx.reply(en.wallet.menu.title, {
+      reply_markup: walletMenu,
+    });
+  }
+);
 
 feature
   .filter((ctx) => ctx.session.step === "wallet")
   .on("message:text", logHandle("handle wallet"), async (ctx) => {
-    console.log(444, ctx.session.step);
     await ctx.replyWithChatAction("typing");
     const { getNetwork } = networksService();
     const { createUserWallet, getAllUserWallets } = walletsService(ctx);
@@ -28,7 +32,7 @@ feature
     const parsedValue = address.replace(/\s+/g, "");
 
     if (!isValidAddress(parsedValue)) {
-      return ctx.reply("Enter a valid address");
+      return ctx.reply(en.wallet.invalidAddress);
     }
 
     const prefix = bech32.decode(address).prefix;
@@ -37,21 +41,21 @@ feature
     });
 
     if (!isValidChain) {
-      return ctx.reply("This network is not supported");
+      return ctx.reply(en.wallet.invalidNetwork);
     }
 
     const { network } = await getNetwork({ name: prefix });
     const userWallets = await getAllUserWallets();
 
     if (userWallets.some((walelt) => walelt.address === address)) {
-      return ctx.reply("You already have this wallet");
+      return ctx.reply(en.wallet.duplicateAddress);
     }
 
     if (network) {
       await createUserWallet(network.id, address);
     }
 
-    await ctx.reply(`Do you want add more ?`, {
+    await ctx.reply(en.addMoreQuestion, {
       reply_markup: agreementKeyboard,
     });
   });
@@ -59,12 +63,12 @@ feature
 feature
   .filter((ctx) => ctx.session.step === "wallet")
   .callbackQuery("yes", async (ctx) => {
-    await ctx.reply(`Add one more price alarm`);
+    await ctx.reply(en.wallet.addMore);
   });
 
 feature
   .filter((ctx) => ctx.session.step === "wallet")
   .callbackQuery("no", async (ctx) => {
     ctx.session.step = undefined;
-    return ctx.reply("Perfect! Use /assets command");
+    return ctx.reply(en.wallet.success);
   });

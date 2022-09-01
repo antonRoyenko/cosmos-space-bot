@@ -70,7 +70,6 @@ server.post<postWalletRequest>("/update_wallet/:id", async (req, res) => {
 
     return req.body;
   } catch (err) {
-    console.log(123, err);
     res.status(500).send(err);
   }
 });

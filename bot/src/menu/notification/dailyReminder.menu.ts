@@ -6,24 +6,25 @@ import {
   toggleReminderActivity,
 } from "../callbacks";
 import { menuCreator } from "@bot/utils";
+import { en } from "@bot/constants/en";
 
 const menuList = [
   {
-    text: "🛰 Networks",
+    text: en.notification.reminderMenu.networks,
     callback: chooseNetworkCallback,
   },
   {
     row: true,
   },
   {
-    text: "🕕 Time",
+    text: en.notification.reminderMenu.time,
     callback: chooseTimeCallback,
   },
   {
     row: true,
   },
   {
-    text: "🌎 Timezone",
+    text: en.notification.reminderMenu.timezone,
     callback: chooseTimezoneCallback,
   },
   {
@@ -37,7 +38,7 @@ const menuList = [
     row: true,
   },
   {
-    back: "<< Go back",
+    back: en.back,
   },
 ];
 

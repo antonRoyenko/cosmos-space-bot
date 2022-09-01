@@ -3,7 +3,12 @@ import { getBalance } from "@bot/graphql/queries/getBalance";
 import { getTokenPrice } from "@bot/graphql/queries/getTokenPrice";
 import { toNumber } from "lodash";
 import { networksService } from "@bot/services";
-import { getPositiveOrNegativeEmoji, getNumberEmoji } from "@bot/utils";
+import {
+  getPositiveOrNegativeEmoji,
+  getNumberEmoji,
+  template,
+} from "@bot/utils";
+import { en } from "@bot/constants/en";
 
 export async function assetsCallback(wallet: Wallet, index?: number) {
   let output = "";
@@ -25,30 +30,25 @@ export async function assetsCallback(wallet: Wallet, index?: number) {
   );
   const denomUppercase = data.available.displayDenom.toUpperCase();
 
-  output +=
-    `<b>Wallet ${
-      index ? getNumberEmoji(index) : ""
-    }:</b> <i>${address}</i> \n` +
-    `\n<b>Balance in ${denomUppercase}: </b>\n\n` +
-    `<i>👉 Available</i> — ${data.available.value} \n\n` +
-    `<i>💸 Delegated</i> — ${data.delegate.value} \n\n` +
-    `<i>🔐 Unbonding</i> — ${data.unbonding.value} \n\n` +
-    `<i>🤑 Staking Reward</i> — ${data.reward.value} \n` +
-    `\n<b>Total ${denomUppercase}</b> — ${data.total.value} \n` +
-    `<b>Total USD</b> — 💲${prices.totalFiat(toNumber(data.total.value))} \n` +
-    `\n<b>P&L:</b> \n` +
-    `▫️ <i>For today</i> ${getPositiveOrNegativeEmoji(
-      first.amount
-    )}${denomUppercase} (${first.percent}%) \n\n` +
-    `▫️ <i>In 7 days</i> ${getPositiveOrNegativeEmoji(
-      seventh.amount
-    )}${denomUppercase} (${seventh.percent}%) \n\n` +
-    `▫️ <i>In 14 days</i> ${getPositiveOrNegativeEmoji(
-      seventh.amount
-    )}${denomUppercase} (${fourteenth.percent}%) \n\n` +
-    `▫️ <i>In 30 days</i> ${getPositiveOrNegativeEmoji(
-      thirty.amount
-    )}${denomUppercase} (${thirty.percent}%) \n\n`;
+  output += template(en.assets.menu.walletDescription, {
+    number: index ? getNumberEmoji(index) : "",
+    address,
+    denom: denomUppercase,
+    available: data.available.value,
+    delegate: data.delegate.value,
+    unbonding: data.unbonding.value,
+    reward: data.reward.value,
+    totalCrypto: data.total.value,
+    total: data.total.value,
+    firstAmount: getPositiveOrNegativeEmoji(first.amount),
+    seventhAmount: getPositiveOrNegativeEmoji(seventh.amount),
+    fourteenthAmount: getPositiveOrNegativeEmoji(fourteenth.amount),
+    thirtyAmount: getPositiveOrNegativeEmoji(thirty.amount),
+    firstPercent: first.percent,
+    seventhPercent: seventh.percent,
+    fourteenthPercent: fourteenth.percent,
+    thirtyPercent: thirty.percent,
+  });
 
   return output;
 }

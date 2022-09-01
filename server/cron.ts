@@ -46,6 +46,7 @@ export function cron(server: any) {
 
             const now = dayjs();
             const userTime = dayjs.tz(now, user.timezone);
+            // TODO fix message
             prices += `Price reminder for ${userTime.format("LLL")} \n\n`;
 
             for (const reminder of reminderNetworks) {
@@ -98,6 +99,7 @@ export function cron(server: any) {
 
             const sendMessage = async (id: number) => {
               await sendNotification(
+                // TODO fix message
                 `Alarm ${network.fullName} price is - ${networkPrice.price}`,
                 "HTML",
                 Number(user?.telegramId)

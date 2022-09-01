@@ -6,6 +6,7 @@ import {
   observer,
 } from "@bot/graphql/queries/governanceSubscription";
 import dayjs from "dayjs";
+import { en } from "@bot/constants/en";
 
 export const proposalMenu = new Menu<Context>("governance", {
   autoAnswer: false,
@@ -51,7 +52,8 @@ export const proposalMenu = new Menu<Context>("governance", {
   }
 
   range.row();
-  range.back("Back");
+  // TODO add Enable all button to all place
+  range.back(en.back);
 
   return range;
 });
