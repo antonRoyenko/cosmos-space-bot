@@ -17,8 +17,11 @@ export const en = {
       "/assets - View and Manage Digital Assets \n" +
       "/statistic - View one of the network statistic \n" +
       "/notification - Use notifications to get alerts \n" +
+      "/proposals - View proposals in different chains" +
       "/resources - The list of resources about one of the Network \n" +
-      "/help - full command list",
+      "/help - Full command list \n" +
+      "/about - About bot \n" +
+      "/support - Support me \n",
   },
   wallet: {
     command: "wallet",
@@ -131,6 +134,39 @@ export const en = {
         "<i>🔐 Unbonding</i> - %{unbonding} \n\n" +
         "<i>🔓 Unbonded</i> - %{unbonded} \n",
     },
+  },
+  proposals: {
+    command: "proposals",
+    menu: {
+      title: "Choose the Network",
+      proposalDescriptionTitle: "<b>Proposal %{number}</b> \n\n",
+      proposalDescription: "%{title}  \n\n" + "%{description} \n\n",
+      proposalDescriptionLink:
+        "https://wallet.keplr.app/chains/%{keplrId}/proposals/%{proposalId} \n\n",
+      noProposal: "🙅‍♂️ No active proposal",
+    },
+  },
+  cron: {
+    reminderTitle: "⏰⏰⏰ Price reminder at time %{date} ⏰⏰⏰ \n\n",
+    reminderItem: "%{networkName} — $%{price}",
+    alarmTitle: "🚨🚨🚨 Alarm❗ %{networkName} price — $%{price} 🚨🚨🚨",
+  },
+  support: {
+    command: "support",
+    title:
+      "I'll be very pleased if you support me with some donation ❤️.\n" +
+      "I'll continue develop useful tools for our Cosmos ecosystem. \n" +
+      "ATOM: cosmos1te6z5n9mpz27wc2yyfrssdc88pztca9mzarmgd \n" +
+      "ETH: 0xB2Df04F4536B99666E3968d14761bb890d002Df3 \n" +
+      "BSC: 0xB2Df04F4536B99666E3968d14761bb890d002Df3",
+  },
+  about: {
+    command: "about",
+    title:
+      "I hope this bot you is useful for you. \n\n" +
+      "If you have question or proposals how I can improve it " +
+      "you can always reach me out. \n" +
+      "Here is full article about the bot implementation",
   },
   addMoreQuestion: "Do you want add more?",
   back: "<< Go back",

@@ -1,10 +1,10 @@
-import { fetchProposal } from "@bot/graphql/queries/fetchProposal";
+import { fetchProposals } from "@bot/graphql/queries/fetchProposal";
 import _ from "lodash";
 import { proposalStatus } from "@bot/constants/proposalStatus";
 import { ProposalsQuery } from "../types/general_types";
 
-export const getProposals = async () => {
-  const promises = [fetchProposal()];
+export const getProposals = async (url: string) => {
+  const promises = [fetchProposals(url)];
 
   const [proposals] = await Promise.allSettled(promises);
 

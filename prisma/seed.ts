@@ -8,6 +8,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
     fullName: "Agoric",
     publicUrl: "https://gql.agoric.forbole.com/v1/graphql",
     wsPublicUrl: "wss://gql.agoric.forbole.com/v1/graphql",
+    keplrId: "agoric",
     resource: {
       create: {
         site: "https://agoric.com",
@@ -106,6 +107,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
   {
     name: "cosmos",
     fullName: "Cosmos Hub",
+    keplrId: "cosmos-hub",
     publicUrl: "https://gql.cosmos.forbole.com/v1/graphql",
     wsPublicUrl: "wss://gql.cosmos.forbole.com/v1/graphql",
     resource: {
@@ -158,6 +160,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
     fullName: "E-money.com",
     publicUrl: "https://gql.emoney.forbole.com/v1/graphql",
     wsPublicUrl: "wss://gql.emoney.forbole.com/v1/graphql",
+    keplrId: "e-money",
     resource: {
       create: {
         site: "https://e-money.com/",
@@ -173,6 +176,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
     fullName: "Evmos",
     publicUrl: "https://gql.evmos.forbole.com/v1/graphql",
     wsPublicUrl: "wss://gql.evmos.forbole.com/v1/graphql",
+    keplrId: "evmos",
     resource: {
       create: {
         site: "https://evmos.org/",
@@ -205,6 +209,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
     fullName: "Osmosis",
     publicUrl: "https://gql.osmosis.forbole.com/v1/graphql",
     wsPublicUrl: "wss://gql.osmosis.forbole.com/v1/graphql",
+    keplrId: "osmosis",
     resource: {
       create: {
         site: "https://osmosis.zone/",
@@ -236,6 +241,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
     fullName: "Regen Network",
     publicUrl: "https://gql.regen.forbole.com/v1/graphql",
     wsPublicUrl: "wss://gql.regen.forbole.com/v1/graphql",
+    keplrId: "regen",
     resource: {
       create: {
         site: "https://www.regen.network",
@@ -271,6 +277,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
     fullName: "Sifchain",
     publicUrl: "https://gql.sifchain.forbole.com/v1/graphql",
     wsPublicUrl: "wss://gql.sifchain.forbole.com/v1/graphql",
+    keplrId: "sifchain",
     resource: {
       create: {
         site: "https://www.sifchain.finance",

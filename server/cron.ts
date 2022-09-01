@@ -12,6 +12,8 @@ import {
 import { notificationDao, networkInNotificationDao } from "@bot/dao";
 import { getTokenPrice } from "@bot/graphql/queries/getTokenPrice";
 import { sendNotification } from "@server/telegram";
+import { template } from "@bot/utils";
+import { en } from "@bot/constants/en";
 
 export function cron(server: any) {
   server.register(fastifyCron, {
@@ -46,8 +48,11 @@ export function cron(server: any) {
 
             const now = dayjs();
             const userTime = dayjs.tz(now, user.timezone);
-            // TODO fix message
-            prices += `Price reminder for ${userTime.format("LLL")} \n\n`;
+            prices += template(en.cron.reminderTitle, {
+              date: userTime.format("LLL"),
+            });
+
+            if (!reminderNetworks) return;
 
             for (const reminder of reminderNetworks) {
               const { network, publicUrl, denom } = await getNetwork({
@@ -57,7 +62,11 @@ export function cron(server: any) {
                 publicUrl,
                 denom,
               });
-              prices += `${network.fullName} - ${networkPrice.price}$ \n`;
+
+              prices += template(en.cron.reminderItem, {
+                networkName: network.fullName,
+                price: `${networkPrice.price}`,
+              });
             }
 
             if (
@@ -99,8 +108,10 @@ export function cron(server: any) {
 
             const sendMessage = async (id: number) => {
               await sendNotification(
-                // TODO fix message
-                `Alarm ${network.fullName} price is - ${networkPrice.price}`,
+                template(en.cron.alarmTitle, {
+                  networkName: network.fullName,
+                  price: `${networkPrice.price}`,
+                }),
                 "HTML",
                 Number(user?.telegramId)
               );

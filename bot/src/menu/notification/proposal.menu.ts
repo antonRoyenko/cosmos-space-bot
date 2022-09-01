@@ -52,7 +52,7 @@ export const proposalMenu = new Menu<Context>("governance", {
   }
 
   range.row();
-  // TODO add Enable all button to all place
+  // range.text("Enable all", () => {});
   range.back(en.back);
 
   return range;

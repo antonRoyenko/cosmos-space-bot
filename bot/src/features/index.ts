@@ -7,3 +7,5 @@ export { feature as proposalFeature } from "./proposal.feature";
 export { feature as resourcesFeature } from "./resources.feature";
 export { feature as notificationFeature } from "./notification.feature";
 export { feature as assetsFeature } from "./assets.feature";
+export { feature as aboutFeature } from "./about.feature";
+export { feature as supportFeature } from "./support.feature";

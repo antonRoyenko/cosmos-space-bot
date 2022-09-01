@@ -25,7 +25,8 @@ import {
   resourcesFeature,
   notificationFeature,
   assetsFeature,
-  // unknownFeature,
+  aboutFeature,
+  supportFeature,
 } from "@bot/features";
 import { handleError } from "@bot/helpers/error-handler";
 import {
@@ -42,6 +43,7 @@ import {
   networksAlarmMenu,
   networksResourcesMenu,
   assetsMenu,
+  networksProposalMenu,
 } from "@bot/menu";
 
 export const bot = new Bot<Context>(config.BOT_TOKEN);
@@ -56,6 +58,8 @@ if (config.isDev) {
   bot.use(updatesLogger());
 }
 
+// Menus
+
 bot.use(collectMetrics());
 bot.use(rateLimit());
 bot.use(hydrateReply);
@@ -68,6 +72,7 @@ bot.use(notificationMenu);
 bot.use(networksStatisticMenu);
 bot.use(networksResourcesMenu);
 bot.use(assetsMenu);
+bot.use(networksProposalMenu);
 walletMenu.register(walletRemoveMenu);
 notificationMenu.register(dailyReminderMenu);
 notificationMenu.register(alarmMenu);
@@ -79,7 +84,6 @@ alarmMenu.register(networksAlarmMenu);
 
 // Handlers
 bot.use(helpFeature);
-
 bot.use(statisticFeature);
 bot.use(botAdminFeature);
 bot.use(startFeature);
@@ -88,6 +92,8 @@ bot.use(assetsFeature);
 bot.use(proposalFeature);
 bot.use(resourcesFeature);
 bot.use(notificationFeature);
+bot.use(aboutFeature);
+bot.use(supportFeature);
 
 router.otherwise(
   async (ctx) =>

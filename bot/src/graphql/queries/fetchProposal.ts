@@ -1,13 +1,12 @@
-// import { createRequest } from "@bot/graphql/request";
 import { Proposals } from "@bot/graphql/general/proposals";
+import { request } from "@bot/utils";
 
-export const fetchProposal = async () => {
+export const fetchProposals = async (url: string) => {
   const defaultReturnValue = {
     proposal: [],
   };
   try {
-    return defaultReturnValue;
-    // return await createRequest(Proposals);
+    return await request(url, Proposals);
   } catch (error) {
     return defaultReturnValue;
   }

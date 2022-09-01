@@ -89,6 +89,7 @@ model Network {
   resourceId              Int                     @unique
   publicUrl               String
   wsPublicUrl             String
+  keplrId                 String?
   wallet                  Wallet[]
   Alarm                   Alarm[]
   governanceNotifications  NetworksInNotification[] @relation("reminder_networks")
