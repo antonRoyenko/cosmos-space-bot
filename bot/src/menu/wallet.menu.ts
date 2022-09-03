@@ -23,6 +23,10 @@ export const walletMenu = new Menu<Context>("wallets", {
       const { getAllUserWallets } = walletsService(ctx);
       const userWallets = await getAllUserWallets();
 
+      if (userWallets.length === 0) {
+        return ctx.reply(en.wallet.emptyWallet);
+      }
+
       userWallets.forEach(
         ({ address }, key) =>
           (wallets +=
@@ -35,10 +39,17 @@ export const walletMenu = new Menu<Context>("wallets", {
       await ctx.reply(wallets);
     })
     .row()
-    .text(en.wallet.menu.delete, (ctx) =>
-      ctx.reply(en.wallet.deleteWallet, {
+    .text(en.wallet.menu.delete, async (ctx) => {
+      const { getAllUserWallets } = walletsService(ctx);
+      const userWallets = await getAllUserWallets();
+
+      if (userWallets.length === 0) {
+        return ctx.reply(en.wallet.emptyWallet);
+      }
+
+      return ctx.reply(en.wallet.deleteWallet, {
         reply_markup: walletRemoveMenu,
-      })
-    );
+      });
+    });
   return range;
 });

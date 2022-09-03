@@ -1,6 +1,8 @@
 import { Menu, MenuRange } from "@grammyjs/menu";
 import { walletsService } from "@bot/services";
 import { Context } from "@bot/types";
+import { template } from "@bot/utils";
+import { en } from "@bot/constants/en";
 
 export const walletRemoveMenu = new Menu<Context>("walletRemove", {
   autoAnswer: false,
@@ -16,9 +18,10 @@ export const walletRemoveMenu = new Menu<Context>("walletRemove", {
       const currWallet = userWallets[i];
       range
         .text(currWallet.address, async (ctx) => {
-          await ctx.replyWithChatAction("typing");
           await removeUserWallet(currWallet.id);
-          return ctx.reply(`Wallet ${currWallet} was successful removed`);
+          return ctx.reply(
+            template(en.wallet.removedWallet, { address: currWallet.address })
+          );
         })
         .row();
     }

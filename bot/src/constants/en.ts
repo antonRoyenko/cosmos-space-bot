@@ -40,6 +40,8 @@ export const en = {
     addAddress: "Enter your address",
     showWallet: "Wallet: %{number} - %{address}",
     deleteWallet: "Choose the wallet that you want to remove",
+    removedWallet: "Wallet %{address} was successful removed",
+    emptyWallet: "You don't have wallets, please add it",
   },
   assets: {
     command: "assets",
@@ -148,7 +150,7 @@ export const en = {
   },
   cron: {
     reminderTitle: "⏰⏰⏰ Price reminder at time %{date} ⏰⏰⏰ \n\n",
-    reminderItem: "%{networkName} — $%{price}",
+    reminderItem: "%{networkName} — $%{price} \n",
     alarmTitle: "🚨🚨🚨 Alarm❗ %{networkName} price — $%{price} 🚨🚨🚨",
   },
   support: {
