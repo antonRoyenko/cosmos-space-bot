@@ -25,7 +25,8 @@ export const en = {
   },
   wallet: {
     command: "wallet",
-    invalidAddress: "Enter a valid address",
+    invalidAddress:
+      "Enter a valid address. If you don't want enter, fill in /reset",
     invalidNetwork: "This network is not supported",
     duplicateAddress: "You already have this wallet",
     addMore: "Add one more wallet",
@@ -170,6 +171,12 @@ export const en = {
       "you can always reach me out. \n" +
       "Here is full article about the bot implementation",
   },
+  reset: {
+    command: "reset",
+    title: "Step reseted",
+  },
+  unknownRoute:
+    "Sorry, I don't understand you, please use /help to get the full command list",
   addMoreQuestion: "Do you want add more?",
   back: "<< Go back",
 };

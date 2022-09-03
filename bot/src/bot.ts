@@ -27,6 +27,7 @@ import {
   assetsFeature,
   aboutFeature,
   supportFeature,
+  resetFeature,
 } from "@bot/features";
 import { handleError } from "@bot/helpers/error-handler";
 import {
@@ -45,6 +46,7 @@ import {
   assetsMenu,
   networksProposalMenu,
 } from "@bot/menu";
+import { en } from "./constants/en";
 
 export const bot = new Bot<Context>(config.BOT_TOKEN);
 
@@ -84,6 +86,7 @@ alarmMenu.register(networksAlarmMenu);
 
 // Handlers
 bot.use(helpFeature);
+bot.use(resetFeature);
 bot.use(statisticFeature);
 bot.use(botAdminFeature);
 bot.use(startFeature);
@@ -95,12 +98,7 @@ bot.use(notificationFeature);
 bot.use(aboutFeature);
 bot.use(supportFeature);
 
-router.otherwise(
-  async (ctx) =>
-    await ctx.reply(
-      "Sorry, I don't understand you, please use /help to get the full command list"
-    )
-);
+router.otherwise(async (ctx) => await ctx.reply(en.unknownRoute));
 bot.use(router);
 
 if (config.isDev) {

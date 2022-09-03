@@ -26,7 +26,6 @@ server.setErrorHandler(async (error, request, response) => {
 
     response.code(200).send({});
   } else {
-    console.log(44444);
     logger.error(error);
 
     response.status(500).send({ error: "Something went wrong" });

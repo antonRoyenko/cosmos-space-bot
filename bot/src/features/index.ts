@@ -9,3 +9,4 @@ export { feature as notificationFeature } from "./notification.feature";
 export { feature as assetsFeature } from "./assets.feature";
 export { feature as aboutFeature } from "./about.feature";
 export { feature as supportFeature } from "./support.feature";
+export { feature as resetFeature } from "./reset.feature";
