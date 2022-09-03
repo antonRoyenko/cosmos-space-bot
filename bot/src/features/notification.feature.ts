@@ -33,6 +33,11 @@ feature
       return;
     }
 
+    if (Number(price) < 0) {
+      await ctx.reply(en.notification.alarmMenu.incorrectPrice);
+      return;
+    }
+
     if (!isNumber(price)) {
       await ctx.reply(en.notification.alarmMenu.incorrectPrice);
       return;
@@ -54,7 +59,9 @@ feature
     const country = ctx.message.text || "";
 
     const currentCountry = countries.find(
-      ({ name }) => name.toLowerCase() === country.toLowerCase()
+      ({ name, code }) =>
+        name.toLowerCase() === country.toLowerCase() ||
+        country.toLowerCase() === code.toLowerCase()
     ) || {
       code: "",
     };

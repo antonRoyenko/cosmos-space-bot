@@ -9,6 +9,6 @@ feature.command(
   en.about.command,
   logHandle("handle /about"),
   async (ctx: Context) => {
-    await ctx.reply(en.about.title);
+    await ctx.reply(en.about.title, { disable_web_page_preview: true });
   }
 );

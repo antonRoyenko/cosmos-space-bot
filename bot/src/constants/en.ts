@@ -83,7 +83,8 @@ export const en = {
       chooseNetwork: "Please, choose network",
       chooseReminderTime: "Please, choose alarm time",
       fillCountry: "Fill in the country to detect your timezone",
-      incorrectCountry: "Incorrect name country",
+      incorrectCountry:
+        "Incorrect name country, please fill full country name or country code",
       chooseTimezone: "Please, Choose timezone",
     },
     alarmMenu: {
@@ -96,15 +97,19 @@ export const en = {
       chooseNetworkTitle: "Choose Network",
       alarmSaved: "Alarm saved",
       alarmRemoved: "Alarm removed",
-      incorrectNumber: "Number should be without $",
-      incorrectPrice: "Price is incorrect",
+      incorrectNumber:
+        "Number should be without $, if you don't want enter, fill in /reset",
+      incorrectPrice:
+        "Price is incorrect, if you don't want enter, fill in /reset",
+      positivePrice:
+        "Price should be positive, if you don't want enter, fill in /reset",
       addMorePrice: "Add one more price alarm",
       coinPrice: "%{name} price - %{price}",
       removeWalletTitle: "Choose the wallet that you want to remove",
       alarmList: "You have alarms(s): \n",
       alarmListItem: "%{networkName} at price(s) — %{prices}$ \n",
       alarmPriceInput:
-        "Current %{networkName} price - %{price} is, please put alarm price",
+        "Current %{networkName} price - $%{price} is, please put alarm price",
     },
     proposalMenu: {
       title: "Choose the network(s)",
@@ -169,7 +174,8 @@ export const en = {
       "I hope this bot you is useful for you. \n\n" +
       "If you have question or proposals how I can improve it " +
       "you can always reach me out. \n" +
-      "Here is full article about the bot implementation",
+      "Here is full article about the bot implementation" +
+      "Github: https://github.com/antonRoyenko/cosmos-space-bot",
   },
   reset: {
     command: "reset",

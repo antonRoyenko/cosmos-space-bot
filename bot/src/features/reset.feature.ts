@@ -9,6 +9,7 @@ feature.command(
   logHandle("handle /proposals"),
   async (ctx) => {
     ctx.session.step = undefined;
+    ctx.session.alarmNetwork = undefined;
     return await ctx.reply(en.reset.title);
   }
 );
