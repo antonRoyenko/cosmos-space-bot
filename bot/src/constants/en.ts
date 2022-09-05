@@ -84,7 +84,7 @@ export const en = {
       chooseReminderTime: "Please, choose alarm time",
       fillCountry: "Fill in the country to detect your timezone",
       incorrectCountry:
-        "Incorrect name country, please fill full country name or country code",
+        "Incorrect name country, please fill full country name or country code, if you don't want enter, put in /reset",
       chooseTimezone: "Please, Choose timezone",
     },
     alarmMenu: {
@@ -174,8 +174,8 @@ export const en = {
       "I hope this bot you is useful for you. \n\n" +
       "If you have question or proposals how I can improve it " +
       "you can always reach me out. \n" +
-      "Here is full article about the bot implementation" +
-      "Github: https://github.com/antonRoyenko/cosmos-space-bot",
+      "Here is full <a href='https://medium.com/@anton.royenko/telegram-bot-for-cosmos-ecosystem-290b32dae41a'>article</a> " +
+      "about the bot implementation and <a href='https://github.com/antonRoyenko/cosmos-space-bot'>Github</a>",
   },
   reset: {
     command: "reset",

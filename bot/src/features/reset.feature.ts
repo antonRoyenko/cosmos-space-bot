@@ -10,6 +10,7 @@ feature.command(
   async (ctx) => {
     ctx.session.step = undefined;
     ctx.session.alarmNetwork = undefined;
+    ctx.session.timezone = [];
     return await ctx.reply(en.reset.title);
   }
 );

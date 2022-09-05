@@ -14,6 +14,7 @@ export const timezoneMenu = new Menu<Context>("timezoneMenu", {
     for (const timezone of timezones) {
       range
         .text(timezone, async (ctx) => {
+          ctx.session.timezone = [];
           const { updateUser } = usersService(ctx);
           const regex = /[a-zA-Z]|[/]/g;
           await updateUser({
