@@ -191,6 +191,22 @@ const networkData: Prisma.NetworkCreateInput[] = [
     },
   },
   {
+    name: "juno",
+    fullName: "Juno",
+    publicUrl: "https://juno-api.polkachu.com/",
+    keplrId: "juno",
+    resource: {
+      create: {
+        site: "https://www.junonetwork.io",
+        discord: "https://discord.gg/Juno",
+        twitter: "https://twitter.com/JunoNetwork",
+        blog: "https://medium.com/@JunoNetwork",
+        github: "https://github.com/CosmosContracts",
+        telegram: "https://t.me/JunoNetwork",
+      },
+    },
+  },
+  {
     name: "like",
     fullName: "LikeCoin",
     publicUrl: "https://mainnet-node.like.co/",

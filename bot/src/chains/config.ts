@@ -15,6 +15,7 @@ import { provenanceConfig } from "./provenance";
 import { regenConfig } from "./regen";
 import { rizonConfig } from "./rizon";
 import { sifchainConfig } from "./sifchain";
+import { junoConfig } from "./juno";
 
 export const config = [
   agoricConfig,
@@ -34,4 +35,5 @@ export const config = [
   regenConfig,
   rizonConfig,
   sifchainConfig,
+  junoConfig,
 ];
