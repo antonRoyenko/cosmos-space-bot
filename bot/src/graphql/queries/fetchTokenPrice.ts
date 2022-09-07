@@ -1,20 +1,23 @@
-import { request, getPnlDate, restRequest } from "@bot/utils";
-import { getTokenPriceByDate } from "@bot/constants/api";
-import { TokenPrice } from "@bot/graphql/general/token_price";
-import { TTokenPrice } from "@bot/types/general";
+import { getPnlDate, restRequest } from "@bot/utils";
+import { getTokenPriceByDate, getTokenPrice } from "@bot/constants/api";
 
-export const fetchTokenPrice = async (publicUrl: string, denom: string) => {
+export const fetchTokenPrice = async (apiId: string) => {
   const defaultReturnValue = {
-    tokenPrice: [],
+    tokenPrice: {},
   };
   try {
-    return await request<{ tokenPrice: Array<TTokenPrice> }>(
-      publicUrl,
-      TokenPrice,
-      {
-        denom,
-      }
+    const response = await restRequest(
+      getTokenPrice({
+        ids: apiId,
+        vs_currencies: "usd",
+      })
     );
+
+    const data = await response.json();
+
+    return {
+      tokenPrice: data,
+    };
   } catch (error) {
     return defaultReturnValue;
   }

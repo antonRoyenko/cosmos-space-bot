@@ -4,24 +4,16 @@ import {
   fetchTokenPrice as fetchTokenPriceApi,
 } from "./fetchTokenPrice";
 import { formatTokenPrice, calcTVLPercent } from "@bot/utils";
-import { CoinHistoryResponse } from "@bot/types/general";
+import { CoinHistoryResponse, TTokenPrice } from "@bot/types/general";
 
-export async function getTokenPrice({
-  publicUrl,
-  denom,
-}: {
-  publicUrl: string;
-  denom: string;
-}): Promise<{
+export async function getTokenPrice({ apiId }: { apiId: string }): Promise<{
   price: number;
 }>;
 export async function getTokenPrice({
-  publicUrl,
-  denom,
+  isHistoryInclude,
   apiId,
 }: {
-  publicUrl: string;
-  denom: string;
+  isHistoryInclude: boolean;
   apiId: string;
 }): Promise<{
   price: number;
@@ -29,21 +21,19 @@ export async function getTokenPrice({
   PNL: any;
 }>;
 export async function getTokenPrice({
-  publicUrl,
-  denom,
+  isHistoryInclude = false,
   apiId,
 }: {
-  publicUrl: string;
-  denom: string;
-  apiId?: string;
+  apiId: string;
+  isHistoryInclude?: boolean;
 }) {
-  const price = await fetchTokenPriceApi(publicUrl, denom);
-  if (price.tokenPrice.length === 0) {
-    return { price: 0 };
-  }
-  const currentPrice = price.tokenPrice[0].price;
+  const price: {
+    tokenPrice: TTokenPrice;
+  } = await fetchTokenPriceApi(apiId);
 
-  if (!apiId) {
+  const currentPrice = price.tokenPrice[apiId]?.usd;
+
+  if (!isHistoryInclude) {
     return { price: currentPrice };
   }
 
@@ -51,23 +41,27 @@ export async function getTokenPrice({
 
   return {
     price: currentPrice,
-    ...formatTokenHistory(tokenHistory.tokenPrice, currentPrice),
+    ...formatTokenHistory(tokenHistory.tokenPrice, price.tokenPrice, apiId),
   };
 }
 
 export const formatTokenHistory = (
   tokenHistory: Array<CoinHistoryResponse>,
-  price: number
+  tokenPrice: TTokenPrice,
+  apiId: string
 ) => {
+  const currentPrice = tokenPrice[apiId]?.usd;
   const totalFiat = (total: number) => {
-    return `${formatTokenPrice(price * total)}`;
+    return `${formatTokenPrice(currentPrice * total)}`;
   };
 
   const PNL = (amount: number) => {
+    const currentPrice = tokenPrice[apiId]?.usd;
     let firstDayPercent = "0";
+
     if (tokenHistory[0]?.market_data?.current_price) {
       firstDayPercent = calcTVLPercent(
-        price,
+        currentPrice,
         tokenHistory[0].market_data.current_price.usd
       );
     }
@@ -75,7 +69,7 @@ export const formatTokenHistory = (
     let seventhDayPercent = "0";
     if (tokenHistory[1]?.market_data?.current_price) {
       seventhDayPercent = calcTVLPercent(
-        price,
+        currentPrice,
         tokenHistory[1].market_data.current_price.usd
       );
     }
@@ -83,7 +77,7 @@ export const formatTokenHistory = (
     let fourteenthDayPercent = "0";
     if (tokenHistory[2]?.market_data?.current_price) {
       fourteenthDayPercent = calcTVLPercent(
-        price,
+        currentPrice,
         tokenHistory[2].market_data.current_price.usd
       );
     }
@@ -91,7 +85,7 @@ export const formatTokenHistory = (
     let thirtyDayPercent = "0";
     if (tokenHistory[3]?.market_data?.current_price) {
       thirtyDayPercent = calcTVLPercent(
-        price,
+        currentPrice,
         tokenHistory[3].market_data.current_price.usd
       );
     }

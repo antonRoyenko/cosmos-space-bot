@@ -28,11 +28,11 @@ export const getBalance = async (
     promises
   );
 
+  console.log(delegation);
   const formattedRawData: BalanceData = {
-    commission: { coins: [] },
     accountBalances: { coins: [] },
-    delegationBalance: { coins: [] },
-    unbondingBalance: { coins: [] },
+    delegationBalance: [],
+    unbondingBalance: [],
     delegationRewards: [],
   };
   formattedRawData.accountBalances = _.get(
@@ -70,28 +70,32 @@ const formatAllBalance = (data: BalanceData, chain: ChainInfo) => {
     tokenUnits[primaryTokenUnit],
     primaryTokenUnit
   );
-  const delegate = getDenom(
-    _.get(data, ["delegationBalance", "coins"], []),
-    primaryTokenUnit
-  );
+
+  const delegate = data.delegationBalance.reduce((a, b) => {
+    const coins = _.get(b, ["balance"], { amount: 0 });
+
+    return Big(a).plus(coins.amount).toPrecision();
+  }, "0");
   const delegateAmount = formatToken(
-    delegate.amount,
+    delegate,
     tokenUnits[primaryTokenUnit],
     primaryTokenUnit
   );
 
-  const unbonding = getDenom(
-    _.get(data, ["unbondingBalance", "coins"], []),
-    primaryTokenUnit
-  );
+  // TODO need check
+  const unbonding = data.unbondingBalance.reduce((a, b) => {
+    const coins = _.get(b, ["balance"], { amount: 0 });
+
+    return Big(a).plus(coins.amount).toPrecision();
+  }, "0");
   const unbondingAmount = formatToken(
-    unbonding.amount,
+    unbonding,
     tokenUnits[primaryTokenUnit],
     primaryTokenUnit
   );
 
   const rewards = data.delegationRewards.reduce((a, b) => {
-    const coins = _.get(b, ["coins"], []);
+    const coins = _.get(b, ["reward"], []);
     const dsmCoins = getDenom(coins, primaryTokenUnit);
 
     return Big(a).plus(dsmCoins.amount).toPrecision();

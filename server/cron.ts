@@ -55,12 +55,11 @@ export function cron(server: any) {
             if (!reminderNetworks) return;
 
             for (const reminder of reminderNetworks) {
-              const { network, publicUrl, denom } = await getNetwork({
+              const { network, coingeckoId } = await getNetwork({
                 networkId: Number(reminder.reminderNetworkId),
               });
               const networkPrice = await getTokenPrice({
-                publicUrl,
-                denom,
+                apiId: coingeckoId,
               });
 
               prices += template(en.cron.reminderItem, {
@@ -90,13 +89,12 @@ export function cron(server: any) {
 
           const alarms = await getAllAlarms(true);
           for (const alarm of alarms) {
-            const { publicUrl, denom, network } = await getNetwork({
+            const { network, coingeckoId } = await getNetwork({
               networkId: alarm.networkId,
             });
 
             const networkPrice = await getTokenPrice({
-              publicUrl,
-              denom,
+              apiId: coingeckoId,
             });
             const alarmPrices = await getAllAlarmPrices(alarm.id);
 

@@ -21,11 +21,11 @@ export const networksAlarmMenu = new Menu<Context>("alarmNetworks", {
       range.text(network.fullName, async (ctx) => {
         ctx.session.alarmNetwork = network;
         ctx.session.step = "notification";
-        const { publicUrl, denom } = await getNetwork({
+        const { coingeckoId } = await getNetwork({
           networkId: network.id,
         });
 
-        const { price } = await getTokenPrice({ publicUrl, denom });
+        const { price } = await getTokenPrice({ apiId: coingeckoId });
 
         await ctx.reply(
           template(en.notification.alarmMenu.alarmPriceInput, {

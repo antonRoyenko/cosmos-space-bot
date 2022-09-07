@@ -33,7 +33,7 @@ export const proposalMenu = new Menu<Context>("governance", {
       async (ctx) => {
         try {
           if (!isGovActive) {
-            governanceSubscription(network.wsPublicUrl, ctx, time);
+            // governanceSubscription(network.wsPublicUrl, ctx, time);
           } else {
             observer.unsubscribe();
           }

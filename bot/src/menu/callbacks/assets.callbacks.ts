@@ -15,14 +15,13 @@ export async function assetsCallback(wallet: Wallet, index?: number) {
 
   const { getNetwork } = networksService();
   const { address, networkId } = wallet;
-  const { coingeckoId, publicUrl, denom, network } = await getNetwork({
+  const { coingeckoId, publicUrl, network } = await getNetwork({
     networkId,
   });
 
   const prices = await getTokenPrice({
-    publicUrl,
-    denom: denom,
     apiId: coingeckoId,
+    isHistoryInclude: true,
   });
   const data = await getBalance(publicUrl, address, network.name);
   const { first, seventh, fourteenth, thirty } = prices.PNL(
@@ -39,7 +38,7 @@ export async function assetsCallback(wallet: Wallet, index?: number) {
     unbonding: data.unbonding.value,
     reward: data.reward.value,
     totalCrypto: data.total.value,
-    total: data.total.value,
+    total: prices.totalFiat(toNumber(data.total.value)),
     firstAmount: getPositiveOrNegativeEmoji(first.amount),
     seventhAmount: getPositiveOrNegativeEmoji(seventh.amount),
     fourteenthAmount: getPositiveOrNegativeEmoji(fourteenth.amount),

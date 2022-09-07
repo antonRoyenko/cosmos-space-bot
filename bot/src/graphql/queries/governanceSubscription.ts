@@ -32,6 +32,7 @@ export const governanceSubscription = function (
       if (!item) {
         return;
       }
+      console.log(999, item, item.voting_start_time, time);
       if (!dayjs(item.voting_start_time).isBefore(dayjs(time))) {
         ctx.reply(`${item.title} \n \n` + `${item.description}`);
       }

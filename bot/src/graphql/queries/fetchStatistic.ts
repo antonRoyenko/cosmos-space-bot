@@ -1,27 +1,97 @@
-import { request } from "@bot/utils";
-import { MarketData, EmoneyMarketData } from "@bot/graphql/general/market_data";
-import { Tokenomics } from "@bot/graphql/general/tokenomics";
-import { LatestBlockHeight } from "@bot/graphql/general/block_height";
+import { restRequest } from "@bot/utils";
 
-export const fetchMarketData = async (publicUrl: string, denom: string) => {
+export const fetchCommunityPool = async (url: string) => {
   const defaultReturnValue = {
-    statistic: {
-      communityPool: [],
-      inflation: [],
-      tokenPrice: [],
-      supply: [],
-      bondedTokens: [],
-      distributionParams: [],
+    communityPool: [],
+  };
+  try {
+    const req = await restRequest(
+      `${url}cosmos/distribution/v1beta1/community_pool`
+    );
+    const res = await req.json();
+
+    return {
+      communityPool: res.pool,
+    };
+  } catch (error) {
+    return defaultReturnValue;
+  }
+};
+
+export const fetchInflation = async (url: string, denom: string) => {
+  const defaultReturnValue = {
+    inflation: {},
+  };
+  try {
+    if (denom === "evmos") {
+      const req = await restRequest(`${url}evmos/inflation/v1/inflation_rate`);
+      const res = await req.json();
+
+      return {
+        inflation: Number(res.inflation_rate / 100 || 0),
+      };
+    }
+    const req = await restRequest(`${url}cosmos/mint/v1beta1/inflation`);
+    const res = await req.json();
+
+    return {
+      inflation: res.inflation,
+    };
+  } catch (error) {
+    return defaultReturnValue;
+  }
+};
+
+export const fetchSupply = async (url: string, denom: string) => {
+  const defaultReturnValue = {
+    supply: {
+      amount: {},
     },
   };
   try {
-    const document = denom === "ngm" ? EmoneyMarketData : MarketData;
-    const data = await request(publicUrl, document, {
-      denom,
-    });
+    const req = await restRequest(`${url}cosmos/bank/v1beta1/supply/${denom}`);
+    const res = await req.json();
 
     return {
-      statistic: data,
+      supply: res.amount,
+    };
+  } catch (error) {
+    return defaultReturnValue;
+  }
+};
+
+export const fetchPool = async (url: string) => {
+  const defaultReturnValue = {
+    pool: {
+      bonded: "",
+      notBonded: "",
+    },
+  };
+  try {
+    const req = await restRequest(`${url}cosmos/staking/v1beta1/pool`);
+    const res = await req.json();
+
+    return {
+      pool: {
+        bonded: res.pool.bonded_tokens,
+        notBonded: res.pool.not_bonded_tokens,
+      },
+    };
+  } catch (error) {
+    return defaultReturnValue;
+  }
+};
+
+export const fetchDistributionParams = async (url: string) => {
+  const defaultReturnValue = {
+    params: {},
+  };
+  try {
+    const req = await restRequest(`${url}cosmos/distribution/v1beta1/params`);
+    const res = await req.json();
+
+    return {
+      params: res.params,
     };
   } catch (error) {
     return defaultReturnValue;
@@ -30,28 +100,68 @@ export const fetchMarketData = async (publicUrl: string, denom: string) => {
 
 export const fetchLatestHeight = async (publicUrl: string) => {
   const defaultReturnValue = {
-    height: [],
+    height: "",
   };
   try {
-    return await request(publicUrl, LatestBlockHeight);
+    const req = await restRequest(
+      `${publicUrl}cosmos/base/tendermint/v1beta1/blocks/latest`
+    );
+    const res = await req.json();
+
+    return {
+      height: res?.block,
+    };
   } catch (error) {
     return defaultReturnValue;
   }
 };
 
-export const fetchTokenomics = async (publicUrl: string) => {
+export const fetchBlock = async (publicUrl: string, block: number) => {
   const defaultReturnValue = {
-    tokenomics: {
-      stakingParams: [],
-      stakingPool: [],
-      supply: [],
-    },
+    height: "",
   };
   try {
-    const data = await request(publicUrl, Tokenomics);
+    const req = await restRequest(
+      `${publicUrl}cosmos/base/tendermint/v1beta1/blocks/${block}`
+    );
+    const res = await req.json();
 
     return {
-      tokenomics: data,
+      height: res?.block,
+    };
+  } catch (error) {
+    return defaultReturnValue;
+  }
+};
+
+export const fetchAnnualProvisions = async (publicUrl: string) => {
+  const defaultReturnValue = {
+    annualProvisions: "",
+  };
+  try {
+    const req = await restRequest(
+      `${publicUrl}cosmos/mint/v1beta1/annual_provisions`
+    );
+    const res = await req.json();
+
+    return {
+      annualProvisions: res.annual_provisions,
+    };
+  } catch (error) {
+    return defaultReturnValue;
+  }
+};
+
+export const fetchNetworkStatistic = async (publicUrl: string) => {
+  const defaultReturnValue = {
+    networkStatistic: {},
+  };
+  try {
+    const req = await restRequest(`${publicUrl}cosmos/mint/v1beta1/params`);
+    const res = await req.json();
+
+    return {
+      networkStatistic: res.params,
     };
   } catch (error) {
     return defaultReturnValue;

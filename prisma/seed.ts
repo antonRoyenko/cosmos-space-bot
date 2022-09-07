@@ -6,8 +6,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
   {
     name: "agoric",
     fullName: "Agoric",
-    publicUrl: "https://gql.agoric.forbole.com/v1/graphql",
-    wsPublicUrl: "wss://gql.agoric.forbole.com/v1/graphql",
+    publicUrl: "https://api.agoric.sgtstake.com/",
     keplrId: "agoric",
     resource: {
       create: {
@@ -24,8 +23,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
   {
     name: "mantle",
     fullName: "AssetMantle",
-    publicUrl: "https://gql.assetmantle.forbole.com/v1/graphql",
-    wsPublicUrl: "wss://gql.assetmantle.forbole.com/v1/graphql",
+    publicUrl: "https://api.assetmantle.nodestake.top/",
     resource: {
       create: {
         site: "https://assetmantle.one",
@@ -40,8 +38,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
   {
     name: "band",
     fullName: "Band Protocol",
-    publicUrl: "https://gql.band.forbole.com/v1/graphql",
-    wsPublicUrl: "wss://gql.band.forbole.com/v1/graphql",
+    publicUrl: "https://laozi1.bandchain.org/api/",
     resource: {
       create: {
         site: "https://bandprotocol.com",
@@ -56,8 +53,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
   {
     name: "bitsong",
     fullName: "BitSong",
-    publicUrl: "https://gql.bitsong.forbole.com/v1/graphql",
-    wsPublicUrl: "wss://gql.bitsong.forbole.com/v1/graphql",
+    publicUrl: "https://lcd.explorebitsong.com/",
     resource: {
       create: {
         site: "https://bitsong.io",
@@ -70,11 +66,23 @@ const networkData: Prisma.NetworkCreateInput[] = [
       },
     },
   },
+  // {
+  //   name: "bostrom",
+  //   fullName: "Bostrom",
+  //   publicUrl: "https://lcd.bostrom.cybernode.ai",
+  //   resource: {
+  //     create: {
+  //       site: "https://cyb.ai",
+  //       twitter: "https://twitter.com/cyber_devs",
+  //       github: "github.com/cybercongress",
+  //       telegram: "https://t.me/cyber_russian_community",
+  //     },
+  //   },
+  // },
   {
     name: "cheqd",
     fullName: "Chheqd",
-    publicUrl: "https://explorer-gql.cheqd.io/v1/graphql",
-    wsPublicUrl: "wss://explorer-gql.cheqd.io/v1/graphql",
+    publicUrl: "https://api.cheqd.net/",
     resource: {
       create: {
         site: "https://cheqd.io/",
@@ -90,8 +98,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
   {
     name: "comdex",
     fullName: "Comdex",
-    publicUrl: "https://gql.comdex.forbole.com/v1/graphql",
-    wsPublicUrl: "wss://gql.comdex.forbole.com/v1/graphql",
+    publicUrl: "https://rest.comdex.one/",
     resource: {
       create: {
         site: "https://comdex.one",
@@ -108,8 +115,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
     name: "cosmos",
     fullName: "Cosmos Hub",
     keplrId: "cosmos-hub",
-    publicUrl: "https://gql.cosmos.forbole.com/v1/graphql",
-    wsPublicUrl: "wss://gql.cosmos.forbole.com/v1/graphql",
+    publicUrl: "https://cosmos.api.ping.pub/",
     resource: {
       create: {
         site: "https://cosmos.network",
@@ -125,8 +131,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
   {
     name: "cre",
     fullName: "Crescent",
-    publicUrl: "https://gql.crescent.forbole.com/v1/graphql",
-    wsPublicUrl: "wss://gql.crescent.forbole.com/v1/graphql",
+    publicUrl: "https://crescent-api.polkachu.com/",
     resource: {
       create: {
         site: "https://crescent.network/",
@@ -141,8 +146,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
   {
     name: "desmos",
     fullName: "Desmos",
-    publicUrl: "https://gql.desmos.forbole.com/v1/graphql",
-    wsPublicUrl: "wss://gql.desmos.forbole.com/v1/graphql",
+    publicUrl: "https://api.mainnet.desmos.network/",
     resource: {
       create: {
         site: "https://www.desmos.network",
@@ -158,8 +162,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
   {
     name: "emoney",
     fullName: "E-money.com",
-    publicUrl: "https://gql.emoney.forbole.com/v1/graphql",
-    wsPublicUrl: "wss://gql.emoney.forbole.com/v1/graphql",
+    publicUrl: "https://emoney.validator.network/api/",
     keplrId: "e-money",
     resource: {
       create: {
@@ -174,8 +177,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
   {
     name: "evmos",
     fullName: "Evmos",
-    publicUrl: "https://gql.evmos.forbole.com/v1/graphql",
-    wsPublicUrl: "wss://gql.evmos.forbole.com/v1/graphql",
+    publicUrl: "https://evmos-api.polkachu.com/",
     keplrId: "evmos",
     resource: {
       create: {
@@ -191,8 +193,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
   {
     name: "like",
     fullName: "LikeCoin",
-    publicUrl: "https://gql.likecoin.forbole.com/v1/graphql",
-    wsPublicUrl: "wss://gql.likecoin.forbole.com/v1/graphql",
+    publicUrl: "https://mainnet-node.like.co/",
     resource: {
       create: {
         site: "https://about.like.co",
@@ -207,8 +208,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
   {
     name: "osmo",
     fullName: "Osmosis",
-    publicUrl: "https://gql.osmosis.forbole.com/v1/graphql",
-    wsPublicUrl: "wss://gql.osmosis.forbole.com/v1/graphql",
+    publicUrl: "https://osmosis-api.polkachu.com/",
     keplrId: "osmosis",
     resource: {
       create: {
@@ -224,8 +224,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
   {
     name: "pb",
     fullName: "Provenance",
-    publicUrl: "https://gql.provenance.forbole.com/v1/graphql",
-    wsPublicUrl: "wss://gql.provenance.forbole.com/v1/graphql",
+    publicUrl: "https://api.provenance.io/",
     resource: {
       create: {
         site: "https://www.provenance.io",
@@ -239,8 +238,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
   {
     name: "regen",
     fullName: "Regen Network",
-    publicUrl: "https://gql.regen.forbole.com/v1/graphql",
-    wsPublicUrl: "wss://gql.regen.forbole.com/v1/graphql",
+    publicUrl: "https://regen.api.ping.pub/",
     keplrId: "regen",
     resource: {
       create: {
@@ -258,8 +256,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
   {
     name: "rizon",
     fullName: "Rizon",
-    publicUrl: "https://gql.rizon.forbole.com/v1/graphql",
-    wsPublicUrl: "wss://gql.rizon.forbole.com/v1/graphql",
+    publicUrl: "https://restapi.rizon.world/",
     resource: {
       create: {
         site: "https://rizon.world",
@@ -275,8 +272,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
   {
     name: "sif",
     fullName: "Sifchain",
-    publicUrl: "https://gql.sifchain.forbole.com/v1/graphql",
-    wsPublicUrl: "wss://gql.sifchain.forbole.com/v1/graphql",
+    publicUrl: "https://api.sifchain.finance/",
     keplrId: "sifchain",
     resource: {
       create: {

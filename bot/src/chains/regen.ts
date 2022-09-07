@@ -4,9 +4,9 @@ export const regenConfig = {
   network: "regen",
   coingeckoId: "regen",
   prefix: Bech32Address.defaultBech32Config("regen"),
-  primaryTokenUnit: "regen",
+  primaryTokenUnit: "uregen",
   tokenUnits: {
-    regen: {
+    uregen: {
       display: "regen",
       exponent: 6,
     },

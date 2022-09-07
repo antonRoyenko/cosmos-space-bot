@@ -17,10 +17,9 @@ export type Coins = {
 };
 
 export type BalanceData = {
-  commission: { coins: Array<Coins> };
   accountBalances: { coins: Array<Coins> };
-  delegationBalance: { coins: Array<Coins> };
-  unbondingBalance: { coins: Array<Coins> };
+  delegationBalance: [];
+  unbondingBalance: [];
   delegationRewards: Array<{ coins: Array<Coins>; validatorAddress: string }>;
 };
 
@@ -38,15 +37,24 @@ export type ChainInfo = {
 };
 
 export type StatisticData = {
-  statistic: MarketDataQuery;
-  height: Array<{ height: number }>;
-  tokenomics: TokenomicsQuery;
+  communityPool: any;
+  supply: {
+    amount: number;
+    denom: string;
+  };
+  pool: any;
+  distributionParams: any;
+  inflation: any;
+  height: "";
+  annualProvisions: "";
+  networkStatistic: any;
+  blocksPerYear: 0;
 };
 
 export type TTokenPrice = {
-  id: number;
-  price: number;
-  timestamp: string;
+  [key: string]: {
+    usd: number;
+  };
 };
 
 export type TokenData = {

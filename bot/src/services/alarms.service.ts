@@ -31,12 +31,12 @@ export async function alarmsService({
     const { getNetwork } = networksService();
 
     const alarm = (await getAlarm(networkId)) || { id: 0 };
-    const { publicUrl, denom } = await getNetwork({ networkId });
+    const { coingeckoId } = await getNetwork({ networkId });
     const alarmPrices = (await getAllAlarmPrices(alarm.id)) || {
       id: 0,
     };
 
-    const tokenPrices = await getTokenPrice({ publicUrl, denom });
+    const tokenPrices = await getTokenPrice({ apiId: coingeckoId });
     const createAlarmPrice = {
       price: Number(price),
       coingeckoPrice: tokenPrices.price,

@@ -1,90 +1,119 @@
 import _ from "lodash";
 import {
-  fetchMarketData,
+  fetchCommunityPool,
+  fetchDistributionParams,
+  fetchInflation,
+  fetchPool,
+  fetchSupply,
   fetchLatestHeight,
-  fetchTokenomics,
+  fetchAnnualProvisions,
+  fetchNetworkStatistic,
 } from "./fetchStatistic";
-import Big from "big.js";
 import numeral from "numeral";
 import { ChainInfo, Coins, StatisticData } from "@bot/types/general";
-import { formatToken, getDenom } from "@bot/utils";
+import { formatToken } from "@bot/utils";
+import { getBlocksPerYearReal } from "@bot/utils/getBlocksPerYearReal";
+import { calculateRealAPR } from "@bot/utils/calculateApr";
 
 export const getStatistic = async (
   publicUrl: string,
   denom: string,
-  chain: ChainInfo
+  chain: ChainInfo,
+  tokenUnit: string
 ) => {
   const promises = [
-    fetchMarketData(publicUrl, denom),
+    fetchCommunityPool(publicUrl),
+    fetchInflation(publicUrl, denom),
+    fetchSupply(publicUrl, tokenUnit),
+    fetchPool(publicUrl),
+    fetchDistributionParams(publicUrl),
     fetchLatestHeight(publicUrl),
-    fetchTokenomics(publicUrl),
+    fetchAnnualProvisions(publicUrl),
+    fetchNetworkStatistic(publicUrl),
+    getBlocksPerYearReal(publicUrl),
   ];
 
-  const [marketData, latestHeight, tokenomics] = await Promise.allSettled(
-    promises
-  );
+  const [
+    communityPool,
+    inflation,
+    supply,
+    pool,
+    distributionParams,
+    latestHeight,
+    annualProvisions,
+    networkStatistic,
+    blocksPerYear,
+  ] = await Promise.allSettled(promises);
 
   const formattedRawData: StatisticData = {
-    statistic: {
-      communityPool: [],
-      inflation: [],
-      tokenPrice: [],
-      supply: [],
-      bondedTokens: [],
-      distributionParams: [],
+    communityPool: {},
+    inflation: {},
+    supply: {
+      amount: 0,
+      denom: "",
     },
-    height: [],
-    tokenomics: {
-      stakingParams: [],
-      stakingPool: [],
-      supply: [],
-    },
+    pool: {},
+    distributionParams: {},
+    height: "",
+    annualProvisions: "",
+    networkStatistic: {},
+    blocksPerYear: 0,
   };
 
-  formattedRawData.statistic = _.get(marketData, ["value", "statistic"], []);
-  formattedRawData.height = _.get(latestHeight, ["value", "height"], []);
-  formattedRawData.tokenomics = _.get(tokenomics, ["value", "tokenomics"], []);
+  formattedRawData.communityPool = _.get(
+    communityPool,
+    ["value", "communityPool"],
+    {}
+  );
+  formattedRawData.inflation = _.get(inflation, ["value", "inflation"], 0);
+  formattedRawData.supply = _.get(supply, ["value", "supply"], {});
+  formattedRawData.pool = _.get(pool, ["value", "pool"], {});
+  formattedRawData.distributionParams = _.get(
+    distributionParams,
+    ["value", "params"],
+    {}
+  );
+  formattedRawData.height = _.get(
+    latestHeight,
+    ["value", "height", "last_commit", "height"],
+    ""
+  );
+  formattedRawData.annualProvisions = _.get(
+    annualProvisions,
+    ["value", "annualProvisions"],
+    ""
+  );
+  formattedRawData.networkStatistic = _.get(
+    networkStatistic,
+    ["value", "networkStatistic"],
+    ""
+  );
+  formattedRawData.blocksPerYear = _.get(
+    blocksPerYear,
+    ["value", "blocksPerYear"],
+    ""
+  );
 
   return formatStatisticsValues(formattedRawData, chain);
 };
 
 const formatStatisticsValues = (data: StatisticData, chain: ChainInfo) => {
-  const { statistic, height, tokenomics } = data;
   const { primaryTokenUnit, tokenUnits } = chain;
-  let communityPool, price, marketCap;
-
-  if (statistic.tokenPrice?.length) {
-    price = numeral(
-      numeral(statistic?.tokenPrice[0]?.price).format("0.[00]", Math.floor)
-    ).value();
-    marketCap = statistic.tokenPrice[0]?.marketCap;
-  }
+  let communityPool;
 
   const [communityPoolCoin]: [Coins] = _.get(
-    statistic,
-    ["communityPool", 0, "coins"],
+    data,
+    ["communityPool"],
     []
   ).filter((x: Coins) => x.denom === chain.primaryTokenUnit);
 
-  let inflation = _.get(statistic, ["inflation", 0, "value"], 0);
-  if (inflation === 0) {
-    inflation = _.get(
-      _.get(statistic, ["inflation", 0, "inflation"], []).filter(
-        (x: any) => x.denom === chain.primaryTokenUnit
-      ),
-      [0, "inflation"],
-      0
-    );
-  }
+  const inflation = _.get(data, ["inflation"], 0);
 
-  const [total] = _.get(statistic, ["supply", 0, "coins"], []).filter(
-    (x: Coins) => x.denom === chain.primaryTokenUnit
-  );
+  const total = _.get(data, ["supply"], {
+    amount: 0,
+  });
 
-  const rawSupplyAmount = getDenom(
-    _.get(statistic, ["supply", 0, "coins"], []),
-    chain.primaryTokenUnit
-  ).amount;
+  const rawSupplyAmount = total.amount;
 
   const supply = formatToken(
     rawSupplyAmount,
@@ -93,6 +122,7 @@ const formatStatisticsValues = (data: StatisticData, chain: ChainInfo) => {
   );
 
   if (communityPoolCoin && communityPoolCoin.denom === chain.primaryTokenUnit) {
+    console.log(1, communityPoolCoin.amount);
     communityPool = formatToken(
       communityPoolCoin.amount,
       tokenUnits[communityPoolCoin.denom],
@@ -100,41 +130,30 @@ const formatStatisticsValues = (data: StatisticData, chain: ChainInfo) => {
     );
   }
 
-  const bondedTokens = _.get(
-    statistic,
-    ["bondedTokens", 0, "bonded_tokens"],
-    1
-  );
+  const bonded = _.get(data, ["pool", "bonded"], 1);
+  const unbonding = _.get(data, ["pool", "notBonded"], 1);
+  const unbonded = rawSupplyAmount - unbonding - bonded;
+
   const communityTax = _.get(
-    statistic,
-    ["distributionParams", 0, "params", "community_tax"],
+    data,
+    ["distributionParams", "community_tax"],
     "0"
   );
 
-  const inflationWithCommunityTax = Big(1)
-    .minus(communityTax)
-    .times(inflation)
-    .toPrecision(2);
-  const apr = Big(rawSupplyAmount)
-    .times(inflationWithCommunityTax)
-    .div(bondedTokens)
-    .toNumber();
-
-  const bonded = _.get(tokenomics, ["stakingPool", 0, "bonded"], data);
-
-  const unbonding = _.get(tokenomics, ["stakingPool", 0, "unbonded"], []);
-
-  const unbonded = total.amount - unbonding - bonded;
+  console.log(data.annualProvisions, communityTax);
+  const apr = calculateRealAPR({
+    annualProvisions: Number(data.annualProvisions),
+    communityTax: communityTax,
+    bondedTokens: bonded,
+    blocksYearReal: data.blocksPerYear,
+  });
 
   return {
-    price,
     supply,
-    marketCap,
     inflation,
     communityPool,
-    apr,
-    height,
-    tokenomics,
+    apr: Number(apr),
+    height: data.height,
     bonded: numeral(
       formatToken(bonded, tokenUnits[primaryTokenUnit], primaryTokenUnit).value
     ).value(),

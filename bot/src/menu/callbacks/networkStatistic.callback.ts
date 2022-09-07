@@ -17,13 +17,12 @@ import { en } from "@bot/constants/en";
 export async function statisticCallback(ctx: Context, network: Network) {
   const chain: ChainInfo =
     config.find((item) => item.network === network.name) || cosmosConfig;
-  const { tokenUnits, primaryTokenUnit } = chain;
+  const { tokenUnits, primaryTokenUnit, coingeckoId } = chain;
   const publicUrl = network?.publicUrl || "";
   const denom = tokenUnits[primaryTokenUnit].display;
   const prices = await getTokenPrice({
-    publicUrl,
-    denom,
-    apiId: chain.coingeckoId,
+    apiId: coingeckoId,
+    isHistoryInclude: true,
   });
 
   if (prices.price === 0) {
@@ -31,16 +30,16 @@ export async function statisticCallback(ctx: Context, network: Network) {
   }
 
   const { communityPool, height, apr, inflation, bonded, unbonding, unbonded } =
-    await getStatistic(publicUrl, denom, chain);
+    await getStatistic(publicUrl, denom, chain, primaryTokenUnit);
   const { first, seventh, fourteenth, thirty } = prices.PNL(1);
 
   return ctx.reply(
     template(en.statistic.menu.statisticDescription, {
       denom: `${communityPool?.displayDenom?.toUpperCase()}`,
       price: `${prices.price}`,
-      apr: `${formatTokenPrice(apr * 100)}`,
+      apr: `${formatTokenPrice(apr)}`,
       inflation: `${formatTokenPrice(inflation * 100)}`,
-      height: `${height[0].height ?? 0}`,
+      height: `${height ?? 0}`,
       communityPool: `${nFormatter(toNumber(communityPool?.value), 2)}`,
       firstPercent: getPositiveOrNegativeEmoji(first.percent),
       seventhPercent: getPositiveOrNegativeEmoji(seventh.percent),

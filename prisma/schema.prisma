@@ -9,14 +9,14 @@ datasource db {
 }
 
 model User {
-  id             Int          @id @default(autoincrement())
-  wallets        Wallet[]
-  telegramId     BigInt       @unique @map("telegram_id")
-  updatedAt      DateTime     @updatedAt @map("updated_at")
-  createdAt      DateTime     @default(now()) @map("created_at")
-  notification    Notification?
-  alarm          Alarm[]
-  timezone       String       @default("Europe/London")
+  id           Int           @id @default(autoincrement())
+  wallets      Wallet[]
+  telegramId   BigInt        @unique @map("telegram_id")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+  createdAt    DateTime      @default(now()) @map("created_at")
+  notification Notification?
+  alarm        Alarm[]
+  timezone     String        @default("Europe/London")
 
   @@map(name: "users")
 }
@@ -26,7 +26,7 @@ model Notification {
   networks                 NetworksInNotification[]
   isReminderActive         Boolean                  @default(false) @map("is_reminder_active")
   isAlarmActive            Boolean                  @default(false) @map("is_alarm_active")
-  notificationReminderTime  String[]                 @map("notification_reminder_time")
+  notificationReminderTime String[]                 @map("notification_reminder_time")
   user                     User                     @relation(fields: [userId], references: [id])
   userId                   Int                      @unique @map("user_id")
 
@@ -35,8 +35,8 @@ model Notification {
 
 model NetworksInNotification {
   id                  Int           @id @default(autoincrement())
-  notification         Notification?  @relation(fields: [notificationId], references: [id])
-  notificationId       Int?          @map("notification_id")
+  notification        Notification? @relation(fields: [notificationId], references: [id])
+  notificationId      Int?          @map("notification_id")
   reminderNetwork     Network?      @relation("reminder_networks", fields: [reminderNetworkId], references: [id])
   reminderNetworkId   Int?          @unique @map("reminder_network_id")
   governanceNetwork   Network?      @relation("governance_networks", fields: [governanceNetworkId], references: [id])
@@ -70,30 +70,29 @@ model AlarmPrice {
 }
 
 model Wallet {
-  id        Int        @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   address   String
-  network   Network    @relation(fields: [networkId], references: [id])
-  networkId Int        @map("network_id")
-  User      User       @relation(fields: [userId], references: [id])
-  userId    Int        @map("user_id")
-  createdAt DateTime   @default(now()) @map("created_at")
+  network   Network  @relation(fields: [networkId], references: [id])
+  networkId Int      @map("network_id")
+  User      User     @relation(fields: [userId], references: [id])
+  userId    Int      @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@map(name: "wallets")
 }
 
 model Network {
-  id                      Int                     @id @default(autoincrement())
-  name                    String                  @unique
+  id                      Int                      @id @default(autoincrement())
+  name                    String                   @unique
   fullName                String
-  resource                Resource?               @relation(fields: [resourceId], references: [id])
-  resourceId              Int                     @unique
+  resource                Resource?                @relation(fields: [resourceId], references: [id])
+  resourceId              Int                      @unique
   publicUrl               String
-  wsPublicUrl             String
   keplrId                 String?
   wallet                  Wallet[]
   Alarm                   Alarm[]
-  governanceNotifications  NetworksInNotification[] @relation("reminder_networks")
-  reminderNotifications    NetworksInNotification[] @relation("governance_networks")
+  governanceNotifications NetworksInNotification[] @relation("reminder_networks")
+  reminderNotifications   NetworksInNotification[] @relation("governance_networks")
 
   @@map(name: "networks")
 }
