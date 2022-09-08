@@ -1,7 +1,7 @@
 import { Menu, MenuRange } from "@grammyjs/menu";
 import { networksService } from "@bot/services";
 import { Context } from "@bot/types";
-import { getProposals } from "@bot/graphql/queries/getProposals";
+import { getProposals } from "@bot/api";
 import { en } from "@bot/constants/en";
 import { template, getNumberEmoji } from "@bot/utils";
 

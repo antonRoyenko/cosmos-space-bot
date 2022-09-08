@@ -1,6 +1,5 @@
 import { Wallet } from "@prisma/client";
-import { getBalance } from "@bot/graphql/queries/getBalance";
-import { getTokenPrice } from "@bot/graphql/queries/getTokenPrice";
+import { getBalance, getTokenPrice } from "@bot/api";
 import { toNumber } from "lodash";
 import { networksService } from "@bot/services";
 import {

@@ -158,6 +158,10 @@ export const en = {
     reminderTitle: "⏰⏰⏰ Price reminder at time %{date} ⏰⏰⏰ \n\n",
     reminderItem: "%{networkName} — $%{price} \n",
     alarmTitle: "🚨🚨🚨 Alarm❗ %{networkName} price — $%{price} 🚨🚨🚨",
+    newProposal:
+      "🚨 New proposal from %{networkName}❗🚨 \n\n" +
+      "%{title}  \n\n" +
+      "%{description}",
   },
   support: {
     command: "support",

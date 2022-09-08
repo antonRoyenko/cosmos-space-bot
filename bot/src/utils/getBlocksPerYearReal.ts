@@ -1,7 +1,4 @@
-import {
-  fetchLatestHeight,
-  fetchBlock,
-} from "@bot/graphql/queries/fetchStatistic";
+import { fetchLatestHeight, fetchBlock } from "@bot/api";
 
 export async function getBlocksPerYearReal(api: string) {
   const latestHeight = await fetchLatestHeight(api);

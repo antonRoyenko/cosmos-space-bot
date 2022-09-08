@@ -2,7 +2,7 @@ import Big from "big.js";
 import {
   fetchTokenHistory,
   fetchTokenPrice as fetchTokenPriceApi,
-} from "./fetchTokenPrice";
+} from "@bot/api";
 import { formatTokenPrice, calcTVLPercent } from "@bot/utils";
 import { CoinHistoryResponse, TTokenPrice } from "@bot/types/general";
 

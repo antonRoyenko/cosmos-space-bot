@@ -32,7 +32,9 @@ export const networksService = () => {
   };
 
   const getAllNetworks = async () => {
-    return await networkDao.getAllNetworks();
+    const networks = await networkDao.getAllNetworks();
+
+    return networks.sort((a, b) => a.fullName.localeCompare(b.fullName));
   };
 
   return {

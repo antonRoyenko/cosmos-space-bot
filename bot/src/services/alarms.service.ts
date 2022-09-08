@@ -1,8 +1,8 @@
 import { Context } from "@bot/types";
 import { alarmDao } from "@bot/dao";
+import { getTokenPrice } from "@bot/api";
 import { alarmPricesService } from "./alarmPrices.service";
 import { networksService } from "./networks.service";
-import { getTokenPrice } from "@bot/graphql/queries/getTokenPrice";
 
 export async function alarmsService({
   ctx,

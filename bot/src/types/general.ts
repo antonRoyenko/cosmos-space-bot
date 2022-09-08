@@ -1,7 +1,3 @@
-import {
-  MarketDataQuery,
-  TokenomicsQuery,
-} from "@bot/graphql/types/general_types";
 import { Bech32Config } from "@keplr-wallet/types";
 
 export type TokenUnit = {
@@ -160,21 +156,20 @@ export interface CoinHistoryResponse extends BasicCoin {
   public_interest_stats: PublicInterestStats;
 }
 
-export type StatisticValues = {
-  price?: number | null;
-  supply: TokenUnit;
-  marketCap: number | null;
-  inflation: number;
-  communityPool?: TokenUnit;
-  apr: number;
-  height: Array<{ height: number }>;
-  tokenomics: TokenomicsQuery;
-  bonded: number | null;
-  unbonding: number | null;
-  unbonded: number | null;
+export type ProposalItem = {
+  proposalId: number;
+  votingStartTime: string;
+  title: string;
+  description: string;
+  status: string;
 };
 
-export type Subscription = {
-  closed: boolean;
-  unsubscribe(): void;
-};
+export type ProposalItemResponse = Array<{
+  proposal_id: number;
+  voting_start_time: string;
+  content: {
+    title: string;
+    description: string;
+  };
+  status: string;
+}>;

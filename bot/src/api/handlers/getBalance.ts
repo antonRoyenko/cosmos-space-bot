@@ -5,7 +5,7 @@ import {
   fetchDelegationBalance,
   fetchUnbondingBalance,
   fetchRewards,
-} from "./fetchBalance";
+} from "../requests/fetchBalance";
 import { getDenom, formatToken } from "@bot/utils";
 import { BalanceData, ChainInfo } from "@bot/types/general";
 import { config } from "@bot/chains";

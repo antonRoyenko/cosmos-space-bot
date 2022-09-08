@@ -1,10 +1,6 @@
 import { Menu, MenuRange } from "@grammyjs/menu";
 import { networksService, networksInNotificationService } from "@bot/services";
 import { Context } from "@bot/types";
-import {
-  governanceSubscription,
-  observer,
-} from "@bot/graphql/queries/governanceSubscription";
 import dayjs from "dayjs";
 import { en } from "@bot/constants/en";
 
@@ -15,11 +11,8 @@ export const proposalMenu = new Menu<Context>("governance", {
 
   const { getAllNetworks } = networksService();
   const networks = await getAllNetworks();
-  const sortedNetworks = networks.sort((a, b) =>
-    a.fullName.localeCompare(b.fullName)
-  );
 
-  for (let i = 0; i < sortedNetworks.length; i++) {
+  for (let i = 0; i < networks.length; i++) {
     const network = networks[i];
     const { isGovActive, updateGovernance } =
       await networksInNotificationService({
@@ -31,16 +24,6 @@ export const proposalMenu = new Menu<Context>("governance", {
     range.text(
       isGovActive ? `🔔 ${network.fullName}` : `🔕 ${network.fullName}`,
       async (ctx) => {
-        try {
-          if (!isGovActive) {
-            // governanceSubscription(network.wsPublicUrl, ctx, time);
-          } else {
-            observer.unsubscribe();
-          }
-        } catch (e) {
-          console.error(e);
-        }
-
         await updateGovernance(time);
         ctx.menu.update();
       }
@@ -52,7 +35,6 @@ export const proposalMenu = new Menu<Context>("governance", {
   }
 
   range.row();
-  // range.text("Enable all", () => {});
   range.back(en.back);
 
   return range;

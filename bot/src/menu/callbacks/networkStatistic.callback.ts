@@ -3,8 +3,7 @@ import { Network } from "@prisma/client";
 import { ChainInfo } from "@bot/types/general";
 import { config } from "@bot/chains";
 import { cosmosConfig } from "@bot/chains/cosmos";
-import { getTokenPrice } from "@bot/graphql/queries/getTokenPrice";
-import { getStatistic } from "@bot/graphql/queries/getStatistic";
+import { getStatistic, getTokenPrice } from "@bot/api";
 import {
   formatTokenPrice,
   getPositiveOrNegativeEmoji,

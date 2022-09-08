@@ -8,7 +8,7 @@ import {
   fetchLatestHeight,
   fetchAnnualProvisions,
   fetchNetworkStatistic,
-} from "./fetchStatistic";
+} from "@bot/api";
 import numeral from "numeral";
 import { ChainInfo, Coins, StatisticData } from "@bot/types/general";
 import { formatToken } from "@bot/utils";
