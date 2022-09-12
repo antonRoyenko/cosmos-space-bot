@@ -1,5 +1,6 @@
 import { Context } from "@bot/types";
 import { walletDao } from "@bot/dao";
+import { Prisma } from "@prisma/client";
 
 export const walletsService = (ctx?: Context) => {
   const user = ctx?.local.user || {
@@ -22,6 +23,12 @@ export const walletsService = (ctx?: Context) => {
     });
   };
 
+  const bulkCreateUserWallet = async (
+    data: Array<Prisma.WalletCreateManyInput>
+  ) => {
+    return await walletDao.bulkCreateWallets(data);
+  };
+
   const getAllUserWallets = async (id?: number) => {
     const userId = id ?? user.id;
     return await walletDao.getAllWallets({
@@ -41,6 +48,7 @@ export const walletsService = (ctx?: Context) => {
 
   return {
     createUserWallet,
+    bulkCreateUserWallet,
     getAllUserWallets,
     removeUserWallet,
   };

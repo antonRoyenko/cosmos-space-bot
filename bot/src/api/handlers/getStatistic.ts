@@ -122,7 +122,6 @@ const formatStatisticsValues = (data: StatisticData, chain: ChainInfo) => {
   );
 
   if (communityPoolCoin && communityPoolCoin.denom === chain.primaryTokenUnit) {
-    console.log(1, communityPoolCoin.amount);
     communityPool = formatToken(
       communityPoolCoin.amount,
       tokenUnits[communityPoolCoin.denom],
@@ -140,7 +139,6 @@ const formatStatisticsValues = (data: StatisticData, chain: ChainInfo) => {
     "0"
   );
 
-  console.log(data.annualProvisions, communityTax);
   const apr = calculateRealAPR({
     annualProvisions: Number(data.annualProvisions),
     communityTax: communityTax,

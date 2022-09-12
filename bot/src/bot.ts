@@ -1,6 +1,7 @@
 import { Bot } from "grammy";
 import { limit as rateLimit } from "@grammyjs/ratelimiter";
 import { apiThrottler } from "@grammyjs/transformer-throttler";
+import { hydrateFiles } from "@grammyjs/files";
 import { hydrateReply, parseMode } from "@grammyjs/parse-mode";
 
 import { Context } from "@bot/types";
@@ -53,6 +54,7 @@ export const bot = new Bot<Context>(config.BOT_TOKEN);
 // Middlewares
 
 bot.api.config.use(apiThrottler());
+bot.api.config.use(hydrateFiles(config.BOT_TOKEN));
 bot.api.config.use(parseMode("HTML"));
 
 if (config.isDev) {

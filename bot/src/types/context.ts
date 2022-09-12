@@ -1,6 +1,7 @@
 import { Context as DefaultContext, SessionFlavor } from "grammy";
 import { FluentContextFlavor } from "@grammyjs/fluent";
 import { ParseModeContext } from "@grammyjs/parse-mode";
+import { FileFlavor } from "@grammyjs/files";
 
 import { LocalContext } from "@bot/context";
 import { Network } from "@prisma/client";
@@ -23,11 +24,14 @@ export interface SessionData {
     | "resources"
     | "assets"
     | "timezone"
-    | "notification";
+    | "notification"
+    | "bulkImportWallet";
 }
 
-export type Context = DefaultContext &
-  FluentContextFlavor &
-  ParseModeContext &
-  LocalContextFlavor &
-  SessionFlavor<SessionData>;
+export type Context = FileFlavor<
+  DefaultContext &
+    FluentContextFlavor &
+    ParseModeContext &
+    LocalContextFlavor &
+    SessionFlavor<SessionData>
+>;

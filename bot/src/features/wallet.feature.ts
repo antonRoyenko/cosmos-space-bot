@@ -2,12 +2,11 @@ import { router } from "@bot/middlewares";
 import { logHandle } from "@bot/helpers/logging";
 import { Context } from "@bot/types";
 import { walletMenu } from "@bot/menu";
-import { networksService, walletsService } from "@bot/services";
+import { networksService, usersService, walletsService } from "@bot/services";
 import { bech32 } from "bech32";
 import { agreementKeyboard } from "@bot/menu/utils";
-import { isValidAddress } from "@bot/utils";
-import { config } from "@bot/chains";
 import { en } from "@bot/constants/en";
+import { template, validation, loadAddresses } from "@bot/utils";
 
 export const feature = router.route("wallet");
 
@@ -31,28 +30,26 @@ feature
     const address = ctx.message.text;
     const parsedValue = address.replace(/\s+/g, "");
 
-    if (!isValidAddress(parsedValue)) {
+    if (!validation.isValidAddress(parsedValue)) {
       return ctx.reply(en.wallet.invalidAddress);
     }
 
     const prefix = bech32.decode(address).prefix;
-    const isValidChain = config.some(({ network }) => {
-      return network === prefix;
-    });
-
-    if (!isValidChain) {
-      return ctx.reply(en.wallet.invalidNetwork);
-    }
-
     const { network } = await getNetwork({ name: prefix });
     const userWallets = await getAllUserWallets();
 
-    if (userWallets.some((walelt) => walelt.address === address)) {
+    if (!validation.isValidChain(parsedValue)) {
+      return ctx.reply(
+        template(en.wallet.invalidNetwork, { networkName: network.fullName })
+      );
+    }
+
+    if (validation.isDuplicateAddress(userWallets, parsedValue)) {
       return ctx.reply(en.wallet.duplicateAddress);
     }
 
     if (network) {
-      await createUserWallet(network.id, address);
+      await createUserWallet(network.id, parsedValue);
     }
 
     await ctx.reply(en.addMoreQuestion, {
@@ -71,4 +68,20 @@ feature
   .callbackQuery("no", async (ctx) => {
     ctx.session.step = undefined;
     return ctx.reply(en.wallet.success);
+  });
+
+feature
+  .filter((ctx) => ctx.session.step === "bulkImportWallet")
+  .on("message:document", logHandle("handle wallet"), async (ctx) => {
+    const { bulkCreateUserWallet } = walletsService(ctx);
+    const file = await ctx.getFile();
+    const path = await file.download();
+
+    const result = await loadAddresses(path, ctx);
+
+    if (typeof result === "string") return ctx.reply(result);
+
+    if (Array.isArray(result)) {
+      await bulkCreateUserWallet(result);
+    }
   });

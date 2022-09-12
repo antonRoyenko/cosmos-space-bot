@@ -166,6 +166,8 @@ export function cron(server: any) {
               const { activeProposals } = await getProposals(item.publicUrl);
               const proposals = activeProposals[0];
 
+              if (!proposals) return;
+
               if (
                 dayjs(network.governanceTimeStart).isBefore(
                   dayjs(proposals.votingStartTime)

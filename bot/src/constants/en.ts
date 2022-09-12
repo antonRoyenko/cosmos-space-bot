@@ -27,28 +27,38 @@ export const en = {
     command: "wallet",
     invalidAddress:
       "Enter a valid address. If you don't want enter, fill in /reset",
-    invalidNetwork: "This network is not supported",
-    duplicateAddress: "You already have this wallet",
+    invalidNetwork:
+      "Network %{networkName} is not supported, enter other chain. If you don't want enter, fill in /reset",
+    duplicateAddress:
+      "You already have this wallet. If you don't want enter, fill in /reset",
     addMore: "Add one more wallet",
     success: "Perfect! Use /assets command",
     menu: {
       title: "Choose the Action",
       keplr: "🔑 Add Via Keplr",
       manually: "👇 Add Manually",
+      bulkImport: "📁 Add via .csv",
       list: "💳 List of Wallets",
       delete: "🗑 Delete a wallet",
     },
     addAddress: "Enter your address",
+    addBulkWallet: "Send .csv file with wallet addresses",
     showWallet: "Wallet: %{number} - %{address}",
     deleteWallet: "Choose the wallet that you want to remove",
     removedWallet: "Wallet %{address} was successful removed",
     emptyWallet: "You don't have wallets, please add it",
+    bulkImportAddressInvalid:
+      "Check addresses in file and reload file. If you don't want, fill in /reset",
+    bulkImportNetworkInvalid:
+      "Network %{networkName} is not supported, fix and reload file. If you don't want, fill in /reset",
+    bulkImportDuplicateAddress:
+      "Wallet %{walletAddress} duplicated, remove it and reload file. If you don't want, fill in /reset",
   },
   assets: {
     command: "assets",
     menu: {
       title: "Choose wallet(s)",
-      all: "All wallets",
+      all: "Total amount",
       walletDescription:
         "<b>Wallet %{number}:</b> <i>%{address}</i> \n" +
         "\n<b>Balance in %{denom}: </b>\n\n" +
@@ -63,6 +73,7 @@ export const en = {
         "▫️ <i>In 7 days</i> %{seventhAmount}%{denom} (%{seventhPercent}%) \n\n" +
         "▫️ <i>In 14 days</i> %{seventhAmount}%{denom} (%{fourteenthPercent}%) \n\n" +
         "▫️ <i>In 30 days</i> %{thirtyAmount}%{denom} (%{thirtyPercent}%) \n\n",
+      total: "%{number} <i>%{networkName}</i> — <b>%{amount}</b> \n\n",
     },
   },
   notification: {

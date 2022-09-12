@@ -72,6 +72,7 @@ model AlarmPrice {
 model Wallet {
   id        Int      @id @default(autoincrement())
   address   String
+  name      String?
   network   Network  @relation(fields: [networkId], references: [id])
   networkId Int      @map("network_id")
   User      User     @relation(fields: [userId], references: [id])

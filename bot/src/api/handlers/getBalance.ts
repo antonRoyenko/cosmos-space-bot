@@ -28,7 +28,6 @@ export const getBalance = async (
     promises
   );
 
-  console.log(delegation);
   const formattedRawData: BalanceData = {
     accountBalances: { coins: [] },
     delegationBalance: [],
