@@ -85,11 +85,11 @@ model Wallet {
 model Network {
   id                      Int                      @id @default(autoincrement())
   name                    String                   @unique
-  fullName                String
+  fullName                String                   @map("full_name")
   resource                Resource?                @relation(fields: [resourceId], references: [id])
-  resourceId              Int                      @unique
-  publicUrl               String
-  keplrId                 String?
+  resourceId              Int                      @unique @map("resource_id")
+  publicUrl               String                   @map("public_url")
+  keplrId                 String?                  @map("keplr_id")
   wallet                  Wallet[]
   Alarm                   Alarm[]
   governanceNotifications NetworksInNotification[] @relation("reminder_networks")
