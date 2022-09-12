@@ -42,7 +42,8 @@ export const en = {
       delete: "🗑 Delete a wallet",
     },
     addAddress: "Enter your address",
-    addBulkWallet: "Send .csv file with wallet addresses",
+    addBulkWallet:
+      "Send .csv file with wallet addresses, should be comma separator",
     showWallet: "Wallet: %{number} - %{address}",
     deleteWallet: "Choose the wallet that you want to remove",
     removedWallet: "Wallet %{address} was successful removed",
@@ -53,6 +54,7 @@ export const en = {
       "Network %{networkName} is not supported, fix and reload file. If you don't want, fill in /reset",
     bulkImportDuplicateAddress:
       "Wallet %{walletAddress} duplicated, remove it and reload file. If you don't want, fill in /reset",
+    incorrectCSV: "Incorrect .csv file format, should be comma separator",
   },
   assets: {
     command: "assets",

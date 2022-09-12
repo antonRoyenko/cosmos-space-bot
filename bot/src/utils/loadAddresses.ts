@@ -33,6 +33,8 @@ export async function loadAddresses(
   );
 
   for await (const record of parser) {
+    if (!record[0] || record[1]) return en.wallet.incorrectCSV;
+
     const [address, name] = record;
     const parsedValue: string = address.replace(/\s+/g, "");
 
