@@ -2,7 +2,7 @@ import { router } from "@bot/middlewares";
 import { logHandle } from "@bot/helpers/logging";
 import { Context } from "@bot/types";
 import { walletMenu } from "@bot/menu";
-import { networksService, usersService, walletsService } from "@bot/services";
+import { networksService, walletsService } from "@bot/services";
 import { bech32 } from "bech32";
 import { agreementKeyboard } from "@bot/menu/utils";
 import { en } from "@bot/constants/en";
@@ -27,7 +27,11 @@ feature
     const { getNetwork } = networksService();
     const { createUserWallet, getAllUserWallets } = walletsService(ctx);
 
-    const address = ctx.message.text;
+    const [address, name] = ctx.message.text.split("\n");
+
+    if (!address || !name) return ctx.reply(en.wallet.invalidFormat);
+
+    console.log(44, address, name);
     const parsedValue = address.replace(/\s+/g, "");
 
     if (!validation.isValidAddress(parsedValue)) {
@@ -83,5 +87,7 @@ feature
 
     if (Array.isArray(result)) {
       await bulkCreateUserWallet(result);
+
+      await ctx.reply(en.wallet.successfulImport);
     }
   });

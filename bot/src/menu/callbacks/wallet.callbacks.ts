@@ -1,8 +1,10 @@
+import { writeFileSync } from "fs";
 import { Context } from "@bot/types";
 import { en } from "@bot/constants/en";
 import { walletsService } from "@bot/services";
 import { getNumberEmoji, template } from "@bot/utils";
 import { walletRemoveMenu } from "@bot/menu";
+import { InputFile } from "grammy";
 
 export async function addManuallyCallback(ctx: Context) {
   ctx.session.step = "wallet";
@@ -12,6 +14,22 @@ export async function addManuallyCallback(ctx: Context) {
 export async function bulkImportCallback(ctx: Context) {
   ctx.session.step = "bulkImportWallet";
   return ctx.reply(en.wallet.addBulkWallet);
+}
+
+export async function bulkExportCallback(ctx: Context) {
+  const { getAllUserWallets } = walletsService(ctx);
+
+  const userWallets = await getAllUserWallets();
+
+  let csv = "Address,Name" + "\r\n";
+
+  for (const i of userWallets) {
+    csv += i.address + "," + i.name + "\r\n";
+  }
+
+  writeFileSync("/tmp/addresses.csv", csv);
+
+  await ctx.replyWithDocument(new InputFile("/tmp/addresses.csv"));
 }
 
 export async function walletListCallback(ctx: Context) {

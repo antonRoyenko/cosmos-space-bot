@@ -28,42 +28,46 @@ export async function loadAddresses(
 
   if (!user?.id) return;
 
-  const parser = createReadStream(path).pipe(
-    parse({ delimiter: ",", from_line: 2 })
-  );
+  try {
+    const parser = createReadStream(path).pipe(
+      parse({ delimiter: ",", from_line: 2 })
+    );
 
-  for await (const record of parser) {
-    if (!record[0] || record[1]) return en.wallet.incorrectCSV;
+    for await (const record of parser) {
+      if (!record[0] || !record[1]) return en.wallet.incorrectCSV;
 
-    const [address, name] = record;
-    const parsedValue: string = address.replace(/\s+/g, "");
+      const [address, name] = record;
+      const parsedValue: string = address.replace(/\s+/g, "");
 
-    if (!validation.isValidAddress(parsedValue)) {
-      return en.wallet.bulkImportAddressInvalid;
-    }
+      if (!validation.isValidAddress(parsedValue)) {
+        return en.wallet.bulkImportAddressInvalid;
+      }
 
-    const prefix = bech32.decode(address).prefix;
-    const { network } = await getNetwork({ name: prefix });
+      const prefix = bech32.decode(address).prefix;
+      const { network } = await getNetwork({ name: prefix });
 
-    if (!validation.isValidChain(parsedValue)) {
-      return template(en.wallet.bulkImportNetworkInvalid, {
-        networkName: network.fullName,
+      if (!validation.isValidChain(parsedValue)) {
+        return template(en.wallet.bulkImportNetworkInvalid, {
+          networkName: network.fullName,
+        });
+      }
+
+      if (validation.isDuplicateAddress(userWallets, parsedValue)) {
+        return template(en.wallet.bulkImportDuplicateAddress, {
+          walletAddress: parsedValue,
+        });
+      }
+
+      addresses.push({
+        address: parsedValue,
+        name,
+        networkId: network.id,
+        userId: user.id,
       });
     }
 
-    if (validation.isDuplicateAddress(userWallets, parsedValue)) {
-      return template(en.wallet.bulkImportDuplicateAddress, {
-        walletAddress: parsedValue,
-      });
-    }
-
-    addresses.push({
-      address: parsedValue,
-      name,
-      networkId: network.id,
-      userId: user.id,
-    });
+    return addresses;
+  } catch (e: any) {
+    return e.message;
   }
-
-  return addresses;
 }

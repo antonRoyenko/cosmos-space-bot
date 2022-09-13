@@ -5,7 +5,6 @@ import { assetsCallback } from "@bot/menu/callbacks";
 import { en } from "@bot/constants/en";
 import { getBalance } from "@bot/api";
 import { getNumberEmoji, template } from "@bot/utils";
-import { forEach } from "lodash";
 
 export const assetsMenu = new Menu<Context>("assets", {
   autoAnswer: false,

@@ -25,6 +25,10 @@ export const en = {
   },
   wallet: {
     command: "wallet",
+    invalidFormat:
+      "Format should be: (If you don't want, fill in /reset) \n\n" +
+      "Address\n" +
+      "Wallet name\n\n",
     invalidAddress:
       "Enter a valid address. If you don't want enter, fill in /reset",
     invalidNetwork:
@@ -38,10 +42,12 @@ export const en = {
       keplr: "🔑 Add Via Keplr",
       manually: "👇 Add Manually",
       bulkImport: "📁 Add via .csv",
+      bulkExport: "📎 Export addresses",
       list: "💳 List of Wallets",
       delete: "🗑 Delete a wallet",
     },
-    addAddress: "Enter your address",
+    addAddress:
+      "Enter your address in format:\n\n" + "Address\n" + "Wallet name \n",
     addBulkWallet:
       "Send .csv file with wallet addresses, should be comma separator",
     showWallet: "Wallet: %{number} - %{address}",
@@ -55,6 +61,7 @@ export const en = {
     bulkImportDuplicateAddress:
       "Wallet %{walletAddress} duplicated, remove it and reload file. If you don't want, fill in /reset",
     incorrectCSV: "Incorrect .csv file format, should be comma separator",
+    successfulImport: "File was successful uploaded",
   },
   assets: {
     command: "assets",
