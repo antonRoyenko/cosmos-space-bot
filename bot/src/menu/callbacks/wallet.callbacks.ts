@@ -5,6 +5,8 @@ import { walletsService } from "@bot/services";
 import { getNumberEmoji, template } from "@bot/utils";
 import { walletRemoveMenu } from "@bot/menu";
 import { InputFile } from "grammy";
+import { STEPS } from "@bot/constants/step";
+import { Steps } from "@bot/types/general";
 
 export async function addManuallyCallback(ctx: Context) {
   ctx.session.step = "wallet";
@@ -12,7 +14,7 @@ export async function addManuallyCallback(ctx: Context) {
 }
 
 export async function bulkImportCallback(ctx: Context) {
-  ctx.session.step = "bulkImportWallet";
+  ctx.session.step = STEPS.BULK_IMPORT as Steps;
   return ctx.reply(en.wallet.addBulkWallet);
 }
 

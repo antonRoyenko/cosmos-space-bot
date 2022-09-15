@@ -173,3 +173,17 @@ export type ProposalItemResponse = Array<{
   };
   status: string;
 }>;
+
+export type Cw20 = Array<{
+  symbol: string;
+  decimal: number;
+  balance: number;
+}>;
+
+export type Steps =
+  | "wallet"
+  | "admin"
+  | "governance"
+  | "timezone"
+  | "notification"
+  | "bulkImport";

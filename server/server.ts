@@ -5,7 +5,7 @@ import { register } from "prom-client";
 import { bot } from "@bot/bot";
 import { config } from "@bot/config";
 import { logger } from "@bot/logger";
-import { handleError } from "@bot/helpers/error-handler";
+import { handleError } from "@bot/helpers/errorHandler";
 import { networksService, walletsService, usersService } from "@bot/services";
 import { bech32 } from "bech32";
 import { cron } from "@server/cron";

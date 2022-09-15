@@ -1,8 +1,9 @@
+import { KEYBOARD } from "@bot/constants/keyboard";
 import { InlineKeyboard } from "grammy";
 
 export const agreementKeyboard = new InlineKeyboard()
   .add({
-    text: "Yes",
-    callback_data: "yes",
+    text: KEYBOARD.TEXT_YES,
+    callback_data: KEYBOARD.CALLBACK_YES,
   })
-  .add({ text: "No", callback_data: "no" });
+  .add({ text: KEYBOARD.TEXT_NO, callback_data: KEYBOARD.CALLBACK_NO });

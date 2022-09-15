@@ -7,12 +7,16 @@ import { bech32 } from "bech32";
 import { agreementKeyboard } from "@bot/menu/utils";
 import { en } from "@bot/constants/en";
 import { template, validation, loadAddresses } from "@bot/utils";
+import { ROUTE, ROUTE_LOGS } from "@bot/constants/route";
+import { STEPS } from "@bot/constants/step";
+import { removeSpace } from "@bot/constants/regex";
+import { KEYBOARD } from "@bot/constants/keyboard";
 
-export const feature = router.route("wallet");
+export const feature = router.route(ROUTE.WALLET);
 
 feature.command(
   en.wallet.command,
-  logHandle("handle /wallet"),
+  logHandle(ROUTE_LOGS.WALLET),
   async (ctx: Context) => {
     await ctx.reply(en.wallet.menu.title, {
       reply_markup: walletMenu,
@@ -21,8 +25,8 @@ feature.command(
 );
 
 feature
-  .filter((ctx) => ctx.session.step === "wallet")
-  .on("message:text", logHandle("handle wallet"), async (ctx) => {
+  .filter((ctx) => ctx.session.step === STEPS.WALLET)
+  .on("message:text", logHandle(ROUTE_LOGS.WALLET), async (ctx) => {
     await ctx.replyWithChatAction("typing");
     const { getNetwork } = networksService();
     const { createUserWallet, getAllUserWallets } = walletsService(ctx);
@@ -32,7 +36,7 @@ feature
     if (!address || !name) return ctx.reply(en.wallet.invalidFormat);
 
     console.log(44, address, name);
-    const parsedValue = address.replace(/\s+/g, "");
+    const parsedValue = address.replace(removeSpace, "");
 
     if (!validation.isValidAddress(parsedValue)) {
       return ctx.reply(en.wallet.invalidAddress);
@@ -62,21 +66,21 @@ feature
   });
 
 feature
-  .filter((ctx) => ctx.session.step === "wallet")
-  .callbackQuery("yes", async (ctx) => {
+  .filter((ctx) => ctx.session.step === STEPS.WALLET)
+  .callbackQuery(KEYBOARD.CALLBACK_YES, async (ctx) => {
     await ctx.reply(en.wallet.addMore);
   });
 
 feature
-  .filter((ctx) => ctx.session.step === "wallet")
-  .callbackQuery("no", async (ctx) => {
+  .filter((ctx) => ctx.session.step === STEPS.WALLET)
+  .callbackQuery(KEYBOARD.CALLBACK_NO, async (ctx) => {
     ctx.session.step = undefined;
     return ctx.reply(en.wallet.success);
   });
 
 feature
-  .filter((ctx) => ctx.session.step === "bulkImportWallet")
-  .on("message:document", logHandle("handle wallet"), async (ctx) => {
+  .filter((ctx) => ctx.session.step === STEPS.BULK_IMPORT)
+  .on("message:document", logHandle(ROUTE_LOGS.WALLET), async (ctx) => {
     const { bulkCreateUserWallet } = walletsService(ctx);
     const file = await ctx.getFile();
     const path = await file.download();

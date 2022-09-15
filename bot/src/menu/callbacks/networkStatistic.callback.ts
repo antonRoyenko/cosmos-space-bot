@@ -25,7 +25,11 @@ export async function statisticCallback(ctx: Context, network: Network) {
   });
 
   if (prices.price === 0) {
-    return ctx.reply(`${network.fullName} - &#60;price is unknown&#62;`);
+    return ctx.reply(
+      template(en.statistic.menu.unknownPrice, {
+        networkName: network.fullName,
+      })
+    );
   }
 
   const { communityPool, height, apr, inflation, bonded, unbonding, unbonded } =

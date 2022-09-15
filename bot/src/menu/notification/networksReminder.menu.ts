@@ -1,6 +1,7 @@
 import { Menu, MenuRange } from "@grammyjs/menu";
 import { networksService, networksInNotificationService } from "@bot/services";
 import { Context } from "@bot/types";
+import { en } from "@bot/constants/en";
 
 export const networksReminderMenu = new Menu<Context>("reminderNetworks", {
   autoAnswer: false,
@@ -32,7 +33,7 @@ export const networksReminderMenu = new Menu<Context>("reminderNetworks", {
   }
 
   range.row();
-  range.back("<< Go back");
+  range.back(en.back);
 
   return range;
 });

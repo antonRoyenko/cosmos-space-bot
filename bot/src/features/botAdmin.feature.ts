@@ -2,7 +2,6 @@ import { isUserId } from "grammy-guard";
 
 import { userDao } from "@bot/dao";
 import { config } from "@bot/config";
-import { getGroupChatCommands } from "@bot/helpers/bot-commands";
 import { logHandle } from "@bot/helpers/logging";
 import { router } from "@bot/middlewares";
 
@@ -45,13 +44,6 @@ feature.command(
         },
       }
     );
-
-    // set group chat commands
-    await ctx.api.setMyCommands(getGroupChatCommands(), {
-      scope: {
-        type: "all_group_chats",
-      },
-    });
 
     return ctx.reply("Commands updated");
   }

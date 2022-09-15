@@ -4,12 +4,13 @@ import { router } from "@bot/middlewares";
 import { assetsMenu } from "@bot/menu";
 import { en } from "@bot/constants/en";
 import { walletsService } from "@bot/services";
+import { ROUTE } from "@bot/constants/route";
 
-export const feature = router.route("assets");
+export const feature = router.route(ROUTE.ASSETS);
 
 feature.command(
   en.assets.command,
-  logHandle("handle /assets"),
+  logHandle(ROUTE.ASSETS),
   async (ctx: Context) => {
     const { getAllUserWallets } = walletsService(ctx);
     const userWallets = await getAllUserWallets();

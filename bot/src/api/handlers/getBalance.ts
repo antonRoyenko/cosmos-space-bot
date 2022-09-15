@@ -5,11 +5,13 @@ import {
   fetchDelegationBalance,
   fetchUnbondingBalance,
   fetchRewards,
-} from "../requests/fetchBalance";
+} from "@bot/api";
 import { getDenom, formatToken } from "@bot/utils";
-import { BalanceData, ChainInfo } from "@bot/types/general";
+import { BalanceData, ChainInfo, Cw20 } from "@bot/types/general";
 import { config } from "@bot/chains";
 import { cosmosConfig } from "@bot/chains/cosmos";
+import { getCW20tokens } from "@bot/utils/getCW20tokens";
+import { junoCW20 } from "@bot/chains/junoCW20";
 
 export const getBalance = async (
   publicUrl: string,
@@ -18,6 +20,8 @@ export const getBalance = async (
 ) => {
   const chain =
     config.find(({ network }) => network === prefix) || cosmosConfig;
+  const cw20tokens: Cw20 = [];
+
   const promises = [
     fetchAvailableBalances(publicUrl, address),
     fetchDelegationBalance(publicUrl, address),
@@ -27,6 +31,22 @@ export const getBalance = async (
   const [available, delegation, unbonding, rewards] = await Promise.allSettled(
     promises
   );
+
+  if (prefix === "juno") {
+    await Promise.all(
+      junoCW20.map(async (token) => {
+        const balance: number = await getCW20tokens(
+          token.contract_address,
+          address
+        );
+        cw20tokens.push({
+          symbol: token.symbol,
+          decimal: token.decimal || 0,
+          balance: Number(balance),
+        });
+      })
+    );
+  }
 
   const formattedRawData: BalanceData = {
     accountBalances: { coins: [] },
@@ -55,10 +75,14 @@ export const getBalance = async (
     []
   );
 
-  return formatAllBalance(formattedRawData, chain);
+  return formatAllBalance(formattedRawData, chain, cw20tokens);
 };
 
-const formatAllBalance = (data: BalanceData, chain: ChainInfo) => {
+const formatAllBalance = (
+  data: BalanceData,
+  chain: ChainInfo,
+  cw20tokens: Cw20
+) => {
   const { primaryTokenUnit, tokenUnits } = chain;
   const available = getDenom(
     _.get(data, ["accountBalances", "coins"], []),
@@ -112,6 +136,16 @@ const formatAllBalance = (data: BalanceData, chain: ChainInfo) => {
     .plus(rewardsAmount.value)
     .toFixed(tokenUnits[primaryTokenUnit].exponent);
 
+  const cw20 = cw20tokens
+    .filter((item) => Number(item.balance) > 0)
+    .map((item) =>
+      formatToken(
+        item.balance,
+        { exponent: item.decimal, display: item.symbol },
+        item.symbol
+      )
+    );
+
   return {
     available: availableAmount,
     delegate: delegateAmount,
@@ -123,5 +157,6 @@ const formatAllBalance = (data: BalanceData, chain: ChainInfo) => {
       baseDenom: availableAmount.baseDenom,
       exponent: availableAmount.exponent,
     },
+    cw20tokens: cw20,
   };
 };

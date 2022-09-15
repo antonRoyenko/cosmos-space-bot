@@ -77,6 +77,7 @@ export const en = {
         "<i>🤑 Staking Reward</i> — %{reward} \n\n" +
         "<b>Total %{denom}</b> — %{totalCrypto} \n" +
         "<b>Total USD</b> — 💲%{total} \n\n" +
+        "<b>CW20 tokens: </b> \n%{cw20}\n" +
         "<b>P&L:</b> \n" +
         "▫️ <i>For today</i> %{firstAmount}%{denom} (%{firstPercent}%) \n\n" +
         "▫️ <i>In 7 days</i> %{seventhAmount}%{denom} (%{seventhPercent}%) \n\n" +
@@ -161,6 +162,7 @@ export const en = {
         "<i>🔒 Bonded</i> - %{bonded} \n\n" +
         "<i>🔐 Unbonding</i> - %{unbonding} \n\n" +
         "<i>🔓 Unbonded</i> - %{unbonded} \n",
+      unknownPrice: "%{networkName} - &#60;price is unknown&#62;",
     },
   },
   proposals: {

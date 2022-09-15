@@ -5,7 +5,7 @@ import { server } from "@server/server";
 import { prisma } from "@server/prisma";
 import { config } from "@bot/config";
 import { logger } from "@bot/logger";
-import { handleGracefulShutdown } from "@bot/helpers/graceful-shutdown-handler";
+import { handleGracefulShutdown } from "@bot/helpers/gracefulShutdownHandler";
 
 // Graceful shutdown
 prisma.$on("beforeExit", handleGracefulShutdown);

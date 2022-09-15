@@ -30,7 +30,7 @@ import {
   supportFeature,
   resetFeature,
 } from "@bot/features";
-import { handleError } from "@bot/helpers/error-handler";
+import { handleError } from "@bot/helpers/errorHandler";
 import {
   walletMenu,
   walletRemoveMenu,

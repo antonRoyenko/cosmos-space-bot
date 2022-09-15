@@ -8,6 +8,7 @@ import {
   template,
 } from "@bot/utils";
 import { en } from "@bot/constants/en";
+import { cw20line } from "@bot/constants/regex";
 
 export async function assetsCallback(wallet: Wallet, index?: number) {
   let output = "";
@@ -26,6 +27,9 @@ export async function assetsCallback(wallet: Wallet, index?: number) {
   const { first, seventh, fourteenth, thirty } = prices.PNL(
     toNumber(data.total.value)
   );
+  const cw20str = data.cw20tokens
+    .map((item) => `${item.displayDenom} — ${item.value} \n`)
+    .join("");
   const denomUppercase = data.available.displayDenom.toUpperCase();
 
   output += template(en.assets.menu.walletDescription, {
@@ -46,7 +50,12 @@ export async function assetsCallback(wallet: Wallet, index?: number) {
     seventhPercent: seventh.percent,
     fourteenthPercent: fourteenth.percent,
     thirtyPercent: thirty.percent,
+    cw20: cw20str,
   });
+
+  console.log(data.cw20tokens.length);
+
+  output = data.cw20tokens.length > 0 ? output : output.replace(cw20line, "");
 
   return output;
 }
