@@ -7,7 +7,7 @@ export const persistanceConfig = {
   primaryTokenUnit: "uxprt",
   tokenUnits: {
     uxprt: {
-      display: "akt",
+      display: "xprt",
       exponent: 6,
     },
   },
