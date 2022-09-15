@@ -53,8 +53,6 @@ export async function assetsCallback(wallet: Wallet, index?: number) {
     cw20: cw20str,
   });
 
-  console.log(data.cw20tokens.length);
-
   output = data.cw20tokens.length > 0 ? output : output.replace(cw20line, "");
 
   return output;

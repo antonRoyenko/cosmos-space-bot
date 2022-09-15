@@ -34,6 +34,7 @@ export async function statisticCallback(ctx: Context, network: Network) {
 
   const { communityPool, height, apr, inflation, bonded, unbonding, unbonded } =
     await getStatistic(publicUrl, denom, chain, primaryTokenUnit);
+
   const { first, seventh, fourteenth, thirty } = prices.PNL(1);
 
   return ctx.reply(

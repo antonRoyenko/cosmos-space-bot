@@ -35,7 +35,6 @@ feature
 
     if (!address || !name) return ctx.reply(en.wallet.invalidFormat);
 
-    console.log(44, address, name);
     const parsedValue = address.replace(removeSpace, "");
 
     if (!validation.isValidAddress(parsedValue)) {
