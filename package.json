@@ -11,7 +11,7 @@
     "build": "npm run clean && tsc",
     "dev": "tsc-watch --onSuccess \"npm run start\"",
     "start": "node dist/server/run.js",
-    "heroku-prebuild": "npm i --only=prod && npx prisma migrate deploy"
+    "heroku-prebuild": "npm i --only=prod"
   },
   "author": "deptyped <deptyped@gmail.com>",
   "license": "MIT",

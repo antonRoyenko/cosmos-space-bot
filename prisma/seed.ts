@@ -286,6 +286,7 @@ const networkData: Prisma.NetworkCreateInput[] = [
     name: "persistence",
     fullName: "Persistence",
     publicUrl: "https://rest.core.persistence.one/",
+    keplrId: "persistence",
     resource: {
       create: {
         site: "https://persistence.one",
@@ -341,14 +342,13 @@ const networkData: Prisma.NetworkCreateInput[] = [
     keplrId: "secret-network",
     resource: {
       create: {
-        site: "https://www.regen.network",
-        discord: "https://discord.gg/regen-network",
-        twitter: "http://twitter.com/regen_network",
-        youtube: "https://www.youtube.com/channel/UCICD2WukTY0MbQdQ9Quew3g",
-        blog: "https://medium.com/regen-network",
-        github: "https://github.com/regen-network",
-        reddit: "https://www.reddit.com/r/DesmosNetwork",
-        telegram: "http://t.me/regennetwork_public",
+        site: "https://scrt.network",
+        discord: "https://discord.com/invite/SJK32GY",
+        twitter: "https://twitter.com/SecretNetwork",
+        youtube: "https://www.youtube.com/channel/UCZPqj7h7mzjwuSfw_UWxQPw",
+        blog: "https://medium.com/@secretnetwork",
+        github: "https://github.com/SecretFoundation",
+        telegram: "https://t.me/SCRTcommunity",
       },
     },
   },
