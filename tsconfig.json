@@ -32,6 +32,7 @@
   "include": [
     "bot/**/*.ts",
     "server/**/*.ts",
+    "server/**/*.png",
     "types/**/*.ts",
     "prisma/seed.ts"
   ]

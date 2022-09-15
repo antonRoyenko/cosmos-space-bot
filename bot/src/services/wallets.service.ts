@@ -10,13 +10,21 @@ export const walletsService = (ctx?: Context) => {
   };
 
   const createUserWallet = async (
-    networkId: number,
-    address: string,
+    {
+      networkId,
+      address,
+      name,
+    }: {
+      networkId: number;
+      address: string;
+      name: string;
+    },
     userId?: number
   ) => {
     return await walletDao.createWallet({
       data: {
         userId: !userId ? user.id : userId,
+        name,
         networkId,
         address,
       },

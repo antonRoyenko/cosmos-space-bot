@@ -56,7 +56,11 @@ feature
     }
 
     if (network) {
-      await createUserWallet(network.id, parsedValue);
+      await createUserWallet({
+        networkId: network.id,
+        address: parsedValue,
+        name,
+      });
     }
 
     await ctx.reply(en.addMoreQuestion, {

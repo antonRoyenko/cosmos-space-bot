@@ -49,8 +49,8 @@ export const en = {
     addAddress:
       "Enter your address in format:\n\n" + "Address\n" + "Wallet name \n",
     addBulkWallet:
-      "Send .csv file with wallet addresses, should be comma separator",
-    showWallet: "Wallet: %{number} - %{address}",
+      "Send .csv file with wallet addresses, example of .csv file above",
+    showWallet: "%{number} <b>%{name}</b> - %{address}",
     deleteWallet: "Choose the wallet that you want to remove",
     removedWallet: "Wallet %{address} was successful removed",
     emptyWallet: "You don't have wallets, please add it",

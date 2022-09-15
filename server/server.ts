@@ -1,6 +1,7 @@
 import fastify from "fastify";
 import { BotError, webhookCallback } from "grammy";
 import fastifyCors from "@fastify/cors";
+import fastifyStatic from "@fastify/static";
 import { register } from "prom-client";
 import { bot } from "@bot/bot";
 import { config } from "@bot/config";
@@ -10,6 +11,7 @@ import { networksService, walletsService, usersService } from "@bot/services";
 import { bech32 } from "bech32";
 import { cron } from "@server/cron";
 import { sendNotification } from "@server/telegram";
+import path from "path";
 
 export const server = fastify({
   logger,
@@ -17,6 +19,11 @@ export const server = fastify({
 });
 
 server.register(fastifyCors, { origin: "*" });
+
+server.register(fastifyStatic, {
+  root: path.join(__dirname, "assets"),
+  prefix: "/assets/",
+});
 
 cron(server);
 
@@ -57,6 +64,7 @@ server.post<postWalletRequest>("/update_wallet/:id", async (req, res) => {
     const user = await getUser({ telegramId });
     const userWallets = await getAllUserWallets(user?.id);
     const address = req.body.wallet;
+    const name = req.body.name;
 
     if (userWallets.some((item) => item.address === address)) {
       return req.body;
@@ -65,7 +73,7 @@ server.post<postWalletRequest>("/update_wallet/:id", async (req, res) => {
     const prefix = bech32.decode(address).prefix;
     const { network } = await getNetwork({ name: prefix });
 
-    await createUserWallet(network.id, address, user?.id);
+    await createUserWallet({ networkId: network.id, address, name }, user?.id);
 
     return req.body;
   } catch (err) {

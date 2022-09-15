@@ -15,7 +15,12 @@ export async function addManuallyCallback(ctx: Context) {
 
 export async function bulkImportCallback(ctx: Context) {
   ctx.session.step = STEPS.BULK_IMPORT as Steps;
-  return ctx.reply(en.wallet.addBulkWallet);
+  return await ctx.replyWithPhoto(
+    new InputFile("server/assets/csv_example.png"),
+    {
+      caption: en.wallet.addBulkWallet,
+    }
+  );
 }
 
 export async function bulkExportCallback(ctx: Context) {
@@ -44,10 +49,11 @@ export async function walletListCallback(ctx: Context) {
   }
 
   userWallets.forEach(
-    ({ address }, key) =>
+    ({ address, name }, key) =>
       (wallets +=
         template(en.wallet.showWallet, {
           number: getNumberEmoji(key + 1),
+          name: name || "",
           address,
         }) + "\n\n")
   );

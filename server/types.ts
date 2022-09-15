@@ -1,6 +1,7 @@
 interface postWalletRequest {
   Body: {
     wallet: string;
+    name: string;
   };
   Params: {
     id: number;

@@ -101,7 +101,6 @@ const formatStatisticsValues = (data: StatisticData, chain: ChainInfo) => {
   const { primaryTokenUnit, tokenUnits } = chain;
   let communityPool;
 
-  console.log(55555, data.communityPool, chain.primaryTokenUnit);
   const [communityPoolCoin]: [Coins] = _.get(
     data,
     ["communityPool"],
