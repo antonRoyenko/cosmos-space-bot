@@ -368,6 +368,36 @@ const networkData: Prisma.NetworkCreateInput[] = [
       },
     },
   },
+  {
+    name: "stars",
+    fullName: "Stargaze",
+    publicUrl: "https://rest.stargaze-apis.com/",
+    keplrId: "stargaze",
+    resource: {
+      create: {
+        site: "https://www.stargaze.zone",
+        discord: "https://discord.gg/stargaze",
+        twitter: "https://twitter.com/stargazezone",
+        github: "https://github.com/public-awesome",
+        telegram: "https://t.me/joinchat/ZQ95YmIn3AI0ODFh",
+      },
+    },
+  },
+  {
+    name: "terra",
+    fullName: "Terra",
+    publicUrl: "https://fcd.terra.dev/",
+    resource: {
+      create: {
+        site: "https://www.terra.money",
+        discord: "https://terra.sc/discord",
+        twitter: "https://twitter.com/terra_money",
+        blog: "https://medium.com/terra-money",
+        github: "https://github.com/terra-money",
+        telegram: "https://t.me/TerraNetworkLobby",
+      },
+    },
+  },
 ];
 
 async function main() {

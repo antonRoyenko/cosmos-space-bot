@@ -3,7 +3,7 @@ import { Bech32Address } from "@keplr-wallet/cosmos";
 export const stargazeConfig = {
   network: "stargaze",
   coingeckoId: "stargaze",
-  prefix: Bech32Address.defaultBech32Config("secret"),
+  prefix: Bech32Address.defaultBech32Config("stars"),
   primaryTokenUnit: "ustars",
   tokenUnits: {
     ustars: {
