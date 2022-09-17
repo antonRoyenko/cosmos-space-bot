@@ -42,14 +42,6 @@ export const assetsMenu = new Menu<Context>("assets", {
         outputObj[network.name] = outputObj[network.name]
           ? Number(outputObj[network.name]) + Number(data.total.value)
           : Number(data.total.value);
-
-        if (data.cw20tokens.length > 0) {
-          data.cw20tokens.forEach((item) => {
-            outputObj[item.displayDenom] = outputObj[item.displayDenom]
-              ? Number(outputObj[item.displayDenom]) + Number(item.value)
-              : Number(item.value);
-          });
-        }
       })
     );
     let output = "";
