@@ -16,7 +16,8 @@ import { junoCW20 } from "@bot/chains/junoCW20";
 export const getBalance = async (
   publicUrl: string,
   address: string,
-  prefix: string
+  prefix: string,
+  isCW20Include = false
 ) => {
   const chain =
     config.find(({ network }) => network === prefix) || cosmosConfig;
@@ -32,7 +33,7 @@ export const getBalance = async (
     promises
   );
 
-  if (prefix === "juno") {
+  if (prefix === "juno" && isCW20Include) {
     await Promise.all(
       junoCW20.map(async (token) => {
         const balance: number = await getCW20tokens(

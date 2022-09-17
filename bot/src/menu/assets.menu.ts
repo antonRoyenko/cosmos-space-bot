@@ -39,7 +39,7 @@ export const assetsMenu = new Menu<Context>("assets", {
           networkId,
         });
 
-        const data = await getBalance(publicUrl, address, network.name);
+        const data = await getBalance(publicUrl, address, network.name, false);
         outputObj[network.name] = outputObj[network.name]
           ? Number(outputObj[network.name]) + Number(data.total.value)
           : Number(data.total.value);
