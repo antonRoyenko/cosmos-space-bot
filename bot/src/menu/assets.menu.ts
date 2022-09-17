@@ -30,6 +30,7 @@ export const assetsMenu = new Menu<Context>("assets", {
     const outputObj: {
       [key: string]: number;
     } = {};
+    console.log(111, userWallets);
     await Promise.all(
       userWallets.map(async (wallet) => {
         const { getNetwork } = networksService();
@@ -46,6 +47,7 @@ export const assetsMenu = new Menu<Context>("assets", {
     );
     let output = "";
 
+    console.log(222, outputObj);
     Object.entries(outputObj).forEach(([key, value], index) => {
       output += template(en.assets.menu.total, {
         number: getNumberEmoji(index + 1),
