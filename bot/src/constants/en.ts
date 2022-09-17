@@ -7,14 +7,23 @@ export const en = {
     command: "start",
     text:
       "I'm the @CosmosSpaceBot \n\n" +
+      "<b>I have a lot of useful functions such as:</b>  \n\n" +
+      "<i>Manage wallets</i>\n" +
+      "<i>View cryptocurrency assets</i>\n" +
+      "<i>Network statistics</i>\n" +
+      "<i>Show active proposals</i>\n" +
+      "<i>List of resources about networks</i>\n" +
+      "<i>Daily reminder</i>\n" +
+      "<i>Price alert</i>\n" +
+      "<i>Subscribe to networks proposals</i>\n\n" +
       "/help get full command list \n\n" +
       "Reach Out to the Developer @ReactiveGuy",
   },
   help: {
     command: "help",
     text:
-      "/wallet - Manage cryptocurrencies in your wallet \n" +
-      "/assets - View and Manage Digital Assets \n" +
+      "/wallet - Manage wallets \n" +
+      "/assets - View cryptocurrency Assets \n" +
       "/statistic - View one of the network statistic \n" +
       "/notification - Use notifications to get alerts \n" +
       "/proposals - View proposals in different chains" +
@@ -158,7 +167,7 @@ export const en = {
         "▫️ <i>In 7 days</i> - %{seventhPercent}% \n\n" +
         "▫️ <i>In 14 days</i> - %{fourteenthPercent}% \n\n" +
         "▫️ <i>In 30 days</i> - %{thirtyPercent}% \n\n" +
-        "<b>Tockenomics</b>: \n\n" +
+        "<b>Tokenomics</b>: \n\n" +
         "<i>🔒 Bonded</i> - %{bonded} \n\n" +
         "<i>🔐 Unbonding</i> - %{unbonding} \n\n" +
         "<i>🔓 Unbonded</i> - %{unbonded} \n",
