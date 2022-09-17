@@ -26,9 +26,9 @@ export const assetsMenu = new Menu<Context>("assets", {
   range.text(en.assets.menu.all, async () => {
     await ctx.replyWithChatAction("typing");
 
-    const output = await totalAmountCallback(ctx);
+    // const output = await totalAmountCallback(ctx);
 
-    return ctx.reply(output);
+    return ctx.reply("empty");
   });
 
   console.log(999, range);
