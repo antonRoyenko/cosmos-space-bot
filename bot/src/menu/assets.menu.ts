@@ -30,26 +30,28 @@ export const assetsMenu = new Menu<Context>("assets", {
     const outputObj: {
       [key: string]: number;
     } = {};
-    for await (const wallet of userWallets) {
-      const { getNetwork } = networksService();
-      const { address, networkId } = wallet;
-      const { publicUrl, network } = await getNetwork({
-        networkId,
-      });
-
-      const data = await getBalance(publicUrl, address, network.name);
-      outputObj[network.name] = outputObj[network.name]
-        ? Number(outputObj[network.name]) + Number(data.total.value)
-        : Number(data.total.value);
-
-      if (data.cw20tokens.length > 0) {
-        data.cw20tokens.forEach((item) => {
-          outputObj[item.displayDenom] = outputObj[item.displayDenom]
-            ? Number(outputObj[item.displayDenom]) + Number(item.value)
-            : Number(item.value);
+    await Promise.all(
+      userWallets.map(async (wallet) => {
+        const { getNetwork } = networksService();
+        const { address, networkId } = wallet;
+        const { publicUrl, network } = await getNetwork({
+          networkId,
         });
-      }
-    }
+
+        const data = await getBalance(publicUrl, address, network.name);
+        outputObj[network.name] = outputObj[network.name]
+          ? Number(outputObj[network.name]) + Number(data.total.value)
+          : Number(data.total.value);
+
+        if (data.cw20tokens.length > 0) {
+          data.cw20tokens.forEach((item) => {
+            outputObj[item.displayDenom] = outputObj[item.displayDenom]
+              ? Number(outputObj[item.displayDenom]) + Number(item.value)
+              : Number(item.value);
+          });
+        }
+      })
+    );
     let output = "";
 
     Object.entries(outputObj).forEach(([key, value], index) => {

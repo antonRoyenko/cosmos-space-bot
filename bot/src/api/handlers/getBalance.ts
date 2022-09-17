@@ -105,12 +105,20 @@ const formatAllBalance = (
     primaryTokenUnit
   );
 
-  // TODO need check
-  const unbonding = data.unbondingBalance.reduce((a, b) => {
-    const coins = _.get(b, ["balance"], { amount: 0 });
+  let unbonding = 0;
 
-    return Big(a).plus(coins.amount).toPrecision();
-  }, "0");
+  if (data.unbondingBalance.length > 0) {
+    data.unbondingBalance.forEach(
+      (item: { entries: Array<{ balance: string }> }) => {
+        if (item?.entries.length) {
+          item?.entries.forEach(({ balance }) => {
+            unbonding += Number(balance);
+          });
+        }
+      }
+    );
+  }
+
   const unbondingAmount = formatToken(
     unbonding,
     tokenUnits[primaryTokenUnit],
