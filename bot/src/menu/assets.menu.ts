@@ -30,21 +30,22 @@ export const assetsMenu = new Menu<Context>("assets", {
     const outputObj: {
       [key: string]: number;
     } = {};
-    console.log(111, userWallets);
-    await Promise.all(
-      userWallets.map(async (wallet) => {
-        const { getNetwork } = networksService();
-        const { address, networkId } = wallet;
-        const { publicUrl, network } = await getNetwork({
-          networkId,
-        });
 
-        const data = await getBalance(publicUrl, address, network.name, false);
-        outputObj[network.name] = outputObj[network.name]
-          ? Number(outputObj[network.name]) + Number(data.total.value)
-          : Number(data.total.value);
-      })
-    );
+    console.log(111);
+
+    for await (const wallet of userWallets) {
+      const { getNetwork } = networksService();
+      const { address, networkId } = wallet;
+      const { publicUrl, network } = await getNetwork({
+        networkId,
+      });
+
+      const data = await getBalance(publicUrl, address, network.name, false);
+      outputObj[network.name] = outputObj[network.name]
+        ? Number(outputObj[network.name]) + Number(data.total.value)
+        : Number(data.total.value);
+    }
+
     let output = "";
 
     console.log(222, outputObj);
@@ -58,5 +59,7 @@ export const assetsMenu = new Menu<Context>("assets", {
 
     return ctx.reply(output);
   });
+
+  console.log(999, range);
   return range;
 });
