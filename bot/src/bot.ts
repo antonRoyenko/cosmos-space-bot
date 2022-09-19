@@ -68,7 +68,7 @@ if (config.isDev) {
 bot.use(collectMetrics());
 bot.use(
   rateLimit({
-    timeFrame: 2000,
+    timeFrame: 1000,
     storageClient: redis,
     onLimitExceeded: () => {
       console.error("Too many request");
