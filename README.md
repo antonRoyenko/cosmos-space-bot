@@ -39,13 +39,15 @@ The bot currently supports the following networks: <a href="https://agoric.com">
 </p>
 
 <h2 align="left">Tech Stack:</h3>
-- Node JS
-- Typescript
-- PostgresSQL
-- Redis
-- Prisma ORM
-- Fastify
-- GrammyJs
+<ul>
+<li>Node JS</li>
+<li>Typescript</li>
+<li>PostgresSQL</li>
+<li>Redis</li>
+<li>Prisma ORM</li>
+<li>Fastify</li>
+<li>GrammyJs</li>
+</ul>
 
 <h2 align="left">Features and Roadmap:</h3>
 <h3>Manage wallets</h3>
