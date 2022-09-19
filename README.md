@@ -8,9 +8,16 @@
 <h3 align="left">Reach me out:</h3>
 
 [//]: # (<img src="https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white" alt="">)
+
+<a href="https://twitter.com/RoenkoAnton">
 <img src="https://img.shields.io/badge/Twitter-%231DA1F2.svg?style=for-the-badge&logo=Twitter&logoColor=white" alt="">
+</a>
+<a href="https://www.linkedin.com/in/anton-royenko-375030160/">
 <img src="https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white" alt="">
+</a>
+<a href="https://t.me/ReactiveGuy">
 <img src="https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white" alt="">
+</a>
 
 Website - https://reactivestation.dev/
 
