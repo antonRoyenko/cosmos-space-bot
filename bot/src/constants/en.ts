@@ -88,10 +88,10 @@ export const en = {
         "<b>Total USD</b> — 💲%{total} \n\n" +
         "<b>CW20 tokens: </b> \n%{cw20}\n" +
         "<b>P&L:</b> \n" +
-        "▫️ <i>For today</i> %{firstAmount}%{denom} (%{firstPercent}%) \n\n" +
-        "▫️ <i>In 7 days</i> %{seventhAmount}%{denom} (%{seventhPercent}%) \n\n" +
-        "▫️ <i>In 14 days</i> %{seventhAmount}%{denom} (%{fourteenthPercent}%) \n\n" +
-        "▫️ <i>In 30 days</i> %{thirtyAmount}%{denom} (%{thirtyPercent}%) \n\n",
+        "▫️ <i>For today</i> %{firstAmount} (%{firstPercent}%) \n\n" +
+        "▫️ <i>In 7 days</i> %{seventhAmount} (%{seventhPercent}%) \n\n" +
+        "▫️ <i>In 14 days</i> %{fourteenthAmount} (%{fourteenthPercent}%) \n\n" +
+        "▫️ <i>In 30 days</i> %{thirtyAmount} (%{thirtyPercent}%) \n\n",
       total: "%{number} <i>%{networkName}</i> — <b>%{amount}</b> \n\n",
     },
   },

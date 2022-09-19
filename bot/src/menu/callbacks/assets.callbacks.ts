@@ -32,6 +32,7 @@ export async function assetsCallback(wallet: Wallet, index?: number) {
     .map((item) => `${item.displayDenom} — ${item.value} \n`)
     .join("");
   const denomUppercase = data.available.displayDenom.toUpperCase();
+  console.log(fourteenth.amount, seventh.amount);
 
   output += template(en.assets.menu.walletDescription, {
     number: index ? getNumberEmoji(index) : "",
@@ -43,10 +44,10 @@ export async function assetsCallback(wallet: Wallet, index?: number) {
     reward: data.reward.value,
     totalCrypto: data.total.value,
     total: prices.totalFiat(toNumber(data.total.value)),
-    firstAmount: getPositiveOrNegativeEmoji(first.amount),
-    seventhAmount: getPositiveOrNegativeEmoji(seventh.amount),
-    fourteenthAmount: getPositiveOrNegativeEmoji(fourteenth.amount),
-    thirtyAmount: getPositiveOrNegativeEmoji(thirty.amount),
+    firstAmount: getPositiveOrNegativeEmoji(`$${first.amount}`),
+    seventhAmount: getPositiveOrNegativeEmoji(`$${seventh.amount}`),
+    fourteenthAmount: getPositiveOrNegativeEmoji(`$${fourteenth.amount}`),
+    thirtyAmount: getPositiveOrNegativeEmoji(`$${thirty.amount}`),
     firstPercent: first.percent,
     seventhPercent: seventh.percent,
     fourteenthPercent: fourteenth.percent,

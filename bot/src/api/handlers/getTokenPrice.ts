@@ -81,6 +81,7 @@ export const formatTokenHistory = (
         tokenHistory[2].market_data.current_price.usd
       );
     }
+    console.log(44, tokenHistory);
 
     let thirtyDayPercent = "0";
     if (tokenHistory[3]?.market_data?.current_price) {
@@ -94,25 +95,37 @@ export const formatTokenHistory = (
       first: {
         percent: formatTokenPrice(firstDayPercent),
         amount: formatTokenPrice(
-          Big(amount).div(100).mul(firstDayPercent).toPrecision()
+          Big(amount * currentPrice)
+            .div(100)
+            .mul(firstDayPercent)
+            .toPrecision()
         ),
       },
       seventh: {
         percent: formatTokenPrice(seventhDayPercent),
         amount: formatTokenPrice(
-          Big(amount).div(100).mul(seventhDayPercent).toPrecision()
+          Big(amount * currentPrice)
+            .div(100)
+            .mul(seventhDayPercent)
+            .toPrecision()
         ),
       },
       fourteenth: {
         percent: formatTokenPrice(fourteenthDayPercent),
         amount: formatTokenPrice(
-          Big(amount).div(100).mul(fourteenthDayPercent).toPrecision()
+          Big(amount * currentPrice)
+            .div(100)
+            .mul(fourteenthDayPercent)
+            .toPrecision()
         ),
       },
       thirty: {
         percent: formatTokenPrice(thirtyDayPercent),
         amount: formatTokenPrice(
-          Big(amount).div(100).mul(thirtyDayPercent).toPrecision()
+          Big(amount * currentPrice)
+            .div(100)
+            .mul(thirtyDayPercent)
+            .toPrecision()
         ),
       },
     };

@@ -1,3 +1,5 @@
+import { number } from "@bot/constants/regex";
+
 export function getNumberEmoji(num: number) {
   const digits = num.toString().split("");
   const digitWithEmoji = digits
@@ -7,8 +9,13 @@ export function getNumberEmoji(num: number) {
   return digitWithEmoji;
 }
 
-export function getPositiveOrNegativeEmoji(num: number) {
-  return num >= 0 ? `📈 ${num}` : `📉 ${num}`;
+export function getPositiveOrNegativeEmoji(num: number | string) {
+  let parsedNumber = num;
+  if (typeof num === "string") {
+    // eslint-disable-next-line no-useless-escape
+    parsedNumber = parseFloat(num.replace(number, ""));
+  }
+  return parsedNumber >= 0 ? `📈 ${num}` : `📉 ${num}`;
 }
 
 export function getFlagEmoji(countryCode: string) {
