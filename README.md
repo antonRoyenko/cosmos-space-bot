@@ -51,23 +51,25 @@ The bot currently supports the following networks: <a href="https://agoric.com">
 
 <h2 align="left">Features and Roadmap:</h3>
 <h3>Manage wallets</h3>
-- [x] Add wallet manually
-- [x] Add wallet via Keplr
-- [x] Add wallet via CSV
-- [x] Exports wallets in CSV
-- [x] List of Wallets
-- [x] Delete a wallet
-- [x] Wallet encryption
-- [x] Show Wallet assets
-- [x] CW20 tokens for Juno
-- [x] Total assets
-- [x] P&L for wallet
-- [ ] Bulk wallets delete
-- [ ] Import/Export wallets via .TXT
-- [ ] Wallets pagination
-- [ ] Add CW20 tokens in total amount
-- [ ] Export total amount in .CSV
-- [ ] Add liquidity pools
+<ul>
+<li>- [x] Add wallet manually</li>
+<li>- [x] Add wallet via Keplr</li>
+<li>- [x] Add wallet via CSV</li>
+<li>- [x] Exports wallets in CSV</li>
+<li>- [x] List of Wallets</li>
+<li>- [x] Delete a wallet</li>
+<li>- [x] Wallet encryption</li>
+<li>- [x] Show Wallet assets</li>
+<li>- [x] CW20 tokens for Juno</li>
+<li>- [x] Total assets</li>
+<li>- [x] P&L for wallet</li>
+<li>- [ ] Bulk wallets delete</li>
+<li>- [ ] Import/Export wallets via .TXT</li>
+<li>- [ ] Wallets pagination</li>
+<li>- [ ] Add CW20 tokens in total amount</li>
+<li>- [ ] Export total amount in .CSV</li>
+<li>- [ ] Add liquidity pools</li>
+</ul>
 
 <h3>Network statistic and resources</h3>
 - [x] General networks statistic
