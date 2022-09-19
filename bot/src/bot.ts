@@ -6,6 +6,7 @@ import { hydrateReply, parseMode } from "@grammyjs/parse-mode";
 
 import { Context } from "@bot/types";
 import { config } from "@bot/config";
+import { connection as redis } from "./redis";
 import {
   updatesLogger,
   setupSession,
@@ -65,7 +66,15 @@ if (config.isDev) {
 // Menus
 
 bot.use(collectMetrics());
-bot.use(rateLimit());
+bot.use(
+  rateLimit({
+    timeFrame: 2000,
+    storageClient: redis,
+    onLimitExceeded: () => {
+      console.error("Too many request");
+    },
+  })
+);
 bot.use(hydrateReply);
 bot.use(setupSession());
 bot.use(setupLocalContext());
