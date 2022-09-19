@@ -1,8 +1,13 @@
-<img src="server/assets/logo_small.png?raw=true" width="150" height="150">
-<h1 align="center">Cosmos space bot</h1>
+<p align="center">
+<img src="server/assets/logo_small.png" width="120" height="120" text-align="center">
+</p>
+<h1 align="center"><a href="https://t.me/CosmosSpaceBot">Cosmos space bot</a></h1>
+![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=antonRoyenko&layout=compact&repo=cosmos-space-bot))
 
 Bot starter template based on [grammY](https://grammy.dev/) bot framework and [prisma](https://www.prisma.io/) ORM.  
-Uses PostgreSQL for data storage (MySQL, MongoDB, SQL Server, SQLite [are also supported by prisma](https://www.prisma.io/docs/reference/database-reference/supported-databases)) and Redis for session storage.
+Uses PostgreSQL for data storage (MySQL, MongoDB, SQL Server,
+SQLite [are also supported by prisma](https://www.prisma.io/docs/reference/database-reference/supported-databases)) and
+Redis for session storage.
 
 ---
 
