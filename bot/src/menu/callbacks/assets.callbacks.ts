@@ -1,6 +1,6 @@
 import { Wallet } from "@prisma/client";
 import { getBalance, getTokenPrice } from "@bot/api";
-import { toNumber } from "lodash";
+import _, { toNumber } from "lodash";
 import { networksService, walletsService } from "@bot/services";
 import {
   getPositiveOrNegativeEmoji,
@@ -64,9 +64,7 @@ export async function totalAmountCallback(ctx: Context) {
   const userWallets = await getAllUserWallets();
 
   let output = "";
-  const outputObj: {
-    [key: string]: number;
-  } = {};
+  const balances = [];
 
   for await (const wallet of userWallets) {
     const { getNetwork } = networksService();
@@ -76,12 +74,26 @@ export async function totalAmountCallback(ctx: Context) {
     });
 
     const data = await getBalance(publicUrl, address, network.name, false);
-    outputObj[network.name] = outputObj[network.name]
-      ? Number(outputObj[network.name]) + Number(data.total.value)
-      : Number(data.total.value);
+    balances.push({
+      networkName: network.name,
+      amount: Number(data.total.value),
+    });
   }
 
-  Object.entries(outputObj).forEach(([key, value], index) => {
+  const totalBalance = balances.reduce((accumulator: any, currentValue) => {
+    let amount = _.get(currentValue, ["amount"], 0);
+
+    if (accumulator[currentValue.networkName]) {
+      amount += accumulator[currentValue.networkName];
+    }
+
+    return {
+      ...accumulator,
+      [currentValue.networkName]: amount,
+    };
+  }, {});
+
+  Object.entries(totalBalance).forEach(([key, value], index) => {
     output += template(en.assets.menu.total, {
       number: getNumberEmoji(index + 1),
       networkName: key,
