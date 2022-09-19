@@ -158,7 +158,7 @@ export const en = {
       title: "Choose the Network",
       statisticDescription:
         "<b>%{denom} Price: 🔥 💲%{price} 🔥</b> \n\n" +
-        "<i>💸 APR</i> - %{apr}% \n\n" +
+        "<i>💸 APR</i> - %{apr} \n\n" +
         "<i>📊 Inflation</i> - %{inflation}% \n\n" +
         "<i>🔝 Height</i> - %{height} \n\n" +
         "<i>🌐 Community Pool</i> - %{communityPool} \n\n" +

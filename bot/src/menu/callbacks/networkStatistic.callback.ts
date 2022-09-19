@@ -41,7 +41,7 @@ export async function statisticCallback(ctx: Context, network: Network) {
     template(en.statistic.menu.statisticDescription, {
       denom: `${communityPool?.displayDenom?.toUpperCase()}`,
       price: `${prices.price}`,
-      apr: `${formatTokenPrice(apr)}`,
+      apr: `${apr > 0 ? `${formatTokenPrice(apr)}%` : "&#60;unknown&#62;"}`,
       inflation: `${formatTokenPrice(inflation * 100)}`,
       height: `${height ?? 0}`,
       communityPool: `${nFormatter(toNumber(communityPool?.value), 2)}`,
