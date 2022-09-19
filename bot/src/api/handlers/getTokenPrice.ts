@@ -81,7 +81,6 @@ export const formatTokenHistory = (
         tokenHistory[2].market_data.current_price.usd
       );
     }
-    console.log(44, tokenHistory);
 
     let thirtyDayPercent = "0";
     if (tokenHistory[3]?.market_data?.current_price) {

@@ -32,7 +32,6 @@ export async function assetsCallback(wallet: Wallet, index?: number) {
     .map((item) => `${item.displayDenom} — ${item.value} \n`)
     .join("");
   const denomUppercase = data.available.displayDenom.toUpperCase();
-  console.log(fourteenth.amount, seventh.amount);
 
   output += template(en.assets.menu.walletDescription, {
     number: index ? getNumberEmoji(index) : "",
