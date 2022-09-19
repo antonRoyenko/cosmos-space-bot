@@ -72,33 +72,43 @@ The bot currently supports the following networks: <a href="https://agoric.com">
 </ul>
 
 <h3>Network statistic and resources</h3>
-- [x] General networks statistic
-- [x] Price change
-- [x] Network resources
-- [x] Active proposals
-- [ ] Added more networks
-- [ ] Additional statistic params
-- [ ] Fix APR on some networks
-- [ ] Address converter between networks
+<ul>
+<li>- [x] General networks statistic</li>
+<li>- [x] Price change</li>
+<li>- [x] Network resources</li>
+<li>- [x] Active proposals</li>
+<li>- [ ] Added more networks</li>
+<li>- [ ] Additional statistic params</li>
+<li>- [ ] Fix APR on some networks</li>
+<li>- [ ] Address converter between networks</li>
+</ul>
 
 <h3>Notification</h3>
-- [x] Daily price reminder
-- [x] Price alert
-- [x] Subscribe to proposal
-- [ ] Subscribe to new deposit on wallets
+<ul>
+<li>- [x] Daily price reminder</li>
+<li>- [x] Price alert</li>
+<li>- [x] Subscribe to proposal</li>
+<li>- [ ] Subscribe to new deposit on wallets</li>
+</ul>
 
 <h2 align="left">Summary:</h3>
 
-- I hope that this bot will be useful in the space ecosystem, add structure 
+<ul>
+<li>I hope that this bot will be useful in the space ecosystem, add structure 
 to the management of your funds, notifications will help you never miss 
-important events for you
-- For me, this is an extremely useful experience that will help create useful products and tools
-- Big thanks for help <a href="https://posthuman.digital/">Posthuman ∞ DVS</a> team
+important events for you</li>
+<li>For me, this is an extremely useful experience that will help create useful products and tools</li>
+<li>Big thanks for help <a href="https://posthuman.digital/">Posthuman ∞ DVS</a> team</li>
+</ul>
 
 <h2 align="left">License</h2>
 
-- Open Source
-- Apache-2.0 license
+<ul>
+<li>Open Source</li>
+<li>Apache-2.0 license</li>
+</ul>
 
 <h2 align="left">Dependencies</h2>
-- <a href="https://github.com/antonRoyenko/cosmos-space-bot-ui">cosmos-space-bot-ui</a>
+<ul>
+<li><a href="https://github.com/antonRoyenko/cosmos-space-bot-ui">cosmos-space-bot-ui</a></li>
+</ul>
