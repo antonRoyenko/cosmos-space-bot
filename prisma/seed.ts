@@ -37,21 +37,6 @@ const networkData: Prisma.NetworkCreateInput[] = [
     },
   },
   {
-    name: "chihuahua",
-    fullName: "Chihuahua",
-    publicUrl: "https://api.chihuahua.wtf/",
-    resource: {
-      create: {
-        site: "https://www.chihuahua.wtf",
-        discord: "https://discord.gg/chihuahua",
-        twitter: "https://t.me/chihuahua_cosmos",
-        github: "https://github.com/chihuahuachain",
-        telegram: "https://t.me/chihuahua_cosmos",
-        blog: "https://medium.com/@chihuahuachain",
-      },
-    },
-  },
-  {
     name: "mantle",
     fullName: "AssetMantle",
     publicUrl: "https://api.assetmantle.nodestake.top/",
@@ -63,6 +48,21 @@ const networkData: Prisma.NetworkCreateInput[] = [
         blog: "https://assetmantle.medium.com",
         github: "https://github.com/AssetMantle",
         telegram: "https://t.me/assetmantlechat",
+      },
+    },
+  },
+  {
+    name: "chihuahua",
+    fullName: "Chihuahua",
+    publicUrl: "https://api.chihuahua.wtf/",
+    resource: {
+      create: {
+        site: "https://www.chihuahua.wtf",
+        discord: "https://discord.gg/chihuahua",
+        twitter: "https://t.me/chihuahua_cosmos",
+        github: "https://github.com/chihuahuachain",
+        telegram: "https://t.me/chihuahua_cosmos",
+        blog: "https://medium.com/@chihuahuachain",
       },
     },
   },
