@@ -1,6 +1,7 @@
 import { Context } from "@bot/types";
 import { walletDao } from "@bot/dao";
 import { Prisma } from "@prisma/client";
+import { decrypt } from "@bot/utils";
 
 export const walletsService = (ctx?: Context) => {
   const user = ctx?.local.user || {
@@ -14,10 +15,12 @@ export const walletsService = (ctx?: Context) => {
       networkId,
       address,
       name,
+      iv,
     }: {
       networkId: number;
       address: string;
       name: string;
+      iv: string;
     },
     userId?: number
   ) => {
@@ -27,6 +30,7 @@ export const walletsService = (ctx?: Context) => {
         name,
         networkId,
         address,
+        iv,
       },
     });
   };
@@ -39,10 +43,23 @@ export const walletsService = (ctx?: Context) => {
 
   const getAllUserWallets = async (id?: number) => {
     const userId = id ?? user.id;
-    return await walletDao.getAllWallets({
+    const wallets = await walletDao.getAllWallets({
       where: {
         userId: userId,
       },
+    });
+
+    return wallets.map((wallet) => {
+      if (!wallet.iv || !ctx) return wallet;
+      const encryptedWallet = decrypt(
+        { iv: wallet.iv, encryptedData: wallet.address },
+        ctx.session.walletPassword
+      );
+
+      return {
+        ...wallet,
+        address: encryptedWallet,
+      };
     });
   };
 

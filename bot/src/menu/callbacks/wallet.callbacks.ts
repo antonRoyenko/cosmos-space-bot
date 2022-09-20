@@ -9,7 +9,7 @@ import { STEPS } from "@bot/constants/step";
 import { Steps } from "@bot/types/general";
 
 export async function addManuallyCallback(ctx: Context) {
-  ctx.session.step = "wallet";
+  ctx.session.step = STEPS.WALLET as Steps;
   return ctx.reply(en.wallet.addAddress);
 }
 
@@ -48,15 +48,14 @@ export async function walletListCallback(ctx: Context) {
     return ctx.reply(en.wallet.emptyWallet);
   }
 
-  userWallets.forEach(
-    ({ address, name }, key) =>
-      (wallets +=
-        template(en.wallet.showWallet, {
-          number: getNumberEmoji(key + 1),
-          name: name || "",
-          address,
-        }) + "\n\n")
-  );
+  userWallets.forEach(({ address, name }, key) => {
+    return (wallets +=
+      template(en.wallet.showWallet, {
+        number: getNumberEmoji(key + 1),
+        name: name || "",
+        address,
+      }) + "\n\n");
+  });
 
   await ctx.reply(wallets);
 }

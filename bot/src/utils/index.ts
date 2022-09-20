@@ -16,3 +16,4 @@ export { restRequest } from "./restRequest";
 export { template } from "./template";
 export { capitalizeFirstLetter } from "./capitalizeFirstLetter";
 export { loadAddresses } from "./loadAddresses";
+export { decrypt, encrypt } from "./crypto";

@@ -5,4 +5,5 @@ export const STEPS = {
   TIMEZONE: "timezone",
   NOTIFICATION: "notification",
   BULK_IMPORT: "bulkImport",
+  WALLET_PASSWORD: "walletPassword",
 };

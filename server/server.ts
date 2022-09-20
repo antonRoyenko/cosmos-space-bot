@@ -65,6 +65,7 @@ server.post<postWalletRequest>("/update_wallet/:id", async (req, res) => {
     const userWallets = await getAllUserWallets(user?.id);
     const address = req.body.wallet;
     const name = req.body.name;
+    const iv = req.body.iv;
 
     if (userWallets.some((item) => item.address === address)) {
       return req.body;
@@ -73,7 +74,10 @@ server.post<postWalletRequest>("/update_wallet/:id", async (req, res) => {
     const prefix = bech32.decode(address).prefix;
     const { network } = await getNetwork({ name: prefix });
 
-    await createUserWallet({ networkId: network.id, address, name }, user?.id);
+    await createUserWallet(
+      { networkId: network.id, address, name, iv },
+      user?.id
+    );
 
     return req.body;
   } catch (err) {

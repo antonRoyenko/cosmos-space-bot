@@ -6,11 +6,12 @@ import { networksService, walletsService } from "@bot/services";
 import { bech32 } from "bech32";
 import { agreementKeyboard } from "@bot/menu/utils";
 import { en } from "@bot/constants/en";
-import { template, validation, loadAddresses } from "@bot/utils";
+import { template, validation, loadAddresses, encrypt } from "@bot/utils";
 import { ROUTE, ROUTE_LOGS } from "@bot/constants/route";
 import { STEPS } from "@bot/constants/step";
 import { removeSpace } from "@bot/constants/regex";
 import { KEYBOARD } from "@bot/constants/keyboard";
+import { Steps } from "@bot/types/general";
 
 export const feature = router.route(ROUTE.WALLET);
 
@@ -18,6 +19,17 @@ feature.command(
   en.wallet.command,
   logHandle(ROUTE_LOGS.WALLET),
   async (ctx: Context) => {
+    if (!ctx.session.walletPassword) {
+      ctx.session.step = STEPS.WALLET_PASSWORD as Steps;
+
+      await ctx.reply(
+        "Please enter password, it will store local in your telegram session " +
+          "and necessary for secure storing your wallets, " +
+          "in future it will be used for decryption wallet addresses"
+      );
+      return;
+    }
+
     await ctx.reply(en.wallet.menu.title, {
       reply_markup: walletMenu,
     });
@@ -56,15 +68,35 @@ feature
     }
 
     if (network) {
+      const { iv, encryptedData } = encrypt(
+        parsedValue,
+        ctx.session.walletPassword
+      );
+
       await createUserWallet({
         networkId: network.id,
-        address: parsedValue,
+        address: encryptedData,
         name,
+        iv,
       });
     }
 
     await ctx.reply(en.addMoreQuestion, {
       reply_markup: agreementKeyboard,
+    });
+  });
+
+feature
+  .filter((ctx) => ctx.session.step === STEPS.WALLET_PASSWORD)
+  .on("message:text", async (ctx) => {
+    ctx.session.walletPassword = ctx.message.text;
+
+    await ctx.reply(
+      "Password was saved, now you can secure use wallet management"
+    );
+
+    await ctx.reply(en.wallet.menu.title, {
+      reply_markup: walletMenu,
     });
   });
 

@@ -13,7 +13,6 @@ import {
 export const walletMenu = new Menu<Context>("wallets", {
   autoAnswer: false,
 }).dynamic(async (ctx) => {
-  ctx.session.step = undefined;
   const range = new MenuRange<Context>();
 
   range

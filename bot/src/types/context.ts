@@ -15,6 +15,7 @@ export interface SessionData {
   timezone: string[];
   alarmNetwork?: Network;
   step?: Steps;
+  walletPassword: string;
 }
 
 export type Context = FileFlavor<

@@ -95,7 +95,6 @@ dailyReminderMenu.register(networkTimeReminderMenu);
 dailyReminderMenu.register(timezoneMenu);
 alarmMenu.register(networksAlarmMenu);
 
-// Handlers
 bot.use(helpFeature);
 bot.use(resetFeature);
 bot.use(statisticFeature);

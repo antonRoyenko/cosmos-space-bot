@@ -186,4 +186,5 @@ export type Steps =
   | "governance"
   | "timezone"
   | "notification"
-  | "bulkImport";
+  | "bulkImport"
+  | "walletPassword";
