@@ -3,5 +3,3 @@ export const deleteAlarmRegex = /^deleteAlarm:/;
 export const alarmPriceRegex = /\d{1,2}([\.,][\d{1,2}])?/g;
 export const removeSpace = /\s+/g;
 export const cw20line = /^<b>CW20 tokens: <\/b>.*\n\n?/gm;
-// eslint-disable-next-line no-useless-escape
-export const number = /[^\d\.]*/g;

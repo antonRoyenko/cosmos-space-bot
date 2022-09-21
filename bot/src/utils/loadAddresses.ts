@@ -6,12 +6,14 @@ import { bech32 } from "bech32";
 import { template } from "@bot/utils/template";
 import { networksService, usersService, walletsService } from "@bot/services";
 import { Context } from "@bot/types";
+import { encrypt } from "@bot/utils/crypto";
 
 type TAddress = {
   address: string;
   name: string;
   networkId: number;
   userId: number;
+  iv: string;
 };
 
 export async function loadAddresses(
@@ -58,11 +60,17 @@ export async function loadAddresses(
         });
       }
 
+      const { iv, encryptedData } = encrypt(
+        parsedValue,
+        ctx.session.walletPassword
+      );
+
       addresses.push({
-        address: parsedValue,
+        address: encryptedData,
         name,
         networkId: network.id,
         userId: user.id,
+        iv,
       });
     }
 

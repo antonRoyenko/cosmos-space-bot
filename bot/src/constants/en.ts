@@ -47,7 +47,11 @@ export const en = {
     addMore: "Add one more wallet",
     success: "Perfect! Use /assets command",
     menu: {
-      title: "Choose the Action",
+      title:
+        "Choose the Action \n\n" +
+        "Note: Your addresses stores in encrypted format,\n" +
+        "so it's absolutely secure. You can check it from the " +
+        "<a href='https://github.com/antonRoyenko/cosmos-space-bot/blob/8059c2257faa4b16a8be948c52134030ae240e03/bot/src/features/wallet.feature.ts'>link</a>",
       keplr: "🔑 Add Via Keplr",
       manually: "👇 Add Manually",
       bulkImport: "📁 Add via .csv",
@@ -72,9 +76,9 @@ export const en = {
     incorrectCSV: "Incorrect .csv file format, should be comma separator",
     successfulImport: "File was successful uploaded",
     emptyPassword:
-      "Please enter password, it will store local in your telegram session " +
-      "and necessary for secure storing your wallets, " +
-      "in future it will be used for decryption wallet addresses",
+      "Please enter a password, which will be stored locally in your telegram session and " +
+      "is necessary to keep your wallets securely. " +
+      "In the future, it will be used for decryption wallet addresses.",
   },
   assets: {
     command: "assets",

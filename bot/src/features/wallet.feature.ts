@@ -28,6 +28,7 @@ feature.command(
 
     await ctx.reply(en.wallet.menu.title, {
       reply_markup: walletMenu,
+      disable_web_page_preview: true,
     });
   }
 );
@@ -93,6 +94,7 @@ feature
 
     await ctx.reply(en.wallet.menu.title, {
       reply_markup: walletMenu,
+      disable_web_page_preview: true,
     });
   });
 
