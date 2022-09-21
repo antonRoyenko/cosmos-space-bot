@@ -25,12 +25,13 @@ Website - https://reactivestation.dev/
 
 <h2 align="left">About:</h3>
 
-<b>⚠️ The bot don't use any secure information, only your public address in encryption format, 
-so no one except you has access to them</b>
-<p>This bot was developed in order to integrate the Cosmos Ecosystem into 
-Telegram with many useful features that help manage wallets and assets including CW20 tokens on Juno, 
-view network statistics, set up various types of notifications and view useful resources. 
-The bot currently supports the following networks: <a href="https://agoric.com">Agoric</a>, 
+<b>⚠️ The bot doesn't use any secure information, only your public address in encryption format, 
+so no one except you has access to them.
+</b>
+<p>Cosmos Space bot was developed to integrate the Cosmos Ecosystem into Telegram with many valuable 
+features that help manage wallets and assets, including CW20 tokens on Juno, view network statistics, 
+set up various types of notifications, and view useful resources. The bot currently supports the 
+following networks: <a href="https://agoric.com">Agoric</a>, 
 <a href="https://akash.network">Akash</a>, <a href="https://assetmantle.one">AssetMantle</a>, 
 <a href="https://bandprotocol.com">Band Protocol</a>, <a href="https://bitsong.io">Bitsong</a>, 
 <a href="https://cheqd.io/">Cheqd</a>, <a href="https://www.chihuahua.wtf">Chihuahua</a>, 
@@ -101,10 +102,10 @@ The bot currently supports the following networks: <a href="https://agoric.com">
 <h2 align="left">Summary:</h3>
 
 <ul>
-<li>I hope that this bot will be useful in the space ecosystem, add structure 
-to the management of your funds, notifications will help you never miss 
-important events for you</li>
-<li>For me, this is an extremely useful experience that will help create useful products and tools</li>
+<li>I hope that this bot will be useful in the space ecosystem, add structure to the management 
+of your funds, and notifications will help you never miss important events for you.
+</li>
+<li>For me, this is an advantageous experience that will help create valuable products and tools. </li>
 <li>Big thanks for help <a href="https://posthuman.digital/">Posthuman ∞ DVS</a> team</li>
 </ul>
 
