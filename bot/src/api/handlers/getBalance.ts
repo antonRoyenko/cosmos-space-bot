@@ -84,88 +84,115 @@ const formatAllBalance = (
   chain: ChainInfo,
   cw20tokens: Cw20
 ) => {
-  const { primaryTokenUnit, tokenUnits } = chain;
-  const available = getDenom(
-    _.get(data, ["accountBalances", "coins"], []),
-    primaryTokenUnit
-  );
-  const availableAmount = formatToken(
-    available.amount,
-    tokenUnits[primaryTokenUnit],
-    primaryTokenUnit
-  );
+  try {
+    const { primaryTokenUnit, tokenUnits } = chain;
+    const available = getDenom(
+      _.get(data, ["accountBalances", "coins"], []),
+      primaryTokenUnit
+    );
+    const availableAmount = formatToken(
+      available.amount,
+      tokenUnits[primaryTokenUnit],
+      primaryTokenUnit
+    );
 
-  const delegate = data.delegationBalance.reduce((a, b) => {
-    const coins = _.get(b, ["balance"], { amount: 0 });
+    const delegate = data.delegationBalance.reduce((a, b) => {
+      const coins = _.get(b, ["balance"], { amount: 0 });
 
-    return Big(a).plus(coins.amount).toPrecision();
-  }, "0");
-  const delegateAmount = formatToken(
-    delegate,
-    tokenUnits[primaryTokenUnit],
-    primaryTokenUnit
-  );
+      return Big(a).plus(coins.amount).toPrecision();
+    }, "0");
+    const delegateAmount = formatToken(
+      delegate,
+      tokenUnits[primaryTokenUnit],
+      primaryTokenUnit
+    );
 
-  let unbonding = 0;
+    let unbonding = 0;
 
-  if (data.unbondingBalance.length > 0) {
-    data.unbondingBalance.forEach(
-      (item: { entries: Array<{ balance: string }> }) => {
-        if (item?.entries.length) {
-          item?.entries.forEach(({ balance }) => {
-            unbonding += Number(balance);
-          });
+    if (data.unbondingBalance.length > 0) {
+      data.unbondingBalance.forEach(
+        (item: { entries: Array<{ balance: string }> }) => {
+          if (item?.entries.length) {
+            item?.entries.forEach(({ balance }) => {
+              unbonding += Number(balance);
+            });
+          }
         }
-      }
+      );
+    }
+
+    const unbondingAmount = formatToken(
+      unbonding,
+      tokenUnits[primaryTokenUnit],
+      primaryTokenUnit
     );
+
+    const rewards = data.delegationRewards.reduce((a, b) => {
+      const coins = _.get(b, ["reward"], []);
+      const dsmCoins = getDenom(coins, primaryTokenUnit);
+
+      return Big(a).plus(dsmCoins.amount).toPrecision();
+    }, "0");
+
+    const rewardsAmount = formatToken(
+      rewards,
+      tokenUnits[primaryTokenUnit],
+      primaryTokenUnit
+    );
+
+    const total = Big(availableAmount.value)
+      .plus(delegateAmount.value)
+      .plus(unbondingAmount.value)
+      .plus(rewardsAmount.value)
+      .toFixed(tokenUnits[primaryTokenUnit].exponent);
+
+    const cw20 = cw20tokens
+      .filter((item) => Number(item.balance) > 0)
+      .map((item) =>
+        formatToken(
+          item.balance,
+          { exponent: item.decimal, display: item.symbol },
+          item.symbol
+        )
+      );
+
+    return {
+      available: availableAmount,
+      delegate: delegateAmount,
+      unbonding: unbondingAmount,
+      reward: rewardsAmount,
+      total: {
+        value: total,
+        displayDenom: availableAmount.displayDenom,
+        baseDenom: availableAmount.baseDenom,
+        exponent: availableAmount.exponent,
+      },
+      cw20tokens: cw20,
+    };
+  } catch (e) {
+    console.error("Error in formatAllBalance: " + e);
+
+    return {
+      available: {
+        value: "0",
+        displayDenom: "",
+      },
+      delegate: {
+        value: "0",
+      },
+      unbonding: {
+        value: "0",
+      },
+      reward: {
+        value: "0",
+      },
+      total: {
+        value: "0",
+        displayDenom: "",
+        baseDenom: "",
+        exponent: 0,
+      },
+      cw20tokens: [],
+    };
   }
-
-  const unbondingAmount = formatToken(
-    unbonding,
-    tokenUnits[primaryTokenUnit],
-    primaryTokenUnit
-  );
-
-  const rewards = data.delegationRewards.reduce((a, b) => {
-    const coins = _.get(b, ["reward"], []);
-    const dsmCoins = getDenom(coins, primaryTokenUnit);
-
-    return Big(a).plus(dsmCoins.amount).toPrecision();
-  }, "0");
-
-  const rewardsAmount = formatToken(
-    rewards,
-    tokenUnits[primaryTokenUnit],
-    primaryTokenUnit
-  );
-
-  const total = Big(availableAmount.value)
-    .plus(delegateAmount.value)
-    .plus(unbondingAmount.value)
-    .plus(rewardsAmount.value)
-    .toFixed(tokenUnits[primaryTokenUnit].exponent);
-
-  const cw20 = cw20tokens
-    .filter((item) => Number(item.balance) > 0)
-    .map((item) =>
-      formatToken(
-        item.balance,
-        { exponent: item.decimal, display: item.symbol },
-        item.symbol
-      )
-    );
-
-  return {
-    available: availableAmount,
-    delegate: delegateAmount,
-    unbonding: unbondingAmount,
-    reward: rewardsAmount,
-    total: {
-      value: total,
-      displayDenom: availableAmount.displayDenom,
-      baseDenom: availableAmount.baseDenom,
-      exponent: availableAmount.exponent,
-    },
-    cw20tokens: cw20,
-  };
 };

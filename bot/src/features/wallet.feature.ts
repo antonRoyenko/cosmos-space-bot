@@ -22,11 +22,7 @@ feature.command(
     if (!ctx.session.walletPassword) {
       ctx.session.step = STEPS.WALLET_PASSWORD as Steps;
 
-      await ctx.reply(
-        "Please enter password, it will store local in your telegram session " +
-          "and necessary for secure storing your wallets, " +
-          "in future it will be used for decryption wallet addresses"
-      );
+      await ctx.reply(en.wallet.emptyPassword);
       return;
     }
 

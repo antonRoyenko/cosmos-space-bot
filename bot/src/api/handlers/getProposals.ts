@@ -9,12 +9,21 @@ export const getProposals = async (url: string) => {
 };
 
 export const formatProposals = (proposals: Array<ProposalItem>) => {
-  const activeProposals = proposals.filter(
-    ({ status }) => status === proposalStatus.PROPOSAL_STATUS_VOTING_PERIOD
-  );
+  try {
+    const activeProposals = proposals.filter(
+      ({ status }) => status === proposalStatus.PROPOSAL_STATUS_VOTING_PERIOD
+    );
 
-  return {
-    activeProposals,
-    proposals,
-  };
+    return {
+      activeProposals,
+      proposals,
+    };
+  } catch (e) {
+    console.error("Error in formatProposals: " + e);
+
+    return {
+      activeProposals: [],
+      proposals: [],
+    };
+  }
 };

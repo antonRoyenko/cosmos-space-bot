@@ -50,88 +50,95 @@ export const formatTokenHistory = (
   tokenPrice: TTokenPrice,
   apiId: string
 ) => {
-  const currentPrice = tokenPrice[apiId]?.usd;
-  const totalFiat = (total: number) => {
-    return `${formatTokenPrice(currentPrice * total)}`;
-  };
-
-  const PNL = (amount: number) => {
+  try {
     const currentPrice = tokenPrice[apiId]?.usd;
-    let firstDayPercent = "0";
+    const totalFiat = (total: number) => {
+      return `${formatTokenPrice(currentPrice * total)}`;
+    };
 
-    if (tokenHistory[0]?.market_data?.current_price) {
-      firstDayPercent = calcTVLPercent(
-        currentPrice,
-        tokenHistory[0].market_data.current_price.usd
-      );
-    }
+    const PNL = (amount: number) => {
+      const currentPrice = tokenPrice[apiId]?.usd;
+      let firstDayPercent = "0";
 
-    let seventhDayPercent = "0";
-    if (tokenHistory[1]?.market_data?.current_price) {
-      seventhDayPercent = calcTVLPercent(
-        currentPrice,
-        tokenHistory[1].market_data.current_price.usd
-      );
-    }
+      if (tokenHistory[0]?.market_data?.current_price) {
+        firstDayPercent = calcTVLPercent(
+          currentPrice,
+          tokenHistory[0].market_data.current_price.usd
+        );
+      }
 
-    let fourteenthDayPercent = "0";
-    if (tokenHistory[2]?.market_data?.current_price) {
-      fourteenthDayPercent = calcTVLPercent(
-        currentPrice,
-        tokenHistory[2].market_data.current_price.usd
-      );
-    }
+      let seventhDayPercent = "0";
+      if (tokenHistory[1]?.market_data?.current_price) {
+        seventhDayPercent = calcTVLPercent(
+          currentPrice,
+          tokenHistory[1].market_data.current_price.usd
+        );
+      }
 
-    let thirtyDayPercent = "0";
-    if (tokenHistory[3]?.market_data?.current_price) {
-      thirtyDayPercent = calcTVLPercent(
-        currentPrice,
-        tokenHistory[3].market_data.current_price.usd
-      );
-    }
+      let fourteenthDayPercent = "0";
+      if (tokenHistory[2]?.market_data?.current_price) {
+        fourteenthDayPercent = calcTVLPercent(
+          currentPrice,
+          tokenHistory[2].market_data.current_price.usd
+        );
+      }
+
+      let thirtyDayPercent = "0";
+      if (tokenHistory[3]?.market_data?.current_price) {
+        thirtyDayPercent = calcTVLPercent(
+          currentPrice,
+          tokenHistory[3].market_data.current_price.usd
+        );
+      }
+
+      return {
+        first: {
+          percent: formatTokenPrice(firstDayPercent),
+          amount: formatTokenPrice(
+            Big(amount * currentPrice)
+              .div(100)
+              .mul(firstDayPercent)
+              .toPrecision()
+          ),
+        },
+        seventh: {
+          percent: formatTokenPrice(seventhDayPercent),
+          amount: formatTokenPrice(
+            Big(amount * currentPrice)
+              .div(100)
+              .mul(seventhDayPercent)
+              .toPrecision()
+          ),
+        },
+        fourteenth: {
+          percent: formatTokenPrice(fourteenthDayPercent),
+          amount: formatTokenPrice(
+            Big(amount * currentPrice)
+              .div(100)
+              .mul(fourteenthDayPercent)
+              .toPrecision()
+          ),
+        },
+        thirty: {
+          percent: formatTokenPrice(thirtyDayPercent),
+          amount: formatTokenPrice(
+            Big(amount * currentPrice)
+              .div(100)
+              .mul(thirtyDayPercent)
+              .toPrecision()
+          ),
+        },
+      };
+    };
 
     return {
-      first: {
-        percent: formatTokenPrice(firstDayPercent),
-        amount: formatTokenPrice(
-          Big(amount * currentPrice)
-            .div(100)
-            .mul(firstDayPercent)
-            .toPrecision()
-        ),
-      },
-      seventh: {
-        percent: formatTokenPrice(seventhDayPercent),
-        amount: formatTokenPrice(
-          Big(amount * currentPrice)
-            .div(100)
-            .mul(seventhDayPercent)
-            .toPrecision()
-        ),
-      },
-      fourteenth: {
-        percent: formatTokenPrice(fourteenthDayPercent),
-        amount: formatTokenPrice(
-          Big(amount * currentPrice)
-            .div(100)
-            .mul(fourteenthDayPercent)
-            .toPrecision()
-        ),
-      },
-      thirty: {
-        percent: formatTokenPrice(thirtyDayPercent),
-        amount: formatTokenPrice(
-          Big(amount * currentPrice)
-            .div(100)
-            .mul(thirtyDayPercent)
-            .toPrecision()
-        ),
-      },
+      totalFiat,
+      PNL,
     };
-  };
-
-  return {
-    totalFiat,
-    PNL,
-  };
+  } catch (e) {
+    return {
+      totalFiat: 0,
+      PNL: {},
+    };
+  }
 };

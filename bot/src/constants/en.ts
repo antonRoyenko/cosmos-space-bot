@@ -71,6 +71,10 @@ export const en = {
       "Wallet %{walletAddress} duplicated, remove it and reload file. If you don't want, fill in /reset",
     incorrectCSV: "Incorrect .csv file format, should be comma separator",
     successfulImport: "File was successful uploaded",
+    emptyPassword:
+      "Please enter password, it will store local in your telegram session " +
+      "and necessary for secure storing your wallets, " +
+      "in future it will be used for decryption wallet addresses",
   },
   assets: {
     command: "assets",
