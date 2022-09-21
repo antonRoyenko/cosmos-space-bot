@@ -16,6 +16,7 @@ export interface SessionData {
   alarmNetwork?: Network;
   step?: Steps;
   walletPassword: string;
+  isWalletsMigrated: boolean;
 }
 
 export type Context = FileFlavor<

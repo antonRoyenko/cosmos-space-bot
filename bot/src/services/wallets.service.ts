@@ -35,6 +35,26 @@ export const walletsService = (ctx?: Context) => {
     });
   };
 
+  const updateUserWallet = async ({
+    walletId,
+    address,
+    iv,
+  }: {
+    walletId: number;
+    address: string;
+    iv: string;
+  }) => {
+    return await walletDao.updateWallet({
+      where: {
+        id: walletId,
+      },
+      data: {
+        address,
+        iv,
+      },
+    });
+  };
+
   const bulkCreateUserWallet = async (
     data: Array<Prisma.WalletCreateManyInput>
   ) => {
@@ -76,5 +96,6 @@ export const walletsService = (ctx?: Context) => {
     bulkCreateUserWallet,
     getAllUserWallets,
     removeUserWallet,
+    updateUserWallet,
   };
 };

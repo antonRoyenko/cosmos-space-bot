@@ -11,11 +11,11 @@ const storage = new RedisAdapter({
 export const middleware = (): Middleware<Context> =>
   session({
     initial: () => ({
-      currentNetwork: undefined,
       step: "setup",
-      currentWallets: [],
       timezones: [],
       alarmNetwork: undefined,
+      walletPassword: "",
+      isWalletsMigrated: false,
     }),
     storage,
   });

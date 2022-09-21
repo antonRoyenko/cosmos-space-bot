@@ -15,6 +15,7 @@ import {
   setUser,
   collectMetrics,
   router,
+  setupWalletsMigrate,
 } from "@bot/middlewares";
 import { apiCallsLogger } from "@bot/transformers";
 import {
@@ -80,6 +81,7 @@ bot.use(setupSession());
 bot.use(setupLocalContext());
 bot.use(setupLogger());
 bot.use(setUser());
+bot.use(setupWalletsMigrate());
 bot.use(walletMenu);
 bot.use(notificationMenu);
 bot.use(networksStatisticMenu);
