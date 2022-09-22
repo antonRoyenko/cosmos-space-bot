@@ -23,12 +23,16 @@ export function decrypt(
   },
   key: string
 ) {
-  const hash = getPasswordHash(key);
-  const iv = Buffer.from(text.iv, "hex");
-  const decipher = createDecipheriv(algorithm, Buffer.from(hash), iv);
-  let decrypted = decipher.update(text.encryptedData, "hex", "utf8");
-  decrypted += decipher.final("utf8");
-  return decrypted;
+  try {
+    const hash = getPasswordHash(key);
+    const iv = Buffer.from(text.iv, "hex");
+    const decipher = createDecipheriv(algorithm, Buffer.from(hash), iv);
+    let decrypted = decipher.update(text.encryptedData, "hex", "base64");
+    decrypted += decipher.final("base64");
+    return decrypted;
+  } catch (e) {
+    return "Something went wrong. Please contact me @ReactiveGuy";
+  }
 
   // const hash = getPasswordHash(key);
   // const iv = Buffer.from(text.iv, "hex");
