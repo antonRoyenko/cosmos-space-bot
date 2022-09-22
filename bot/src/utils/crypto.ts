@@ -26,9 +26,13 @@ export function decrypt(
   const hash = getPasswordHash(key);
   const iv = Buffer.from(text.iv, "hex");
   const encryptedText = Buffer.from(text.encryptedData, "hex");
+  console.log(555, hash, encryptedText);
   const decipher = createDecipheriv(algorithm, hash, iv);
+  console.log(666, decipher);
   let decrypted = decipher.update(encryptedText);
+  console.log(777, decrypted);
   decrypted = Buffer.concat([decrypted, decipher.final()]);
+  console.log(888, decrypted);
 
   return decrypted.toString();
 }
