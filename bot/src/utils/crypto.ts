@@ -23,27 +23,26 @@ export function decrypt(
   },
   key: string
 ) {
-  const hash = getPasswordHash(key);
-  const iv = Buffer.from(text.iv, "hex");
-  const encryptedText = Buffer.from(text.encryptedData, "hex");
+  const iv = Buffer.from(text.iv, "hex"); //will return iv;
+  const enKey = getPasswordHash(key); //will return key;
+  const encryptedText = Buffer.from(text.encryptedData, "hex"); //returns encrypted Data
+  const decipher = createDecipheriv(algorithm, Buffer.from(enKey), iv);
+  // Added this line here
+  decipher.setAutoPadding(false);
+  let decrypted = decipher.update(encryptedText);
+  decrypted = Buffer.concat([decrypted, decipher.final()]);
+  return decrypted.toString();
 
-  try {
-    const decipher = createDecipheriv(algorithm, hash, iv);
-    let decrypted = decipher.update(encryptedText);
-    console.log(1);
-    decrypted = Buffer.concat([decrypted, decipher.final()]);
-    console.log(2);
-    return decrypted.toString();
-  } catch (e) {
-    console.log("Decrypt error: " + e);
-    const decipher = createDecipheriv(algorithm, hash, iv);
-    decipher.setAutoPadding(false);
-    let decrypted = decipher.update(encryptedText);
-    console.log(3);
-    decrypted = Buffer.concat([decrypted, decipher.final()]);
-    console.log(4);
-    return decrypted.toString();
-  }
+  // const hash = getPasswordHash(key);
+  // const iv = Buffer.from(text.iv, "hex");
+  // const encryptedText = Buffer.from(text.encryptedData, "hex");
+  // const decipher = createDecipheriv(algorithm, hash, iv);
+  // decipher.setAutoPadding(false);
+  // let decrypted = decipher.update(encryptedText);
+  // try {
+  // decrypted = Buffer.concat([decrypted, decipher.final()]);
+  // return decrypted.toString();
+  // }
 }
 
 function getPasswordHash(password: string) {
