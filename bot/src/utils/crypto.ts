@@ -25,11 +25,15 @@ export function decrypt(
 ) {
   try {
     const hash = getPasswordHash(key);
-    const iv = Buffer.from(text.iv, "hex");
-    const decipher = createDecipheriv(algorithm, Buffer.from(hash), iv);
-    let decrypted = decipher.update(text.encryptedData, "hex", "base64");
-    decrypted += decipher.final("base64");
-    return decrypted;
+    const decipher = createDecipheriv(algorithm, hash, text.iv);
+    const buffer = Buffer.from(text.encryptedData, "base64").toString("hex");
+    const firstPart = decipher.update(buffer, "hex", "base64");
+    console.log(1, firstPart);
+    const finalPart = decipher.final("base64") || "";
+    console.log(2, finalPart);
+    const decrypted = `${firstPart}${finalPart}`;
+    const buf = Buffer.from(decrypted, "base64");
+    return buf.toString("utf8");
   } catch (e) {
     console.log(e);
     return "Something went wrong. Please contact me @ReactiveGuy";
