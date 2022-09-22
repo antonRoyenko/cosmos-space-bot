@@ -67,7 +67,7 @@ export const en = {
     showWallet: "%{number} <b>%{name}</b> - %{address}",
     deleteWallet: "Choose the wallet that you want to remove",
     removedWallet: "Wallet %{address} was successful removed",
-    removedAllWallets: "All wallets was removed",
+    removedAllWallets: "All wallets were removed",
     emptyWallet: "You don't have wallets, please add it",
     bulkImportAddressInvalid:
       "Check addresses in file and reload file. If you don't want, fill in /reset",
