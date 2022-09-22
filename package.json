@@ -21,7 +21,6 @@
   "dependencies": {
     "@fastify/cors": "8.0.0",
     "@fastify/static": "6.5.0",
-    "@grammyjs/conversations": "1.0.2",
     "@grammyjs/files": "1.0.4",
     "@grammyjs/fluent": "1.0.3",
     "@grammyjs/menu": "1.1.2",
