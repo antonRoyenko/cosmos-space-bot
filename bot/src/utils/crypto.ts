@@ -23,6 +23,7 @@ export function decrypt(
   },
   key: string
 ) {
+  console.log(444, key);
   const hash = getPasswordHash(key);
   const iv = Buffer.from(text.iv, "hex");
   const encryptedText = Buffer.from(text.encryptedData, "hex");
