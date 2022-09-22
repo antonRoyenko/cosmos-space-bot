@@ -20,7 +20,9 @@ export const walletRemoveMenu = new Menu<Context>("walletRemove", {
         .text(currWallet.name || currWallet.address, async (ctx) => {
           await removeUserWallet(currWallet.id);
           return ctx.reply(
-            template(en.wallet.removedWallet, { address: currWallet.address })
+            template(en.wallet.removedWallet, {
+              address: currWallet.name || currWallet.address,
+            })
           );
         })
         .row();
