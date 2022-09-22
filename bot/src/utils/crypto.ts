@@ -31,6 +31,7 @@ export function decrypt(
     decrypted += decipher.final("base64");
     return decrypted;
   } catch (e) {
+    console.log(e);
     return "Something went wrong. Please contact me @ReactiveGuy";
   }
 
