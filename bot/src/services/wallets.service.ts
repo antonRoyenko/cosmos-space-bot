@@ -92,11 +92,20 @@ export const walletsService = (ctx?: Context) => {
     });
   };
 
+  const removeAllUserWallet = async (id: number) => {
+    return await walletDao.removeAllWallet({
+      where: {
+        userId: id,
+      },
+    });
+  };
+
   return {
     createUserWallet,
     bulkCreateUserWallet,
     getAllUserWallets,
     removeUserWallet,
     updateUserWallet,
+    removeAllUserWallet,
   };
 };

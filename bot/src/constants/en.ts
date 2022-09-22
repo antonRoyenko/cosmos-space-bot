@@ -58,6 +58,7 @@ export const en = {
       bulkExport: "📎 Export addresses",
       list: "💳 List of Wallets",
       delete: "🗑 Delete a wallet",
+      removeAll: "Remove all wallets",
     },
     addAddress:
       "Enter your address in format:\n\n" + "Address\n" + "Wallet name \n",
@@ -66,6 +67,7 @@ export const en = {
     showWallet: "%{number} <b>%{name}</b> - %{address}",
     deleteWallet: "Choose the wallet that you want to remove",
     removedWallet: "Wallet %{address} was successful removed",
+    removedAllWallets: "All wallets was removed",
     emptyWallet: "You don't have wallets, please add it",
     bulkImportAddressInvalid:
       "Check addresses in file and reload file. If you don't want, fill in /reset",

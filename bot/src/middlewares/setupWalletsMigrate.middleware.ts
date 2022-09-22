@@ -7,7 +7,6 @@ import { walletsService } from "@bot/services";
 export const middleware = (): Middleware<Context> => async (ctx, next) => {
   const user = ctx.local.user;
   const { updateUserWallet } = walletsService(ctx);
-  console.log(1, user, ctx.session.isWalletsMigrated);
   if (typeof user === "undefined" || ctx.session.isWalletsMigrated)
     return next();
 

@@ -10,7 +10,8 @@ export const walletRemoveMenu = new Menu<Context>("walletRemove", {
   await ctx.replyWithChatAction("typing");
   const range = new MenuRange<Context>();
 
-  const { getAllUserWallets, removeUserWallet } = walletsService(ctx);
+  const { getAllUserWallets, removeUserWallet, removeAllUserWallet } =
+    walletsService(ctx);
   const userWallets = await getAllUserWallets();
 
   if (userWallets.length > 0) {
@@ -28,6 +29,15 @@ export const walletRemoveMenu = new Menu<Context>("walletRemove", {
         .row();
     }
   }
+
+  range.text(en.wallet.menu.removeAll, async () => {
+    const user = ctx.local.user;
+    if (typeof user === "undefined") return;
+
+    await removeAllUserWallet(user.id);
+
+    return ctx.reply(en.wallet.removedAllWallets);
+  });
 
   return range;
 });

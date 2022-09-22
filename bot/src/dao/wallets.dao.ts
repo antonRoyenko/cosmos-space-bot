@@ -12,4 +12,7 @@ export const createDao = (prisma: PrismaClient) => ({
     prisma.wallet.findMany(args),
 
   removeWallet: (args: Prisma.WalletDeleteArgs) => prisma.wallet.delete(args),
+
+  removeAllWallet: (args: Prisma.WalletDeleteManyArgs) =>
+    prisma.wallet.deleteMany(args),
 });
