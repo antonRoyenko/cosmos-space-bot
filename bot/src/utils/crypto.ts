@@ -25,8 +25,12 @@ export function decrypt(
 ) {
   try {
     const hash = getPasswordHash(key);
-    const decipher = createDecipheriv(algorithm, hash, text.iv);
-    const buffer = Buffer.from(text.encryptedData, "base64").toString("hex");
+    const iv = Buffer.from(text.iv, "hex");
+    const encryptedText = Buffer.from(text.encryptedData, "hex");
+    const decipher = createDecipheriv(algorithm, hash, iv);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const buffer = Buffer.from(encryptedText, "base64").toString("hex");
     const firstPart = decipher.update(buffer, "hex", "base64");
     console.log(1, firstPart);
     const finalPart = decipher.final("base64") || "";
