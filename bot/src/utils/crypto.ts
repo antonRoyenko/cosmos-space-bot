@@ -23,15 +23,12 @@ export function decrypt(
   },
   key: string
 ) {
-  const iv = Buffer.from(text.iv, "hex"); //will return iv;
-  const enKey = getPasswordHash(key); //will return key;
-  const encryptedText = Buffer.from(text.encryptedData, "hex"); //returns encrypted Data
-  const decipher = createDecipheriv(algorithm, Buffer.from(enKey), iv);
-  // Added this line here
-  decipher.setAutoPadding(false);
-  let decrypted = decipher.update(encryptedText);
-  decrypted = Buffer.concat([decrypted, decipher.final()]);
-  return decrypted.toString();
+  const hash = getPasswordHash(key);
+  const iv = Buffer.from(text.iv, "hex");
+  const decipher = createDecipheriv(algorithm, Buffer.from(hash), iv);
+  let decrypted = decipher.update(text.encryptedData, "hex", "utf8");
+  decrypted += decipher.final("utf8");
+  return decrypted;
 
   // const hash = getPasswordHash(key);
   // const iv = Buffer.from(text.iv, "hex");
