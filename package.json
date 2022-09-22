@@ -111,7 +111,7 @@
     "@server": "dist/server"
   },
   "engines": {
-    "node": "16.13.2",
-    "npm": "8.1.2"
+    "node": "17.9.0",
+    "npm": "8.11.0"
   }
 }
