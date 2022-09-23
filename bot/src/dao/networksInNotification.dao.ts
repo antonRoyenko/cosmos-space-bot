@@ -5,9 +5,8 @@ export const createDao = (prisma: PrismaClient) => ({
     args: Prisma.NetworksInNotificationCreateArgs
   ) => prisma.networksInNotification.create(args),
 
-  getNetworkInNotification: (
-    args: Prisma.NetworksInNotificationFindUniqueArgsBase
-  ) => prisma.networksInNotification.findUnique(args),
+  getNetworkInNotification: (args: Prisma.NetworksInNotificationFindManyArgs) =>
+    prisma.networksInNotification.findMany(args),
 
   getAllNetworkInNotification: (
     args: Prisma.NetworksInNotificationFindManyArgs

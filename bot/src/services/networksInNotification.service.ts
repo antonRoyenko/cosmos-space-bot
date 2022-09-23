@@ -35,6 +35,7 @@ export async function networksInNotificationService({
     await networkInNotificationDao.getNetworkInNotification({
       where: {
         reminderNetworkId: network.id,
+        notificationId: notification.id,
       },
     });
 
@@ -42,44 +43,53 @@ export async function networksInNotificationService({
     await networkInNotificationDao.getNetworkInNotification({
       where: {
         governanceNetworkId: network.id,
+        notificationId: notification.id,
       },
     });
 
-  const isNetworkActive = !!reminderNetwork;
-  const isGovActive = !!governanceNetwork;
+  const isNetworkActive = reminderNetwork.length > 0;
+  const isGovActive = governanceNetwork.length > 0;
 
   const updateGovernance = async (time: Date) => {
-    if (isGovActive) {
-      await networkInNotificationDao.removeNetworkInNotification({
-        where: {
-          governanceNetworkId: network.id,
-        },
-      });
-    } else {
-      await networkInNotificationDao.createNetworkInNotification({
-        data: {
-          notificationId: notification.id,
-          governanceNetworkId: network.id,
-          governanceTimeStart: time,
-        },
-      });
+    try {
+      if (isGovActive) {
+        await networkInNotificationDao.removeNetworkInNotification({
+          where: {
+            governanceNetworkId: network.id,
+          },
+        });
+      } else {
+        await networkInNotificationDao.createNetworkInNotification({
+          data: {
+            notificationId: notification.id,
+            governanceNetworkId: network.id,
+            governanceTimeStart: time,
+          },
+        });
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
   const updateReminder = async () => {
-    if (isNetworkActive) {
-      await networkInNotificationDao.removeNetworkInNotification({
-        where: {
-          reminderNetworkId: network.id,
-        },
-      });
-    } else {
-      await networkInNotificationDao.createNetworkInNotification({
-        data: {
-          notificationId: notification.id,
-          reminderNetworkId: network.id,
-        },
-      });
+    try {
+      if (isNetworkActive) {
+        await networkInNotificationDao.removeNetworkInNotification({
+          where: {
+            reminderNetworkId: network.id,
+          },
+        });
+      } else {
+        await networkInNotificationDao.createNetworkInNotification({
+          data: {
+            notificationId: notification.id,
+            reminderNetworkId: network.id,
+          },
+        });
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
