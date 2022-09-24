@@ -14,9 +14,10 @@ export const networksStatisticMenu = new Menu<Context>("statisticNetworks", {
   if (networks.length > 0) {
     for (let i = 0; i < networks.length; i++) {
       const network = networks[i];
-      range.text(network.fullName, async (ctx) =>
-        statisticCallback(ctx, network)
-      );
+      range.text(network.fullName, async (ctx) => {
+        console.log(222, ctx.update.update_id);
+        return statisticCallback(ctx, network);
+      });
 
       if ((i + 1) % 2 == 0) {
         range.row();
