@@ -74,9 +74,11 @@ following networks: <a href="https://agoric.com">Agoric</a>,
 <li>- [ ] Bulk wallets delete</li>
 <li>- [ ] Import/Export wallets via .TXT</li>
 <li>- [ ] Wallets pagination</li>
-<li>- [ ] Add CW20 tokens in total amount</li>
+<li>- [ ] Add Juno CW20 tokens in total amount</li>
 <li>- [ ] Export total amount in .CSV</li>
 <li>- [ ] Add liquidity pools</li>
+<li>- [ ] Support interchain accounts in future</li>
+<li>- [ ] Integrate automatic wallets converter</li>
 </ul>
 
 <h3>Network statistic and resources</h3>
@@ -89,6 +91,8 @@ following networks: <a href="https://agoric.com">Agoric</a>,
 <li>- [ ] Additional statistic params</li>
 <li>- [ ] Fix APR on some networks</li>
 <li>- [ ] Address converter between networks</li>
+<li>- [ ] Show user NFT which support Juno</li>
+<li>- [ ] DAO statistics</li>
 </ul>
 
 <h3>Notification</h3>
@@ -97,6 +101,15 @@ following networks: <a href="https://agoric.com">Agoric</a>,
 <li>- [x] Price alert</li>
 <li>- [x] Subscribe to proposal</li>
 <li>- [ ] Subscribe to new deposit on wallets</li>
+<li>- [ ] Add unbonding notification</li>
+<li>- [ ] Integrate twitter feed for official network</li>
+<li>- [ ] Support Juno CW20 tokens in price alert</li>
+</ul>
+
+<h3>Additional</h3>
+<ul>
+<li>- [ ] Integrate Faucet</li>
+<li>- [ ] Add multilingual</li>
 </ul>
 
 <h2 align="left">Summary:</h3>
@@ -107,6 +120,13 @@ of your funds, and notifications will help you never miss important events for y
 </li>
 <li>For me, this is an advantageous experience that will help create valuable products and tools. </li>
 <li>Big thanks for help <a href="https://posthuman.digital/">Posthuman ∞ DVS</a> team</li>
+</ul>
+
+<h2 align="left">Achivemets:</h3>
+
+<ul>
+<li>100 Active user</li>
+<li>Support 24 network</li>
 </ul>
 
 <h2 align="left">License</h2>
