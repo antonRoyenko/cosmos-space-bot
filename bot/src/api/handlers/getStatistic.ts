@@ -21,6 +21,7 @@ export const getStatistic = async (
   chain: ChainInfo,
   tokenUnit: string
 ) => {
+  console.log(66, publicUrl);
   const promises = [
     fetchCommunityPool(publicUrl),
     fetchInflation(publicUrl, denom),

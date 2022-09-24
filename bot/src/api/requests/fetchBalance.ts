@@ -30,7 +30,7 @@ export const fetchDelegationBalance = async (url: string, address: string) => {
 
   try {
     const req = await restRequest(
-      `${url}/cosmos/staking/v1beta1/delegations/${address}`
+      `${url}cosmos/staking/v1beta1/delegations/${address}`
     );
     const res = await req.json();
 
@@ -52,7 +52,7 @@ export const fetchUnbondingBalance = async (url: string, address: string) => {
 
   try {
     const req = await restRequest(
-      `${url}/cosmos/staking/v1beta1/delegators/${address}/unbonding_delegations`
+      `${url}cosmos/staking/v1beta1/delegators/${address}/unbonding_delegations`
     );
     const res = await req.json();
 
@@ -71,7 +71,7 @@ export const fetchRewards = async (url: string, address: string) => {
   };
   try {
     const req = await restRequest(
-      `${url}/cosmos/distribution/v1beta1/delegators/${address}/rewards`
+      `${url}cosmos/distribution/v1beta1/delegators/${address}/rewards`
     );
     const res = await req.json();
 

@@ -71,7 +71,6 @@ export const walletsService = (ctx?: Context) => {
 
     return wallets.map((wallet) => {
       if (!wallet.iv || !ctx) return wallet;
-      console.log(444, wallet.iv);
       const encryptedWallet = decrypt(
         { iv: wallet.iv, encryptedData: wallet.address },
         ctx.session.walletPassword
