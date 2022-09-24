@@ -39,7 +39,10 @@ server.setErrorHandler(async (error, request, response) => {
   }
 });
 
-server.post(`/${config.BOT_TOKEN}`, webhookCallback(bot, "fastify"));
+server.post(
+  `/${config.BOT_TOKEN}`,
+  webhookCallback(bot, "fastify", { timeoutMilliseconds: 20000 })
+);
 
 server.get("/metrics", async (req, res) => {
   try {

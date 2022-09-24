@@ -20,10 +20,6 @@ export const networksProposalMenu = new Menu<Context>("networksProposal", {
         let output = "";
         const { activeProposals } = await getProposals(network.publicUrl);
 
-        if (activeProposals.length === 0) {
-          return ctx.reply(en.proposals.menu.noProposal);
-        }
-
         activeProposals.map(({ title, description, proposalId }, key) => {
           if (activeProposals.length > 1) {
             output += template(en.proposals.menu.proposalDescriptionTitle, {
@@ -46,9 +42,9 @@ export const networksProposalMenu = new Menu<Context>("networksProposal", {
               proposalId: `${proposalId}`,
             });
           }
-        });
 
-        return ctx.reply(output, { disable_web_page_preview: true });
+          ctx.reply(output, { disable_web_page_preview: true });
+        });
       });
 
       if ((i + 1) % 2 == 0) {

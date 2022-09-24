@@ -18,6 +18,7 @@ export const fetchAvailableBalances = async (url: string, address: string) => {
       },
     };
   } catch (error) {
+    console.log(error);
     return defaultReturnValue;
   }
 };
@@ -37,6 +38,7 @@ export const fetchDelegationBalance = async (url: string, address: string) => {
       delegationBalance: res.delegation_responses,
     };
   } catch (error) {
+    console.log(error);
     return defaultReturnValue;
   }
 };
@@ -58,6 +60,7 @@ export const fetchUnbondingBalance = async (url: string, address: string) => {
       unbondingBalance: res.unbonding_responses,
     };
   } catch (error) {
+    console.log(error);
     return defaultReturnValue;
   }
 };
@@ -76,6 +79,7 @@ export const fetchRewards = async (url: string, address: string) => {
       delegationRewards: res.rewards,
     };
   } catch (error) {
+    console.log(error);
     return defaultReturnValue;
   }
 };

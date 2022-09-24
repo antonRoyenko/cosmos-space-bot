@@ -14,6 +14,7 @@ export const fetchCommunityPool = async (url: string) => {
       communityPool: res.pool,
     };
   } catch (error) {
+    console.log(error);
     return defaultReturnValue;
   }
 };
@@ -38,6 +39,7 @@ export const fetchInflation = async (url: string, denom: string) => {
       inflation: res.inflation,
     };
   } catch (error) {
+    console.log(error);
     return defaultReturnValue;
   }
 };
@@ -56,6 +58,7 @@ export const fetchSupply = async (url: string, denom: string) => {
       supply: res.amount,
     };
   } catch (error) {
+    console.log(error);
     return defaultReturnValue;
   }
 };
@@ -78,6 +81,7 @@ export const fetchPool = async (url: string) => {
       },
     };
   } catch (error) {
+    console.log(error);
     return defaultReturnValue;
   }
 };
@@ -94,6 +98,7 @@ export const fetchDistributionParams = async (url: string) => {
       params: res.params,
     };
   } catch (error) {
+    console.log(error);
     return defaultReturnValue;
   }
 };
@@ -112,6 +117,7 @@ export const fetchLatestHeight = async (publicUrl: string) => {
       height: res?.block,
     };
   } catch (error) {
+    console.log(error);
     return defaultReturnValue;
   }
 };
@@ -130,6 +136,7 @@ export const fetchBlock = async (publicUrl: string, block: number) => {
       height: res?.block,
     };
   } catch (error) {
+    console.log(error);
     return defaultReturnValue;
   }
 };
@@ -148,6 +155,7 @@ export const fetchAnnualProvisions = async (publicUrl: string) => {
       annualProvisions: res.annual_provisions,
     };
   } catch (error) {
+    console.log(error);
     return defaultReturnValue;
   }
 };
@@ -164,6 +172,7 @@ export const fetchNetworkStatistic = async (publicUrl: string) => {
       networkStatistic: res.params,
     };
   } catch (error) {
+    console.log(error);
     return defaultReturnValue;
   }
 };
