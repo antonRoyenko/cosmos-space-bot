@@ -87,6 +87,7 @@ feature
   .filter((ctx) => ctx.session.step === STEPS.WALLET_PASSWORD)
   .on("message:text", async (ctx) => {
     ctx.session.walletPassword = ctx.message.text;
+    ctx.session.step = undefined;
 
     await ctx.reply(
       "Password was saved, now you can secure use wallet management"
