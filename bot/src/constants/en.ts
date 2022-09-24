@@ -218,7 +218,7 @@ export const en = {
     title:
       "I hope this bot you is useful for you. \n\n" +
       "If you have question or proposals how I can improve it " +
-      "you can always reach me out. \n" +
+      "you can always reach me out @ReactiveGuy. \n" +
       "Here is full <a href='https://medium.com/@anton.royenko/telegram-bot-for-cosmos-ecosystem-290b32dae41a'>article</a> " +
       "about the bot implementation and <a href='https://github.com/antonRoyenko/cosmos-space-bot'>Github</a>",
   },
