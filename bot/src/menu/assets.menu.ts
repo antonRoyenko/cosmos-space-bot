@@ -26,10 +26,10 @@ export const assetsMenu = new Menu<Context>("assets", {
 
   range.row();
   range.text(en.assets.menu.all, async () => {
-    currentUpdateId = ctx.update.update_id;
     if (currentUpdateId === ctx.update.update_id) {
       return;
     }
+    currentUpdateId = ctx.update.update_id;
     await ctx.replyWithChatAction("typing");
 
     const output = await totalAmountCallback(ctx);
