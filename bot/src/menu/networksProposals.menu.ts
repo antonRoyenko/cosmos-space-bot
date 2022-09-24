@@ -36,6 +36,10 @@ export const networksProposalMenu = new Menu<Context>("networksProposal", {
           });
           output += str.replaceAll(/[\\]+[n]/gm, "\n");
 
+          if (output.length > 4000) {
+            output = output.slice(0, 4000) + "... \n\n";
+          }
+
           if (network.keplrId) {
             output += template(en.proposals.menu.proposalDescriptionLink, {
               keplrId: `${network.keplrId}`,
