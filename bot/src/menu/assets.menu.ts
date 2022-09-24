@@ -4,6 +4,8 @@ import { walletsService } from "@bot/services";
 import { assetsCallback, totalAmountCallback } from "@bot/menu/callbacks";
 import { en } from "@bot/constants/en";
 
+let currentUpdateId = 0;
+
 export const assetsMenu = new Menu<Context>("assets", {
   autoAnswer: false,
 }).dynamic(async (ctx) => {
@@ -24,7 +26,10 @@ export const assetsMenu = new Menu<Context>("assets", {
 
   range.row();
   range.text(en.assets.menu.all, async () => {
-    console.log(111, ctx.update.update_id);
+    currentUpdateId = ctx.update.update_id;
+    if (currentUpdateId === ctx.update.update_id) {
+      return;
+    }
     await ctx.replyWithChatAction("typing");
 
     const output = await totalAmountCallback(ctx);
