@@ -8,11 +8,9 @@ export const fetchCommunityPool = async (url: string) => {
     const req = await restRequest(
       `${url}cosmos/distribution/v1beta1/community_pool`
     );
-    const res = await req.json();
+    const res = await req.text();
 
-    return {
-      communityPool: res.pool,
-    };
+    return defaultReturnValue;
   } catch (error) {
     console.log(error);
     return defaultReturnValue;
@@ -149,11 +147,11 @@ export const fetchAnnualProvisions = async (publicUrl: string) => {
     const req = await restRequest(
       `${publicUrl}cosmos/mint/v1beta1/annual_provisions`
     );
-    const res = await req.json();
+    console.log(123);
+    const res = await req.text();
+    console.log(124, res);
 
-    return {
-      annualProvisions: res.annual_provisions,
-    };
+    return defaultReturnValue;
   } catch (error) {
     console.log(error);
     return defaultReturnValue;

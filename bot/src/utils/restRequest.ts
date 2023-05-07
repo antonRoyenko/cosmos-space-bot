@@ -7,6 +7,6 @@ export const restRequest = async (
 ) =>
   await fetch(url, {
     method,
-    headers: { "Content-Type": "application/json" },
+    headers: { Accept: "application/json", "Content-Type": "application/json" },
     body,
   });
